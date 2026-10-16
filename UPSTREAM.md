@@ -9,3 +9,11 @@ affiliated with or endorsed by the upstream project.
 - `upstream-manifest.txt` lists every imported upstream file with its git blob SHA at that tag.
   A file whose content no longer matches its entry has been modified in this repository and
   carries a notice saying so, as section 4(b) of the licence requires.
+
+## Modified files without comment syntax
+
+These files cannot carry an in-file notice, so this list is their notice: each has been
+modified from geekatron/jerry v0.31.9.
+
+- `.claude-plugin/plugin.json`
+- `hooks/hooks.json`

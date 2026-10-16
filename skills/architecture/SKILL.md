@@ -1,7 +1,6 @@
 ---
 name: architecture
-description: "This skill should be used when the user asks to \"design system\",
-\"create ADR\", \"review architecture\", or mentions architectural decisions."
+description: "This skill should be used when the user asks to design a system, create an ADR, review architecture, or mentions architectural decisions."
 version: 1.0.0
 allowed-tools:
   - Read
@@ -478,3 +477,5 @@ The architecture skill integrates with other Jerry skills:
 *Skill Version: 1.0.0*
 *Constitutional Compliance: Jerry Constitution v1.0*
 *Last Updated: 2026-02-16*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->
