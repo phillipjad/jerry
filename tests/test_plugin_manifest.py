@@ -6,8 +6,12 @@ import os
 import re
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
+HOOKS = json.loads((ROOT / "hooks" / "hooks.json").read_text(encoding="utf-8"))["hooks"]
+PLUGIN_ROOT = "${CLAUDE_PLUGIN_ROOT}"
 SKIPPED_DIRS = {".git", ".venv", "__pycache__", ".pytest_cache", ".ruff_cache"}
 FILE_CAP = 5000
 FRONTMATTER = re.compile(r"---\r?\n(.*?)\r?\n---\r?\n", re.DOTALL)
@@ -83,10 +87,29 @@ def test_should_give_agents_unique_names() -> None:
     assert len(names) == len(set(names))
 
 
-def test_should_parse_hooks_json() -> None:
-    hooks = json.loads((ROOT / "hooks" / "hooks.json").read_text(encoding="utf-8"))
+def test_should_register_only_the_session_start_and_subagent_start_hooks() -> None:
+    assert set(HOOKS) == {"SessionStart", "SubagentStart"}
 
-    assert isinstance(hooks["hooks"], dict)
+
+@pytest.mark.parametrize(("event", "name"), [("SessionStart", "session-start"), ("SubagentStart", "subagent-start")])
+def test_should_run_each_hook_through_uv_in_exec_form(event: str, name: str) -> None:
+    args = ["run", "--no-project", "--python", ">=3.11", f"{PLUGIN_ROOT}/hooks/run.py", name]
+
+    assert HOOKS[event] == [{"hooks": [{"type": "command", "command": "uv", "args": args, "timeout": 20}]}]
+
+
+def test_should_find_every_plugin_file_a_hook_references() -> None:
+    files = [
+        arg.removeprefix(f"{PLUGIN_ROOT}/")
+        for groups in HOOKS.values()
+        for group in groups
+        for hook in group["hooks"]
+        for arg in hook["args"]
+        if arg.startswith(f"{PLUGIN_ROOT}/")
+    ]
+
+    assert files
+    assert [path for path in files if not (ROOT / path).is_file()] == []
 
 
 def test_should_stay_under_marketplace_file_cap() -> None:

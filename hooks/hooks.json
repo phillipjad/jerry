@@ -1,3 +1,28 @@
 {
-  "hooks": {}
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv",
+            "args": ["run", "--no-project", "--python", ">=3.11", "${CLAUDE_PLUGIN_ROOT}/hooks/run.py", "session-start"],
+            "timeout": 20
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv",
+            "args": ["run", "--no-project", "--python", ">=3.11", "${CLAUDE_PLUGIN_ROOT}/hooks/run.py", "subagent-start"],
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  }
 }

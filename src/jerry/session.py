@@ -172,8 +172,8 @@ def _pick_up_here(project_dir: Path) -> str | None:
         return None
 
 
-def render(session: Session, found: projects.Discovery) -> str:
-    """Render the focus: each project with the primary marked, then each Pick up here section."""
+def render_head(session: Session, found: projects.Discovery) -> str:
+    """Render the focus state: none, nothing, or each project with the primary marked and ``{project_dir}``."""
     if session.none:
         return "Focus: none. This session works without a project.\n"
     if not session.focus:
@@ -186,7 +186,15 @@ def render(session: Session, found: projects.Discovery) -> str:
         lines.append(f"{entry['id']}  {label}" + ("  (primary)" if index == 0 else ""))
         lines.append(f"  path: {entry['path']}")
     lines.append(f"{{project_dir}} = {session.focus[0]['path']}")
-    for entry in session.focus:
-        section = _pick_up_here(Path(entry["path"]))
-        lines += ["", f"{entry['id']} RESUME.md:", section or "No Pick up here section; read RESUME.md."]
     return "\n".join(lines) + "\n"
+
+
+def render_resume(entry: dict[str, str]) -> str:
+    """Render one focused project's Pick up here section, after a blank line."""
+    section = _pick_up_here(Path(entry["path"]))
+    return f"\n{entry['id']} RESUME.md:\n{section or 'No Pick up here section; read RESUME.md.'}\n"
+
+
+def render(session: Session, found: projects.Discovery) -> str:
+    """Render the focus: each project with the primary marked, then each Pick up here section."""
+    return render_head(session, found) + "".join(render_resume(entry) for entry in session.focus)
