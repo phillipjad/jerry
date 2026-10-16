@@ -47,15 +47,68 @@ def build_parser() -> argparse.ArgumentParser:
     show.add_argument("project_id")
     show.add_argument("--root", action="append", type=Path, help=root_help)
 
+    new = project_commands.add_parser("new", help="Create the next-numbered project with a RESUME.md stub.")
+    new.add_argument("slug")
+    new.add_argument("--parent", help="Create a sub-project inside this project ID.")
+    new.add_argument("--title", help="Project title (default: the slug).")
+    new.add_argument("--root", action="append", type=Path, help=root_help)
+
+    index = project_commands.add_parser("index", help="Print each root's registry table, or update its README.md.")
+    index.add_argument("--write", action="store_true", help="Rewrite the table between the README.md markers.")
+    index.add_argument("--root", action="append", type=Path, help=root_help)
+
+    check = project_commands.add_parser("check", help="Validate projects, RESUME.md files and registries.")
+    check.add_argument("--root", action="append", type=Path, help=root_help)
+
     return parser
+
+
+def _new(found: projects.Discovery, args: argparse.Namespace) -> int:
+    try:
+        path = projects.new_project(found, args.slug, parent_id=args.parent, title=args.title)
+    except (OSError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    print(path.as_posix())
+    return 0
+
+
+def _index(found: projects.Discovery, write: bool) -> int:
+    if not write:
+        tables = [projects.render_index(found, root) for root in found.roots]
+        if len(tables) > 1:
+            tables = [f"{root.as_posix()}\n\n{table}" for root, table in zip(found.roots, tables)]
+        print("\n".join(tables), end="")
+        return 0
+    code = 0
+    for root in found.roots:
+        readme = (root / projects.REGISTRY).as_posix()
+        try:
+            changed = projects.sync_registry(found, root, write=True)
+            if changed is None:
+                raise ValueError(f"no '{projects.INDEX_START}' and '{projects.INDEX_END}' lines")
+        except (OSError, ValueError) as exc:
+            print(f"error: {readme}: {exc}", file=sys.stderr)
+            code = 1
+            continue
+        print(f"{readme}: {'updated' if changed else 'up to date'}")
+    return code
 
 
 def _projects(args: argparse.Namespace) -> int:
     found = projects.discover(Path.cwd(), roots=args.root)
-    for warning in found.warnings:
+    errors, warnings = projects.check(found) if args.command == "check" else (found.errors, found.warnings)
+    for warning in warnings:
         print(f"warning: {warning}", file=sys.stderr)
-    for error in found.errors:
+    for error in errors:
         print(f"error: {error}", file=sys.stderr)
+    if args.command == "check":
+        print(f"{len(errors)} errors, {len(warnings)} warnings, {len(found.all_projects)} projects checked")
+        return 1 if errors else 0
+    if args.command == "new":
+        return _new(found, args)
+    if args.command == "index":
+        return _index(found, args.write)
     if args.command == "list":
         print(projects.render_list(found), end="")
         return 0
