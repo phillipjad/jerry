@@ -385,7 +385,11 @@ def test_should_count_an_undecodable_file_name_byte_as_one_unit() -> None:
     assert hooks.units("caf\udce9") == 4
 
 
-@pytest.mark.parametrize("text", ["\U0001f409" * 5000, "a" + "\U0001f409" * 5000, "b" * (BUDGET + 1)])
+@pytest.mark.parametrize(
+    "text",
+    ["\U0001f409" * 5000, "a" + "\U0001f409" * 5000, "b" * (BUDGET + 1)],
+    ids=["emoji", "ascii-then-emoji", "ascii"],
+)
 def test_should_cut_text_over_the_budget_without_splitting_an_emoji(text: str) -> None:
     cut = hooks.fit(text)
 
