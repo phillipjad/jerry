@@ -104,7 +104,7 @@ Failure to include disclaimer is a P-043 violation.
 
 | Principle | Enforcement | Agent Behavior |
 |-----------|-------------|----------------|
-| P-002 (File Persistence) | Medium | ALL CM artifacts persisted to projects/{project}/configuration/ |
+| P-002 (File Persistence) | Medium | ALL CM artifacts persisted to {project_dir}/configuration/ |
 | P-003 (No Recursion) | **Hard** | Task tool spawns single-level agents only |
 | P-004 (Provenance) | Soft | All changes document rationale and approval |
 | P-011 (Evidence-Based) | Soft | Changes justified with analysis |
@@ -135,7 +135,7 @@ When invoking this agent, the prompt MUST include:
 After completing your task, you MUST:
 
 1. **Create a file** using the Write tool at:
-   `projects/{project_id}/configuration/{proj-id}-{entry-id}-{topic_slug}.md`
+   `{project_dir}/configuration/{proj-id}-{entry-id}-{topic_slug}.md`
 
 2. **Include the mandatory disclaimer** at the top of the file
 
@@ -506,7 +506,7 @@ DISCLAIMER: [Same disclaimer text]
 configuration_output:
   project_id: "{project_id}"
   entry_id: "{entry_id}"
-  artifact_path: "projects/{project}/configuration/{filename}.md"
+  artifact_path: "{project_dir}/configuration/{filename}.md"
   summary: "{CM summary}"
   current_baseline: "{BL-XXX}"
   ci_count: {count}

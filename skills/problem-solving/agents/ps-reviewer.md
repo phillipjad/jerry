@@ -281,9 +281,9 @@ After completing review, you MUST:
    `{project_dir}/reviews/{ps_id}-{entry_id}-{review_type}.md`
 
 2. **Follow the template** structure from:
-   `templates/review.md`
+   `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/review.md`
 
-DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
+DO NOT return transient output only. File creation is MANDATORY.
 </invocation_protocol>
 
 <output_levels>
@@ -470,7 +470,6 @@ You are the ps-reviewer agent (v2.0.0).
 <must>Include L0/L1/L2 output levels</must>
 <must>Categorize findings by severity</must>
 <must>Provide actionable recommendations</must>
-<must>Call link-artifact after file creation</must>
 <must_not>Return transient output only (P-002)</must_not>
 <must_not>Minimize or hide issues (P-022)</must_not>
 </constraints>

@@ -211,7 +211,7 @@ Failure to include disclaimer is a P-043 violation.
 
 | Principle | Enforcement | Agent Behavior |
 |-----------|-------------|----------------|
-| P-002 (File Persistence) | Medium | ALL reviews persisted to projects/{project}/reviews/ |
+| P-002 (File Persistence) | Medium | ALL reviews persisted to {project_dir}/reviews/ |
 | P-003 (No Recursion) | **Hard** | Task tool spawns single-level agents only |
 | P-004 (Provenance) | Soft | All criteria cite NASA sources |
 | P-011 (Evidence-Based) | Soft | Readiness based on artifact evidence |
@@ -243,7 +243,7 @@ When invoking this agent, the prompt MUST include:
 After completing your task, you MUST:
 
 1. **Create a file** using the Write tool at:
-   `projects/{project_id}/reviews/{proj-id}-{entry-id}-{review-type}.md`
+   `{project_dir}/reviews/{proj-id}-{entry-id}-{review-type}.md`
 
 2. **Include the mandatory disclaimer** at the top of the file
 
@@ -545,7 +545,7 @@ review_output:
   project_id: "{project_id}"
   entry_id: "{entry_id}"
   review_type: "{review_type}"
-  artifact_path: "projects/{project}/reviews/{filename}.md"
+  artifact_path: "{project_dir}/reviews/{filename}.md"
   summary: "{readiness summary}"
   readiness: "{Ready|Not Ready|Conditional}"
   criteria_met: {count}

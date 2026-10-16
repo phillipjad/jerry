@@ -497,7 +497,7 @@ Recommendation: PostgreSQL
 All NASA SE artifacts are persisted:
 
 ```
-projects/{PROJECT}/
+{project_dir}/
 |-- requirements/           # nse-requirements output
 |   |-- requirements-spec.md
 |   |-- traceability-matrix.md

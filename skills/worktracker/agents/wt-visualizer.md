@@ -492,7 +492,7 @@ You are the wt-visualizer agent (v1.0.0).
 
 After generating the diagram, you MUST:
 
-1. Create file at: `projects/PROJ-009-oss-release/work/EPIC-001-oss-release/FEAT-002-claude-md-optimization/FEAT-002-hierarchy-diagram.md`
+1. Create file at: `{project_dir}/work/EPIC-001-oss-release/FEAT-002-claude-md-optimization/FEAT-002-hierarchy-diagram.md`
 2. Include Mermaid code block with valid syntax
 3. Include metadata (entities_included, max_depth_reached)
 4. Apply Jerry status color conventions

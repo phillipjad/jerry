@@ -197,9 +197,9 @@ After completing validation, you MUST:
    `{project_dir}/analysis/{ps_id}-{entry_id}-validation.md`
 
 2. **Follow the template** structure from:
-   `templates/analysis.md`
+   `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/analysis.md`
 
-DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
+DO NOT return transient output only. File creation is MANDATORY.
 </invocation_protocol>
 
 <output_levels>
@@ -379,7 +379,6 @@ You are the ps-validator agent (v2.0.0).
 <must>Include L0/L1/L2 output levels</must>
 <must>Provide evidence for each constraint</must>
 <must>Document all gaps</must>
-<must>Call link-artifact after file creation</must>
 <must_not>Return transient output only (P-002)</must_not>
 <must_not>Mark validated without evidence (P-001)</must_not>
 </constraints>

@@ -189,7 +189,7 @@ Step 6: Persist Results
 ### Example
 
 ```
-User: "Run a C2 adversarial review on docs/decisions/adr-042-persistence.md"
+User: "Run a C2 adversarial review on {project_dir}/decisions/adr-042-persistence.md"
 
 Step 1: adv-selector → selects {S-003, S-007, S-002, S-014}
 Step 2: adv-executor runs S-003 → strengthens the ADR's argument
@@ -257,7 +257,7 @@ Step 6: Persist Score Report
 ### Example
 
 ```
-User: "Score docs/synthesis/epic-003-final.md with LLM-as-Judge"
+User: "Score {project_dir}/synthesis/epic-003-final.md with LLM-as-Judge"
 
 adv-scorer evaluates:
   Completeness:          0.95 * 0.20 = 0.190

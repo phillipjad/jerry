@@ -17,9 +17,7 @@ compatibility rules for all machine-readable schemas in the Jerry framework.
 | Schema | Location | Current Version |
 |--------|----------|-----------------|
 | Session Context | `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json` | 1.0.0 |
-| Tool Registry | `TOOL_REGISTRY.yaml` | 1.0.0 |
 | Orchestration Template | `skills/orchestration/templates/ORCHESTRATION.template.yaml` | 2.0.0 |
-| Agent Template | `.claude/agents/TEMPLATE.md` | 1.0.0 |
 | PS Skill Contract | `skills/problem-solving/contracts/PS_SKILL_CONTRACT.yaml` | 1.0.0 |
 | NSE Skill Contract | `skills/nasa-se/contracts/NSE_SKILL_CONTRACT.yaml` | 1.0.0 |
 | Cross-Skill Handoff | `skills/shared/contracts/CROSS_SKILL_HANDOFF.yaml` | 1.0.0 |
@@ -219,19 +217,6 @@ def get_json_schema_version(path: str) -> str:
 2. **Version Increment**: New version > old version (on schema changes)
 3. **Changelog Entry**: MAJOR changes require migration notes
 
-### Pre-commit Hook
-
-```yaml
-# .pre-commit-config.yaml
-- repo: local
-  hooks:
-    - id: validate-schema-versions
-      name: Validate schema versions
-      entry: python scripts/validate_schema_versions.py
-      language: python
-      files: \.(yaml|json)$
-```
-
 ---
 
 ## Schema Registry
@@ -241,11 +226,8 @@ def get_json_schema_version(path: str) -> str:
 | Schema Type | Path Pattern |
 |-------------|--------------|
 | Core schemas | `${CLAUDE_PLUGIN_ROOT}/docs/schemas/{name}.json` |
-| Type definitions | `docs/schemas/types/{name}.{ts,py}` |
 | Skill contracts | `skills/{skill}/contracts/{NAME}_CONTRACT.yaml` |
 | Templates | `skills/{skill}/templates/*.template.yaml` |
-| Agent templates | `.claude/agents/TEMPLATE.md` |
-| Tool registry | `TOOL_REGISTRY.yaml` (root) |
 
 ### Schema References
 

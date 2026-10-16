@@ -55,11 +55,8 @@ The `skills/shared/` directory contains reusable infrastructure that multiple Je
 - `DOMAIN_PRINCIPLES` - Additional constitution principles
 - `DOMAIN_XML_SECTIONS` - Domain-specific XML sections
 
-**Usage:** Use the composition script to generate complete agent templates:
-
-```bash
-python3 scripts/compose_agent_template.py --domain {ps|nse} --output "{output-path}"
-```
+**Usage:** Compose a complete agent template by filling the extension points from a domain extension; see
+Composition Notes in `AGENT_TEMPLATE_CORE.md`.
 
 **Sections:**
 - YAML frontmatter schema v1.0 (identity, persona, capabilities, guardrails, output, validation)
@@ -195,7 +192,7 @@ When creating a new agent:
 
 1. Determine domain (ps, nse, orch, etc.)
 2. Create domain extension file if it doesn't exist
-3. Run composition script: `python3 scripts/compose_agent_template.py --domain {domain}`
+3. Fill the core template's extension points from the domain extension
 4. Replace all `{placeholders}` with agent-specific content
 5. Validate against constitution (P-002, P-003, P-004, P-022)
 6. Register agent in skill's SKILL.md agent table
@@ -222,14 +219,13 @@ Common tasks for skill authors and which shared resource to use:
 | Select multi-agent workflow pattern | ORCHESTRATION_PATTERNS.md decision tree | `skills/shared/ORCHESTRATION_PATTERNS.md` |
 | Create a skill playbook | PLAYBOOK_TEMPLATE.md | `skills/shared/PLAYBOOK_TEMPLATE.md` |
 | Define cross-skill handoff | CROSS_SKILL_HANDOFF.yaml | `skills/shared/contracts/CROSS_SKILL_HANDOFF.yaml` |
-| Generate composed agent template | Composition script | `scripts/compose_agent_template.py --domain {ps\|nse}` |
 | Translate cognitive modes at handoff | CROSS_SKILL_HANDOFF.yaml translation rules | `skills/shared/contracts/CROSS_SKILL_HANDOFF.yaml` |
 
 ### Composing an Agent Template (Walkthrough)
 
 1. **Pick your domain** - Determine if the agent belongs to `ps` (problem-solving), `nse` (NASA SE), or a new domain
 2. **Check for domain extension** - Look for `{DOMAIN}_EXTENSION.md` in your skill directory (e.g., `PS_EXTENSION.md`)
-3. **Run composition** - `python3 scripts/compose_agent_template.py --domain {domain} --output agents/"{agent-name}".md`
+3. **Compose** - Fill the core template's extension points from the domain extension; save as `agents/{agent-name}.md`
 4. **Fill placeholders** - Replace all 9 `{PLACEHOLDER}` values with agent-specific content
 5. **Validate** - Ensure P-002 (file persistence), P-003 (no recursive subagents), P-022 (no deception) compliance
 6. **Register** - Add the agent to your skill's SKILL.md agent table
@@ -256,8 +252,8 @@ Common tasks for skill authors and which shared resource to use:
 
 If you need to extend shared resources:
 
-- **Agent template:** Create a new extension file (e.g., `ORCH_EXTENSION.md`) and update composition script
-- **Orchestration patterns:** Propose new pattern via ADR in `docs/decisions/`
+- **Agent template:** Create a new extension file (e.g., `ORCH_EXTENSION.md`)
+- **Orchestration patterns:** Propose new pattern via ADR
 - **Playbook template:** Propose changes via ADR (affects all skills)
 - **Cross-skill handoff:** Add new handoff pattern to `contracts/CROSS_SKILL_HANDOFF.yaml`
 
@@ -288,7 +284,6 @@ Shared resources adhere to the **Jerry Constitution v1.0**:
 
 ## References
 
-- Agent Template ADR: `docs/decisions/wi-sao-009-adr-unified-template-architecture.md`
 - Orchestration Patterns Source: SAO-INIT-007 Deep Research (DISCOVERY-008)
 - Session Context Schema: `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`
 - Jerry Constitution: `${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md`

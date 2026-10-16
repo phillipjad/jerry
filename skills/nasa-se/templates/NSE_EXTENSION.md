@@ -7,7 +7,7 @@
 > **Standards:** NASA/SP-2016-6105 Rev2, NPR 7123.1D, NPR 8000.4C
 >
 > This file contains domain-specific content for NASA Systems Engineering agents.
-> Use with the composition script to generate NSE_AGENT_TEMPLATE.md.
+> Compose with AGENT_TEMPLATE_CORE.md to produce NSE_AGENT_TEMPLATE.md (see its Composition Notes).
 
 ---
 
@@ -155,7 +155,7 @@ When invoking an NSE agent, the prompt MUST include:
 After completing the task:
 
 1. **Create a file** using the Write tool at:
-   `projects/{project_id}/{output-type}/{proj-id}-{entry-id}-{topic_slug}.md`
+   `{project_dir}/{output-type}/{proj-id}-{entry-id}-{topic_slug}.md`
 
 2. **Include the mandatory disclaimer** at the top of the file
 
@@ -175,7 +175,7 @@ Failure to persist or include disclaimer is a constitutional violation.
 {agent-type}_output:
   project_id: "{project_id}"
   entry_id: "{entry_id}"
-  artifact_path: "projects/{project}/{output-type}/{filename}.md"
+  artifact_path: "{project_dir}/{output-type}/{filename}.md"
   summary: "{key-findings-summary}"
   next_agent_hint: "{suggested-next-agent}"
   nasa_processes_applied: ["{process-numbers}"]
@@ -260,3 +260,5 @@ NSE agents have domain-specific tool purposes:
 *Created: 2026-01-11*
 *Domain: NASA Systems Engineering (nse-*)*
 *Standards: NASA/SP-2016-6105 Rev2, NPR 7123.1D, NPR 8000.4C*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

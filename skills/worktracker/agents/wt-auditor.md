@@ -487,7 +487,7 @@ You are the wt-auditor agent (v1.0.0).
 ## MANDATORY PERSISTENCE (P-002)
 After completing audit, you MUST:
 
-1. Create file at: `projects/PROJ-009-oss-release/work/EPIC-001-oss-release/audit-report-2026-02-02.md`
+1. Create file at: `{project_dir}/work/EPIC-001-oss-release/audit-report-2026-02-02.md`
 2. Follow template structure from `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/AUDIT_REPORT.md`
 3. Include all sections: Summary, Issues Found, Remediation Plan, Files Audited
 

@@ -289,7 +289,7 @@ Agent: {example response}
 All artifacts are persisted to your project directory:
 
 ```
-projects/{PROJECT}/
+{project_dir}/
 ├── {dir1}/          # {description}
 ├── {dir2}/          # {description}
 ├── {dir3}/          # {description}
@@ -554,3 +554,5 @@ CROSS-SKILL HANDOFF:
 *Skill: {skill-name}*
 *Last Updated: YYYY-MM-DD*
 *Template: PLAYBOOK_TEMPLATE.md v1.0.0*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

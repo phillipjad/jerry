@@ -6,7 +6,7 @@
 > **ADR:** decisions/wi-sao-009-adr-unified-template-architecture.md
 >
 > This file contains domain-specific content for Problem-Solving agents.
-> Use with the composition script to generate PS_AGENT_TEMPLATE.md.
+> Compose with AGENT_TEMPLATE_CORE.md to produce PS_AGENT_TEMPLATE.md (see its Composition Notes).
 
 ---
 
@@ -82,15 +82,15 @@ prior_art:
 
 | Agent | Output Directory | Template | Description |
 |-------|------------------|----------|-------------|
-| **ps-researcher** | `{project_dir}/research/` | `templates/research.md` | Primary research, literature reviews, web findings |
-| **ps-analyst** | `{project_dir}/analysis/` | `templates/deep-analysis.md` | Gap analysis, trade-offs, deep dives |
-| **ps-architect** | `{project_dir}/decisions/` | `templates/adr.md` | Architecture Decision Records (ADRs) |
-| **ps-critic** | `{project_dir}/critiques/` | `templates/critique.md` | Quality evaluation for generator-critic loops |
-| **ps-investigator** | `{project_dir}/investigations/` | `templates/investigation.md` | Root cause analysis, incident reports |
-| **ps-reporter** | `{project_dir}/reports/` | `templates/report.md` | Status reports, summaries, dashboards |
-| **ps-reviewer** | `{project_dir}/reviews/` | `templates/review.md` | Code reviews, design reviews, security reviews |
-| **ps-synthesizer** | `{project_dir}/synthesis/` | `templates/synthesis.md` | Cross-document pattern synthesis, meta-analysis |
-| **ps-validator** | `{project_dir}/analysis/` | `templates/analysis.md` | Constraint validation reports |
+| **ps-researcher** | `{project_dir}/research/` | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/research.md` | Primary research, literature reviews, web findings |
+| **ps-analyst** | `{project_dir}/analysis/` | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/deep-analysis.md` | Gap analysis, trade-offs, deep dives |
+| **ps-architect** | `{project_dir}/decisions/` | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/adr.md` | Architecture Decision Records (ADRs) |
+| **ps-critic** | `{project_dir}/critiques/` | `${CLAUDE_PLUGIN_ROOT}/skills/problem-solving/templates/critique.md` | Quality evaluation for generator-critic loops |
+| **ps-investigator** | `{project_dir}/investigations/` | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/investigation.md` | Root cause analysis, incident reports |
+| **ps-reporter** | `{project_dir}/reports/` | — | Status reports, summaries, dashboards |
+| **ps-reviewer** | `{project_dir}/reviews/` | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/review.md` | Code reviews, design reviews, security reviews |
+| **ps-synthesizer** | `{project_dir}/synthesis/` | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/synthesis.md` | Cross-document pattern synthesis, meta-analysis |
+| **ps-validator** | `{project_dir}/analysis/` | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/analysis.md` | Constraint validation reports |
 
 #### Artifact Naming Convention
 
@@ -120,7 +120,6 @@ prior_art:
 **P-002 Violation Conditions:**
 - Returning results without file creation
 - Writing to wrong output directory
-- Omitting link-artifact call
 - Using transient output (console only)
 
 ---
@@ -153,10 +152,9 @@ After completing the task:
 1. **Create a file** using the Write tool at:
    `{project_dir}/{output-type}/{ps_id}-{entry_id}-{topic_slug}.md`
 
-2. **Follow the template** structure from:
-   `templates/{template-name}.md`
+2. **Follow the template** the Output Directory Reference table names for the agent, if any.
 
-DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
+DO NOT return transient output only. File creation is MANDATORY.
 Failure to persist is a P-002 violation.
 
 ---

@@ -374,9 +374,9 @@ After completing evaluation, you MUST:
    `{project_dir}/critiques/{ps_id}-{entry_id}-iter{iteration}-critique.md`
 
 2. **Follow the template** structure from:
-   `templates/critique.md`
+   `${CLAUDE_PLUGIN_ROOT}/skills/problem-solving/templates/critique.md`
 
-DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
+DO NOT return transient output only. File creation is MANDATORY.
 </invocation_protocol>
 
 <output_levels>
@@ -640,7 +640,6 @@ You are the ps-critic agent (v2.0.0).
 <must>Include L0/L1/L2 output levels</must>
 <must>Calculate quality score (0.0-1.0)</must>
 <must>Provide actionable improvement recommendations</must>
-<must>Call link-artifact after file creation</must>
 <must_not>Return transient output only (P-002)</must_not>
 <must_not>Hide quality issues (P-022)</must_not>
 <must_not>Manage iteration loop (P-003 - orchestrator's job)</must_not>

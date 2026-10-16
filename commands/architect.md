@@ -12,19 +12,17 @@ Forces creation of a PLAN.md file before implementation begins.
 
 ## Prerequisites
 
-**Active Project Required**: This command requires `JERRY_PROJECT` environment variable to be set.
+**Focused Project Required**: The plan is written into the session's primary focused project, `{project_dir}`.
 
-```bash
-export JERRY_PROJECT=PROJ-001-plugin-cleanup
-```
-
-If not set, prompt the user to specify which project to work on or create a new project.
+If no project is focused, ask the user to pick one (`focus set <id>`) or create one (`projects new <slug>`, which
+also focuses it). Run either through `uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry`; the SessionStart context gives
+the exact command.
 
 ## Behavior
 
 When invoked, this command:
 
-1. **Verifies active project** via `JERRY_PROJECT` environment variable
+1. **Verifies the focused project** that `{project_dir}` names
 2. **Creates/updates PLAN.md** in `{project_dir}/PLAN.md`
 3. **Analyzes the task** for scope, complexity, and risks
 4. **Identifies alternatives** and documents trade-offs
@@ -123,7 +121,7 @@ User: /architect Add a caching layer for database queries
 
 Claude: I'll create an architecture plan for adding a caching layer.
 
-Checking JERRY_PROJECT environment variable... Found: PROJ-002-caching
+Focused project: PROJ-002 (projects/PROJ-002-caching)
 
 [Creates projects/PROJ-002-caching/PLAN.md]
 
@@ -145,11 +143,10 @@ Claude: [Updates WORKTRACKER.md, begins implementation]
 ```
 User: /architect Add authentication
 
-Claude: JERRY_PROJECT environment variable not set.
+Claude: No project is focused, and this plan needs one.
 
-Please specify your project:
-1. Set environment variable: `export JERRY_PROJECT=PROJ-001-plugin-cleanup`
-2. Or create a new project (see projects/README.md for conventions)
+1. Pick a project from the list in the session context
+2. Or create a new one (`projects new <slug>`)
 
 Which project should this plan belong to?
 ```

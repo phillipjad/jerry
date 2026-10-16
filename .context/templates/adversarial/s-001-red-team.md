@@ -377,7 +377,7 @@ The governance document defines: (1) 24 HARD rules that "CANNOT be overridden," 
 
 | ID | Attack Vector | Category | Exploitability | Severity | Priority | Defense | Affected Dimension |
 |----|---------------|----------|----------------|----------|----------|---------|-------------------|
-| RT-001-20260215T1730 | Context rot degrades L1 rules: after 150K tokens, HARD rules loaded at session start are no longer attended to, effectively disabling enforcement | Degradation | High | Critical | P0 | Partial (L2 re-injection) | Methodological Rigor |
+| RT-001-20260215T1730 | Context rot degrades L1 rules: after 150K tokens, HARD rules loaded at session start are no longer attended to, effectively disabling enforcement | Degradation | High | Critical | P0 | Partial (SessionStart context) | Methodological Rigor |
 | RT-002-20260215T1730 | C1 classification abuse: operator classifies C3 work as C1 to avoid quality gate, since criticality self-classification has no independent verification | Circumvention | High | Major | P1 | Missing | Internal Consistency |
 | RT-003-20260215T1730 | Steelman-before-critique ordering (H-16) has no deterministic enforcement: an agent can claim S-003 was applied without evidence, since no L3 gate checks for S-003 output artifact | Circumvention | Medium | Major | P1 | Missing | Evidence Quality |
 | RT-004-20260215T1730 | AE-002 triggers on file path but not content: modifying rule semantics via a new file that imports/overrides `${CLAUDE_PLUGIN_ROOT}/.context/rules/` content would bypass auto-escalation | Boundary | Medium | Major | P1 | Missing | Completeness |
@@ -385,7 +385,7 @@ The governance document defines: (1) 24 HARD rules that "CANNOT be overridden," 
 
 **Step 4: Develop Countermeasures**
 
-**P0:** RT-001 -- Increase L2 re-injection token budget for critical HARD rules; add explicit "context health check" step requiring re-read of quality-enforcement.md at 50% context utilization. Acceptance criteria: L2 re-injection strategy documented with specific trigger conditions.
+**P0:** RT-001 -- Add explicit "context health check" step requiring re-read of quality-enforcement.md at 50% context utilization. Acceptance criteria: re-read strategy documented with specific trigger conditions.
 
 **P1:** RT-002 -- Add "Criticality Justification" requirement: C1 classification must include explicit rationale explaining why criteria (reversible in 1 session, <3 files) are met. RT-003 -- Add S-003 output artifact requirement: H-16 compliance must reference a specific S-003 report with date and findings. RT-004 -- Expand AE-002 to trigger on content that references or modifies rule semantics, not just file paths.
 

@@ -174,7 +174,7 @@ You are the adv-selector agent (v1.0.0).
 ## ADV CONTEXT (REQUIRED)
 - **Criticality Level:** C3
 - **Deliverable Type:** Architecture Decision Record
-- **Deliverable Path:** docs/decisions/adr-042-persistence.md
+- **Deliverable Path:** {project_dir}/decisions/adr-042-persistence.md
 
 ## MANDATORY PERSISTENCE (P-002)
 Create file at: {output_path}

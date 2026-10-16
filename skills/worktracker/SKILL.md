@@ -182,8 +182,8 @@ Agent outputs use standardized templates:
 
 | File | Purpose |
 |------|---------|
-| `projects/{ProjectId}/WORKTRACKER.md` | Global manifest for project |
-| `projects/{ProjectId}/work/` | Work decomposition folder |
+| `{project_dir}/WORKTRACKER.md` | Global manifest for project |
+| `{project_dir}/work/` | Work decomposition folder |
 | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/` | All worktracker templates |
 
 ---
@@ -194,7 +194,7 @@ Agent outputs use standardized templates:
 
 | Condition | Use Instead | Consequence of Misrouting |
 |-----------|-------------|--------------------------|
-| Query answerable by `jerry items list` or `jerry projects list` CLI | Jerry CLI directly | Worktracker agents invoked for simple queries waste agent invocation overhead; CLI provides instant results without context consumption |
+| Query answerable by `jerry projects list` or `jerry projects show` CLI | Jerry CLI directly | Worktracker agents invoked for simple queries waste agent invocation overhead; CLI provides instant results without context consumption |
 | Non-entity file operations (general markdown, code files) | Read/Write/Edit tools directly | AST parsing applied to non-entity files produces validation errors; entity schema enforcement fails on non-worktracker content |
 | Research, analysis, or root cause investigation | `/problem-solving` | Worktracker agents have no research methodology; wt-verifier and wt-auditor are scoped to entity integrity, not analytical tasks |
 | Requirements engineering or V&V activities | `/nasa-se` | Worktracker tracks work items, not requirements; no traceability matrix or verification capability |

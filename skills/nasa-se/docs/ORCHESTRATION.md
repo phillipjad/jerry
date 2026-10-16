@@ -741,7 +741,7 @@ All agents share a common state schema structure for handoffs:
 Agent states are persisted to:
 
 ```
-projects/{PROJECT}/
+{project_dir}/
 └── .jerry/
     └── nse-state/
         ├── nse-requirements-state.json
@@ -807,7 +807,7 @@ function validateSession(state_file, current_session_id):
 
 **State Backup Location:**
 ```
-projects/{PROJECT}/
+{project_dir}/
 └── .jerry/
     └── nse-state/
         ├── nse-requirements-state.json

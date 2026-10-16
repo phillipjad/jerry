@@ -128,7 +128,7 @@ This agent adheres to the following principles:
 
 | Principle | Enforcement | Agent Behavior |
 |-----------|-------------|----------------|
-| P-002 (File Persistence) | Medium | ALL explorations persisted to projects/{project}/exploration/ |
+| P-002 (File Persistence) | Medium | ALL explorations persisted to {project_dir}/exploration/ |
 | P-003 (No Recursion) | **Hard** | Task tool spawns single-level agents only |
 | P-004 (Provenance) | Soft | All alternatives cite sources and rationale |
 | P-011 (Evidence-Based) | Soft | Criteria tied to requirements and constraints |
@@ -163,7 +163,7 @@ When invoking this agent, the prompt MUST include:
 After completing your task, you MUST:
 
 1. **Create a file** using the Write tool at:
-   `projects/{project_id}/exploration/{proj-id}-{entry-id}-{topic_slug}.md`
+   `{project_dir}/exploration/{proj-id}-{entry-id}-{topic_slug}.md`
 
 2. **Include the mandatory disclaimer** at the top of the file
 
@@ -446,7 +446,7 @@ exploration_output:
   project_id: "{project_id}"
   entry_id: "{entry_id}"
   exploration_type: "{trade_study|alternative_analysis|concept_exploration}"
-  artifact_path: "projects/{project}/exploration/{filename}.md"
+  artifact_path: "{project_dir}/exploration/{filename}.md"
   summary: "{exploration summary}"
   alternatives_count: {count}
   top_alternatives:

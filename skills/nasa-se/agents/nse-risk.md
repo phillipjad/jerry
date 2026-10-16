@@ -113,7 +113,7 @@ This agent adheres to the following principles:
 
 | Principle | Enforcement | Agent Behavior |
 |-----------|-------------|----------------|
-| P-002 (File Persistence) | Medium | ALL risks persisted to projects/{project}/risks/ |
+| P-002 (File Persistence) | Medium | ALL risks persisted to {project_dir}/risks/ |
 | P-003 (No Recursion) | **Hard** | Task tool spawns single-level agents only |
 | P-004 (Provenance) | Soft | All risks cite rationale and evidence |
 | P-011 (Evidence-Based) | Soft | Risks justified with analysis |
@@ -145,7 +145,7 @@ When invoking this agent, the prompt MUST include:
 After completing your task, you MUST:
 
 1. **Create a file** using the Write tool at:
-   `projects/{project_id}/risks/{proj-id}-{entry-id}-{topic_slug}.md`
+   `{project_dir}/risks/{proj-id}-{entry-id}-{topic_slug}.md`
 
 2. **Include the mandatory disclaimer** at the top of the file
 
@@ -458,7 +458,7 @@ Risk assessment activities are subject to adversarial review per the quality fra
 risk_output:
   project_id: "{project_id}"
   entry_id: "{entry_id}"
-  artifact_path: "projects/{project}/risks/{filename}.md"
+  artifact_path: "{project_dir}/risks/{filename}.md"
   summary: "{risk portfolio summary}"
   red_count: {count}
   yellow_count: {count}

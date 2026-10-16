@@ -46,7 +46,7 @@ This document explains how the Problem-Solving agents are orchestrated, how stat
               │               │               │
               ▼               ▼               ▼
        ┌──────────────────┐  ┌──────────────────┐  ┌───────────────────┐
-       │projects/$PROJECT/│  │projects/$PROJECT/│  │projects/$PROJECT/ │
+       │  {project_dir}/  │  │  {project_dir}/  │  │  {project_dir}/   │
        │    research/     │  │    analysis/     │  │    decisions/     │
        └──────────────────┘  └──────────────────┘  └───────────────────┘
 ```
@@ -261,7 +261,7 @@ Each agent produces an output key that can be referenced by downstream agents:
 researcher_output:
   ps_id: "work-024"
   entry_id: "e-101"
-  artifact_path: "docs/research/work-024-e-101-caching.md"
+  artifact_path: "{project_dir}/research/work-024-e-101-caching.md"
   summary: "Evaluated Redis, Memcached, and Hazelcast..."
   sources: ["redis.io", "memcached.org", "hazelcast.com"]
   next_agent_hint: "ps-architect for design decision"
@@ -270,7 +270,7 @@ researcher_output:
 analyst_output:
   ps_id: "work-024"
   entry_id: "e-102"
-  artifact_path: "docs/analysis/work-024-e-102-root-cause.md"
+  artifact_path: "{project_dir}/analysis/work-024-e-102-root-cause.md"
   analysis_type: "root-cause"
   root_cause: "Database connection pool exhaustion"
   confidence: "high"
@@ -280,7 +280,7 @@ analyst_output:
 architect_output:
   ps_id: "work-024"
   entry_id: "e-103"
-  artifact_path: "docs/decisions/work-024-e-103-adr-caching.md"
+  artifact_path: "{project_dir}/decisions/work-024-e-103-adr-caching.md"
   adr_number: "ADR-015"
   decision: "Use Redis with Sentinel for HA"
   status: "PROPOSED"
@@ -290,7 +290,7 @@ architect_output:
 validator_output:
   ps_id: "work-024"
   entry_id: "e-104"
-  artifact_path: "docs/analysis/work-024-e-104-validation.md"
+  artifact_path: "{project_dir}/analysis/work-024-e-104-validation.md"
   validated_count: 8
   total_count: 10
   pass_rate: "80%"
@@ -351,13 +351,13 @@ You are the ps-architect agent (v2.0.0).
 - **Decision Topic:** Caching Solution
 
 ## UPSTREAM ARTIFACTS
-- Research: docs/research/work-024-e-101-caching.md
+- Research: {project_dir}/research/work-024-e-101-caching.md
 
 Read the research document before creating the ADR.
 Reference findings and sources in your decision rationale.
 
 ## MANDATORY PERSISTENCE (P-002)
-Create file at: docs/decisions/work-024-e-103-adr-caching.md
+Create file at: {project_dir}/decisions/work-024-e-103-adr-caching.md
 """,
 )
 ```
@@ -379,7 +379,7 @@ Orchestrator:
   - Invokes: Single Task
 
 Output:
-  - docs/research/work-024-e-001-graph-databases.md
+  - {project_dir}/research/work-024-e-001-graph-databases.md
 ```
 
 ### Pattern 2: Sequential Chain
@@ -390,11 +390,11 @@ Output:
 User: "Research, analyze trade-offs, then decide on database"
 
 Orchestrator:
-  1. Invoke ps-researcher → docs/research/...
+  1. Invoke ps-researcher → {project_dir}/research/...
   2. Wait for completion
-  3. Invoke ps-analyst with research reference → docs/analysis/...
+  3. Invoke ps-analyst with research reference → {project_dir}/analysis/...
   4. Wait for completion
-  5. Invoke ps-architect with research + analysis → docs/decisions/...
+  5. Invoke ps-architect with research + analysis → {project_dir}/decisions/...
 
 State Flow:
   researcher_output → analyst_output → architect_output
@@ -413,9 +413,9 @@ Orchestrator:
   - All run concurrently
 
 Output:
-  - docs/research/caching.md
-  - docs/research/queuing.md
-  - docs/research/storage.md
+  - {project_dir}/research/caching.md
+  - {project_dir}/research/queuing.md
+  - {project_dir}/research/storage.md
 ```
 
 ### Pattern 4: Fan-In (Synthesis)
@@ -431,12 +431,12 @@ Orchestrator:
   - Agent reads all, extracts patterns
 
 Input:
-  - docs/research/caching.md
-  - docs/research/queuing.md
-  - docs/research/storage.md
+  - {project_dir}/research/caching.md
+  - {project_dir}/research/queuing.md
+  - {project_dir}/research/storage.md
 
 Output:
-  - docs/synthesis/architecture-patterns.md
+  - {project_dir}/synthesis/architecture-patterns.md
 ```
 
 ### Pattern 5: Full Decision Workflow
@@ -474,10 +474,9 @@ You are the ps-{agent-type} agent (v2.0.0).
 <role>{role from agent spec}</role>
 <task>{specific task}</task>
 <constraints>
-<must>Create file with Write tool at docs/{type}/</must>
+<must>Create file with Write tool at {project_dir}/{type}/</must>
 <must>Include L0/L1/L2 output levels</must>
 <must>{task-specific requirements}</must>
-<must>Call link-artifact after file creation</must>
 <must_not>Return transient output only (P-002)</must_not>
 <must_not>{task-specific prohibitions}</must_not>
 </constraints>
@@ -494,7 +493,7 @@ You are the ps-{agent-type} agent (v2.0.0).
 ## MANDATORY PERSISTENCE (P-002)
 After completing your task, you MUST:
 
-1. Create file at: `docs/{type}/{ps_id}-{entry_id}-{slug}.md`
+1. Create file at: `{project_dir}/{type}/{ps_id}-{entry_id}-{slug}.md`
 2. Include L0 (executive), L1 (technical), L2 (strategic) sections
 
 ## YOUR TASK
