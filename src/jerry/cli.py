@@ -95,12 +95,16 @@ def _discover(args: argparse.Namespace, sid: str | None) -> tuple[session.Sessio
     return state, found
 
 
-def _new(found: projects.Discovery, args: argparse.Namespace) -> int:
+def _new(found: projects.Discovery, args: argparse.Namespace, sid: str | None, state: session.Session | None) -> int:
     try:
         path = projects.new_project(found, args.slug, parent_id=args.parent, title=args.title)
     except (OSError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
+    if state is not None:
+        state.focus.append({"id": projects.parse_folder(path.name).id, "path": path.as_posix()})
+        state.none = False
+        session.save(sid, state)
     print(path.as_posix())
     return 0
 
@@ -128,7 +132,8 @@ def _index(found: projects.Discovery, write: bool) -> int:
 
 
 def _projects(args: argparse.Namespace) -> int:
-    _, found = _discover(args, session.session_id(args.session))
+    sid = session.session_id(args.session)
+    state, found = _discover(args, sid)
     if args.command == "check":
         errors, warnings = projects.check(found)
         for warning in warnings:
@@ -138,7 +143,7 @@ def _projects(args: argparse.Namespace) -> int:
         print(f"{len(errors)} errors, {len(warnings)} warnings, {len(found.all_projects)} projects checked")
         return 1 if errors else 0
     if args.command == "new":
-        return _new(found, args)
+        return _new(found, args, sid, state)
     if args.command == "index":
         return _index(found, args.write)
     if args.command == "list":

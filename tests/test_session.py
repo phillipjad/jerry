@@ -335,3 +335,36 @@ def test_should_prune_nothing_when_no_session_was_ever_written(home: Path) -> No
     session.prune("current")
 
     assert not (home / ".jerry").exists()
+
+
+def test_should_add_a_new_project_to_the_session_focus(start: Path, home: Path) -> None:
+    focus("none")
+
+    code = cli.main(["projects", "new", "majin-buu", "--session", SESSION])
+
+    assert code == 0
+    assert read_session(home)["none"] is False
+    assert read_session(home)["focus"] == [{"id": "PROJ-003", "path": project_path(start, "PROJ-003-majin-buu")}]
+
+
+def test_should_append_a_new_project_after_the_primary(start: Path, home: Path) -> None:
+    focus("set", "PROJ-001")
+
+    assert cli.main(["projects", "new", "majin-buu", "--session", SESSION]) == 0
+
+    assert focused(home) == ["PROJ-001", "PROJ-003"]
+
+
+def test_should_leave_the_session_alone_when_new_fails(start: Path, home: Path) -> None:
+    focus("set", "PROJ-001")
+    before = session_file(home).read_text(encoding="utf-8")
+
+    assert cli.main(["projects", "new", "Not-A-Slug", "--session", SESSION]) == 1
+
+    assert session_file(home).read_text(encoding="utf-8") == before
+
+
+def test_should_not_create_a_session_when_new_runs_without_one(start: Path, home: Path) -> None:
+    assert cli.main(["projects", "new", "majin-buu"]) == 0
+
+    assert not (home / ".jerry").exists()
