@@ -595,7 +595,7 @@ Values sourced from quality-enforcement.md SSOT:
 
 ### Cross-References
 
-- **SSOT:** `.context/rules/quality-enforcement.md` (thresholds, weights, criticality levels, strategy catalog)
+- **SSOT:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (thresholds, weights, criticality levels, strategy catalog)
 - **Related Templates:**
   - S-014 LLM-as-Judge (scoring mechanism for S-010 execution and deliverable quality)
   - S-007 Constitutional AI Critique (HARD rule compliance check, often paired with S-010 at C2)
@@ -607,3 +607,5 @@ Values sourced from quality-enforcement.md SSOT:
 ---
 
 <!-- TEMPLATE NOTES: This template instantiates TEMPLATE-FORMAT.md v1.1.0 for S-010 Self-Refine strategy. Academic foundation: Madaan et al. 2023 demonstrates LLM self-improvement through structured feedback loops. Jerry implementation: H-15 mandates self-review before presenting deliverables. VERSION: 1.0.0 | CREATED: 2026-02-15 | ENABLER: EN-804 -->
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

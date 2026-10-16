@@ -1,5 +1,5 @@
 # Governance metadata for wt-visualizer
-# Validated by: docs/schemas/agent-governance-v1.schema.json
+# Validated by: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-governance-v1.schema.json
 # Runtime config: wt-visualizer.md
 
 version: 1.0.0
@@ -26,7 +26,7 @@ guardrails:
   fallback_behavior: warn_and_retry
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/work/**/*-diagram.md
+  location: "{project_dir}/work/**/*-diagram.md"
   schema:
     diagram_result:
       diagram_type: string
@@ -38,7 +38,7 @@ output:
       warnings: array
       generated_at: string
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-002: File Persistence (Medium) - Diagrams MUST be persisted'
   - 'P-003: No Recursive Subagents (Hard) - No spawning agents'
@@ -60,3 +60,5 @@ capabilities:
   - Misrepresent capabilities, findings, or confidence (P-022)
   - Modify work item content
   - Return transient output only (P-002)
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

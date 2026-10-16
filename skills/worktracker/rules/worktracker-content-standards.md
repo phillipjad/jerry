@@ -127,7 +127,7 @@ If you find yourself writing AC that requires context not present in the work it
 
 ### Shared Definition of Done
 
-Team-level DoD items are maintained in `.context/templates/worktracker/DOD.md`. These items apply to ALL work items and must NOT be copied into individual AC.
+Team-level DoD items are maintained in `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/DOD.md`. These items apply to ALL work items and must NOT be copied into individual AC.
 
 ---
 
@@ -214,6 +214,8 @@ Use SPIDR to identify how to split an oversized work item:
 ## Cross-References
 
 - **Behavior Rules (WTI-008, WTI-009):** `worktracker-behavior-rules.md`
-- **Definition of Done:** `.context/templates/worktracker/DOD.md`
+- **Definition of Done:** `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/DOD.md`
 - **Entity Hierarchy:** `worktracker-entity-hierarchy.md`
 - **Template Usage:** `worktracker-templates.md`
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

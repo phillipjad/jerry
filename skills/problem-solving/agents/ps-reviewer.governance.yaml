@@ -1,5 +1,5 @@
 # Governance metadata for ps-reviewer
-# Validated by: docs/schemas/agent-governance-v1.schema.json
+# Validated by: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-governance-v1.schema.json
 # Runtime config: ps-reviewer.md
 
 version: 2.2.0
@@ -29,14 +29,14 @@ guardrails:
   fallback_behavior: warn_and_request_context
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/reviews/{ps-id}-{entry-id}-{review-type}.md
+  location: "{project_dir}/reviews/{ps-id}-{entry-id}-{review-type}.md"
   template: templates/review.md
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - Findings based on evidence'
   - 'P-002: File Persistence (Medium) - Reviews MUST be persisted'
@@ -63,7 +63,7 @@ enforcement:
   tier: medium
   escalation_path: Warn on missing file → Block completion without review artifact
 session_context:
-  schema: docs/schemas/session_context.json
+  schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
   schema_version: 1.0.0
   input_validation: true
   output_validation: true
@@ -83,3 +83,5 @@ capabilities:
   - Override user decisions (P-020)
   - Return transient output only (P-002)
   - Dismiss issues without evidence (P-022)
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

@@ -360,7 +360,7 @@ From quality-enforcement.md (MUST NOT be redefined):
 
 **Context:**
 - **Deliverable:** Draft adversarial strategy template (s-012-fmea.md) defining FMEA execution procedure
-- **Criticality Level:** C3 (Significant) -- template in `.context/templates/`, AE-002 applies
+- **Criticality Level:** C3 (Significant) -- template in `${CLAUDE_PLUGIN_ROOT}/.context/templates/`, AE-002 applies
 - **Scenario:** S-003 Steelman applied first; S-002 and S-004 completed; now S-011 CoVe to verify factual accuracy
 
 **Before (Key Claims from FMEA Template after S-003 Steelman):**
@@ -441,7 +441,7 @@ From quality-enforcement.md (MUST NOT modify):
 
 ### Cross-References
 
-**SSOT:** `.context/rules/quality-enforcement.md` (H-13 threshold, H-16, dimension weights, criticality levels) | `ADR-EPIC002-001` (strategy selection, score 3.75) | `ADR-EPIC002-002` (enforcement architecture) | `.context/templates/adversarial/TEMPLATE-FORMAT.md` v1.1.0
+**SSOT:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (H-13 threshold, H-16, dimension weights, criticality levels) | `ADR-EPIC002-001` (strategy selection, score 3.75) | `ADR-EPIC002-002` (enforcement architecture) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/TEMPLATE-FORMAT.md` v1.1.0
 
 **Strategy Templates:** `s-003-steelman.md` (SHOULD run before S-011, H-16 indirect) | `s-007-constitutional-ai.md` (complementary: constitutional check before factual verification) | `s-014-llm-as-judge.md` (scores post-correction revision) | `s-001-red-team.md` (complementary: attacks from verified factual baseline) | `s-013-inversion.md` (complementary: tests assumptions CoVe cannot verify) | `s-004-pre-mortem.md` (complementary: imagines failures CoVe cannot detect)
 
@@ -457,6 +457,8 @@ From quality-enforcement.md (MUST NOT modify):
 
 *Template Version: 1.0.0*
 *Format Conformance: TEMPLATE-FORMAT.md v1.1.0*
-*SSOT: `.context/rules/quality-enforcement.md`*
+*SSOT: `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`*
 *Created: 2026-02-15*
 *Enabler: EN-809*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

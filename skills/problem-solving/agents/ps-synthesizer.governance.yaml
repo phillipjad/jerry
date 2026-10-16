@@ -1,5 +1,5 @@
 # Governance metadata for ps-synthesizer
-# Validated by: docs/schemas/agent-governance-v1.schema.json
+# Validated by: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-governance-v1.schema.json
 # Runtime config: ps-synthesizer.md
 
 version: 2.3.0
@@ -29,14 +29,14 @@ guardrails:
   fallback_behavior: warn_and_request_more_sources
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/synthesis/{ps-id}-{entry-id}-synthesis.md
+  location: "{project_dir}/synthesis/{ps-id}-{entry-id}-synthesis.md"
   template: templates/synthesis.md
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - Synthesis reflects source content'
   - 'P-002: File Persistence (Medium) - Synthesis MUST be persisted'
@@ -63,7 +63,7 @@ enforcement:
   tier: medium
   escalation_path: Warn on missing file → Block completion without synthesis artifact
 session_context:
-  schema: docs/schemas/session_context.json
+  schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
   schema_version: 1.0.0
   input_validation: true
   output_validation: true
@@ -84,3 +84,5 @@ capabilities:
   - Return transient output only (P-002)
   - Synthesize without citing sources (P-004)
   - Misrepresent capabilities or confidence (P-022)
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

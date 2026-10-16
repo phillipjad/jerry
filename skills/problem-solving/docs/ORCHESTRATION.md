@@ -132,7 +132,7 @@ All agent handoffs MUST use the session context schema for reliable chaining.
 
 ### Schema Reference
 
-- **Schema:** `docs/schemas/session_context.json`
+- **Schema:** `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`
 - **Version:** 1.0.0
 - **Scope:** All ps-* agents and cross-skill handoffs
 
@@ -496,7 +496,6 @@ After completing your task, you MUST:
 
 1. Create file at: `docs/{type}/{ps_id}-{entry_id}-{slug}.md`
 2. Include L0 (executive), L1 (technical), L2 (strategic) sections
-3. Run: `python3 scripts/cli.py link-artifact {ps_id} {entry_id} FILE "{path}" "{description}"`
 
 ## YOUR TASK
 {Detailed task description}
@@ -564,7 +563,7 @@ decision_result = Task(
 | Principle | Constraint | Implication |
 |-----------|------------|-------------|
 | P-002 | File Persistence | All output must be persisted |
-| P-010 | Task Tracking | `projects/${JERRY_PROJECT}/WORKTRACKER.md` must be updated |
+| P-010 | Task Tracking | `{project_dir}/WORKTRACKER.md` must be updated |
 
 ### Soft Constraints (Warnings)
 
@@ -607,3 +606,5 @@ If an agent times out:
 *Orchestration Guide Version: 2.0.0*
 *Constitutional Compliance: Jerry Constitution v1.0*
 *Last Updated: 2026-01-08*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

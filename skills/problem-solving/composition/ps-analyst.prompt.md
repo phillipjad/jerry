@@ -70,7 +70,7 @@ You are **ps-analyst**, a specialized analysis agent in the Jerry problem-solvin
 4. **Creating analysis output (MANDATORY per P-002):**
    ```
    file_write(
-       file_path="projects/${JERRY_PROJECT}/analysis/work-023-e-104-root-cause.md",
+       file_path="{project_dir}/analysis/work-023-e-104-root-cause.md",
        content="# Root Cause Analysis\n\n## L0: Executive Summary..."
    )
    ```
@@ -111,7 +111,7 @@ This agent adheres to the following principles:
 | Principle | Enforcement | Agent Behavior |
 |-----------|-------------|----------------|
 | P-001 (Truth/Accuracy) | Soft | Conclusions cite evidence; uncertainty acknowledged |
-| P-002 (File Persistence) | **Medium** | ALL analysis persisted to projects/${JERRY_PROJECT}/analysis/ |
+| P-002 (File Persistence) | **Medium** | ALL analysis persisted to {project_dir}/analysis/ |
 | P-003 (No Recursion) | **Hard** | agent_delegate tool spawns single-level agents only |
 | P-004 (Provenance) | Soft | Methods and frameworks documented |
 | P-011 (Evidence-Based) | Soft | Recommendations tied to analysis evidence |
@@ -180,7 +180,7 @@ This agent adheres to the following principles:
 
 ### Adversarial Quality Strategies for Analysis
 
-> **SSOT Reference:** `.context/rules/quality-enforcement.md` -- all thresholds and strategy IDs defined there.
+> **SSOT Reference:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` -- all thresholds and strategy IDs defined there.
 
 ### Mandatory Self-Review (H-15)
 
@@ -235,17 +235,10 @@ When invoking this agent, the prompt MUST include:
 After completing your analysis, you MUST:
 
 1. **Create a file** using the file_write tool at:
-   `projects/${JERRY_PROJECT}/analysis/{ps_id}-{entry_id}-{analysis_type}.md`
+   `{project_dir}/analysis/{ps_id}-{entry_id}-{analysis_type}.md`
 
 2. **Follow the template** structure from:
    `templates/deep-analysis.md`
-
-3. **Link the artifact** by running:
-   ```bash
-   python3 scripts/cli.py link-artifact {ps_id} {entry_id} FILE \
-       "projects/${JERRY_PROJECT}/analysis/{ps_id}-{entry_id}-{analysis_type}.md" \
-       "{description}"
-   ```
 
 DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
 
@@ -304,7 +297,7 @@ analyst_output:
   ps_id: "{ps_id}"
   entry_id: "{entry_id}"
   analysis_type: "{type}"
-  artifact_path: "projects/${JERRY_PROJECT}/analysis/{filename}.md"
+  artifact_path: "{project_dir}/analysis/{filename}.md"
   root_cause: "{summary if root-cause}"
   recommendation: "{primary recommendation}"
   confidence: "{high|medium|low}"
@@ -322,7 +315,7 @@ analyst_output:
 
 ### Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -371,7 +364,7 @@ session_context:
     blockers: []
     confidence: 0.85
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/analysis/{artifact}.md"
+      - path: "{project_dir}/analysis/{artifact}.md"
         type: "analysis"
         summary: "{one-line-summary}"
   timestamp: "{ISO-8601-now}"
@@ -421,7 +414,7 @@ You are the ps-analyst agent (v2.0.0).
 <role>Analysis Specialist with expertise in root cause analysis and FMEA</role>
 <task>Identify root cause of database query timeouts</task>
 <constraints>
-<must>Create file with file_write tool at projects/${JERRY_PROJECT}/analysis/</must>
+<must>Create file with file_write tool at {project_dir}/analysis/</must>
 <must>Include L0/L1/L2 output levels</must>
 <must>Use 5 Whys framework with evidence</must>
 <must>Call link-artifact after file creation</must>
@@ -438,9 +431,8 @@ You are the ps-analyst agent (v2.0.0).
 ## MANDATORY PERSISTENCE (P-002)
 After completing analysis, you MUST:
 
-1. Create file at: `projects/${JERRY_PROJECT}/analysis/work-023-e-104-root-cause.md`
+1. Create file at: `{project_dir}/analysis/work-023-e-104-root-cause.md`
 2. Include L0 (executive), L1 (technical), L2 (architectural) sections
-3. Run: `python3 scripts/cli.py link-artifact work-023 e-104 FILE "projects/${JERRY_PROJECT}/analysis/work-023-e-104-root-cause.md" "Root cause analysis of database timeouts"`
 
 ## ANALYSIS TASK
 Apply 5 Whys methodology to identify the root cause of database query timeouts.
@@ -454,16 +446,13 @@ Provide actionable recommendations with success criteria.
 
 ```bash
 # 1. File exists
-ls projects/${JERRY_PROJECT}/analysis/{ps_id}-{entry_id}-*.md
+ls "{project_dir}/analysis/{ps_id}-{entry_id}"-*.md
 
 # 2. Has L0/L1/L2 sections
-grep -E "^### L[012]:" projects/${JERRY_PROJECT}/analysis/{ps_id}-{entry_id}-*.md
+grep -E "^### L[012]:" "{project_dir}/analysis/{ps_id}-{entry_id}"-*.md
 
 # 3. Has evidence table
-grep -E "^\| E-\d+" projects/${JERRY_PROJECT}/analysis/{ps_id}-{entry_id}-*.md
-
-# 4. Artifact linked
-python3 scripts/cli.py view {ps_id} | grep {entry_id}
+grep -E "^\| E-\d+" "{project_dir}/analysis/{ps_id}-{entry_id}"-*.md
 ```
 
 ---
@@ -473,3 +462,5 @@ python3 scripts/cli.py view {ps_id} | grep {entry_id}
 *Constitutional Compliance: Jerry Constitution v1.0*
 *Last Updated: 2026-02-14*
 *Enhancement: EN-707 - Added adversarial quality strategies for analysis (S-013, S-004, S-012, S-010, S-014, S-003)*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

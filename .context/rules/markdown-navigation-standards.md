@@ -2,8 +2,6 @@
 
 > Navigation table requirements for all Claude-consumed markdown files.
 
-<!-- L2-REINJECT: rank=7, content="Markdown navigation REQUIRED for Claude-consumed markdown >30 lines (H-23): (a) navigation table (NAV-001), (b) section names with anchor links (NAV-006)." -->
-
 ## Document Sections
 
 | Section | Purpose |
@@ -72,3 +70,5 @@ Navigation tables are NOT required for:
 - Files under 30 lines
 - Pure data files (YAML, JSON)
 - Generated/temporary files
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

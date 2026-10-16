@@ -645,7 +645,7 @@ determination requires human judgment and project authority approval.*
 <session_context_validation>
 ## Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -708,7 +708,7 @@ session_context:
     blockers: []  # Or list status blockers (RED items)
     confidence: 0.85  # Based on data freshness
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/reports/{artifact}.md"
+      - path: "{project_dir}/reports/{artifact}.md"
         type: "status"
         summary: "{status-report-summary}"
   timestamp: "{ISO-8601-now}"
@@ -760,3 +760,5 @@ session_context:
 *Last Updated: 2026-01-11*
 *NPR 7123.1D Process: 16 (Technical Assessment)*
 *Migration Note: Converted from code-fenced YAML to proper frontmatter format per WI-SAO-022*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

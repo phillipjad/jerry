@@ -240,7 +240,7 @@ Status: DONE
 
 ## WTI-007: Mandatory Template Usage
 
-**Rule:** Agents MUST read the canonical template from `.context/templates/worktracker/` BEFORE creating any worktracker entity file. Entity files MUST NOT be created from memory or by copying other instance files.
+**Rule:** Agents MUST read the canonical template from `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/` BEFORE creating any worktracker entity file. Entity files MUST NOT be created from memory or by copying other instance files.
 
 **Rationale:** Templates define the canonical structure with REQUIRED sections (Business Value, Progress Summary, Evidence, etc.) that are essential for closure verification (WTI-002), evidence-based closure (WTI-006), and truthful progress tracking (WTI-003). Creating files from memory causes structural drift and missing REQUIRED sections.
 
@@ -251,7 +251,7 @@ Status: DONE
 
 **Procedure:**
 1. Identify the entity type being created
-2. Read the canonical template from `.context/templates/worktracker/`
+2. Read the canonical template from `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/`
 3. Populate the instance file using the template as a guide — include all REQUIRED and RECOMMENDED sections
 4. NEVER create entity files from memory or by copying other instance files
 
@@ -361,3 +361,5 @@ Human reviewers SHOULD verify:
 *Version History:*
 - 1.1 (2026-02-15): Added WTI-007 (Mandatory Template Usage). Source: DISC-001.
 - 1.0 (2026-02-02): Initial version from synthesis document
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

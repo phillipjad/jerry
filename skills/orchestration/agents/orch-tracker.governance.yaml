@@ -1,5 +1,5 @@
 # Governance metadata for orch-tracker
-# Validated by: docs/schemas/agent-governance-v1.schema.json
+# Validated by: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-governance-v1.schema.json
 # Runtime config: orch-tracker.md
 
 version: 2.2.0
@@ -55,15 +55,15 @@ guardrails:
   fallback_behavior: warn_and_retry
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/ORCHESTRATION.yaml
+  location: "{project_dir}/ORCHESTRATION.yaml"
   secondary_artifacts:
-  - projects/${JERRY_PROJECT}/ORCHESTRATION_WORKTRACKER.md
+  - "{project_dir}/ORCHESTRATION_WORKTRACKER.md"
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-002: File Persistence (Medium) - Updates ORCHESTRATION.yaml and WORKTRACKER'
   - 'P-003: No Recursive Subagents (Hard) - Does NOT spawn other agents'
@@ -84,7 +84,7 @@ enforcement:
   tier: medium
   escalation_path: Warn on invalid state transition -> Block invalid status updates
 session_context:
-  schema: docs/schemas/session_context.json
+  schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
   schema_version: 1.0.0
   input_validation: true
   output_validation: true
@@ -107,3 +107,5 @@ capabilities:
   - Use hardcoded pipeline names in paths
   - Update state without reading current ORCHESTRATION.yaml first
   - Misrepresent capabilities or confidence (P-022)
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

@@ -65,7 +65,7 @@ You are **wt-verifier**, a specialized verification agent in the Jerry worktrack
 4. **Creating verification report (MANDATORY per P-002):**
    ```
    file_write(
-       file_path="projects/${JERRY_PROJECT}/work/.../EN-001-verification-report.md",
+       file_path="{project_dir}/work/.../EN-001-verification-report.md",
        content="# Verification Report\n\n## L0: Executive Summary..."
    )
    ```
@@ -593,19 +593,19 @@ After wt-verifier completes, verify:
 
 ```bash
 # 1. Verification report file exists
-ls projects/${JERRY_PROJECT}/work/**/*-verification-report.md
+ls "{project_dir}"/work/**/*-verification-report.md
 
 # 2. Report has L0/L1/L2 sections
-grep -E "^## L[012]:" {verification-report}.md
+grep -E "^## L[012]:" "{verification-report}".md
 
 # 3. Report has pass/fail status
-grep -E "^\*\*Status:\*\*" {verification-report}.md
+grep -E "^\*\*Status:\*\*" "{verification-report}".md
 
 # 4. Report has verification score
-grep -E "^\*\*Score:\*\*" {verification-report}.md
+grep -E "^\*\*Score:\*\*" "{verification-report}".md
 
 # 5. Report documents all checks
-grep -E "Acceptance Criteria|Evidence|Child Rollup" {verification-report}.md
+grep -E "Acceptance Criteria|Evidence|Child Rollup" "{verification-report}".md
 ```
 
 </agent>
@@ -663,3 +663,5 @@ Create a verification report with L0/L1/L2 sections.
 *Agent Version: 1.0.0*
 *Constitutional Compliance: Jerry Constitution v1.0*
 *Last Updated: 2026-02-02*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

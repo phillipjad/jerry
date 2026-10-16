@@ -204,7 +204,7 @@ orchestration/{WORKFLOW_ID}/
 
 ### 7.1.1 Worktracker Entity Templates
 
-> **WTI-007:** Entity files (EPIC, FEATURE, ENABLER, TASK, etc.) created during orchestration MUST use canonical templates from `.context/templates/worktracker/`. Read the appropriate template first, then populate. Do not create entity files from memory or by copying other instance files.
+> **WTI-007:** Entity files (EPIC, FEATURE, ENABLER, TASK, etc.) created during orchestration MUST use canonical templates from `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/`. Read the appropriate template first, then populate. Do not create entity files from memory or by copying other instance files.
 
 ### 7.2 Soft Constraints
 
@@ -276,3 +276,5 @@ Barriers:
 *Workflow ID: {WORKFLOW_ID}*
 *Version: 2.0*
 *Cross-Session Portable: All paths are repository-relative*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

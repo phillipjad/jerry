@@ -19,13 +19,13 @@
 ## Work Tracker (worktracker) Templates
 
 Description:
-- Work tracker (worktracker) templates are stored in the `.context/templates/worktracker/` folder.
+- Work tracker (worktracker) templates are stored in the `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/` folder.
 - These templates provide a standardized structure for creating various work tracker artifacts such as Bugs, Enablers, Epics, Features, Spikes, Stories, and Tasks.
 - Using these templates ensures consistency and completeness across all work tracker items.
 
 Directory Structure:
 ```
-.context/                                                                                                       # Respository level Documents Folder (root)
+${CLAUDE_PLUGIN_ROOT}/.context/                                                                                                       # Respository level Documents Folder (root)
 └── templates/                                                                                              # Repository level Templates Folder
     └── worktracker/                                                                                        # Templates for Worktracker Artifacts
         ├── BUG.md                                                                                          # Template for Bug
@@ -49,10 +49,10 @@ Directory Structure:
 
 ### Work Tracker (worktracker) Templates
 
-**Location:** `.context/templates/worktracker/`
+**Location:** `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/`
 
 Description:
-- Work tracker (worktracker) templates are stored in the `.context/templates/worktracker/` folder.
+- Work tracker (worktracker) templates are stored in the `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/` folder.
 - These templates provide a standardized structure for creating various work tracker artifacts such as Bugs, Enablers, Epics, Features, Spikes, Stories, and Tasks.
 - Using these templates ensures consistency and completeness across all work tracker items.
 
@@ -60,34 +60,34 @@ Work tracker templates provide standardized structure for all work item types:
 
 | Template | Use For | Path |
 |----------|---------|------|
-| `ENABLER.md` | EN-* files | `.context/templates/worktracker/ENABLER.md` |
-| `TASK.md` | TASK-* files | `.context/templates/worktracker/TASK.md` |
-| `BUG.md` | BUG-* files | `.context/templates/worktracker/BUG.md` |
-| `DISCOVERY.md` | DISC-* files | `.context/templates/worktracker/DISCOVERY.md` |
-| `DECISION.md` | DEC-* files | `.context/templates/worktracker/DECISION.md` |
-| `SPIKE.md` | SPIKE-* files | `.context/templates/worktracker/SPIKE.md` |
-| `EPIC.md` | EPIC-* files | `.context/templates/worktracker/EPIC.md` |
-| `FEATURE.md` | FEAT-* files | `.context/templates/worktracker/FEATURE.md` |
-| `STORY.md` | STORY-* files | `.context/templates/worktracker/STORY.md` |
-| `IMPEDIMENT.md` | IMP-* files | `.context/templates/worktracker/IMPEDIMENT.md` |
+| `ENABLER.md` | EN-* files | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/ENABLER.md` |
+| `TASK.md` | TASK-* files | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/TASK.md` |
+| `BUG.md` | BUG-* files | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/BUG.md` |
+| `DISCOVERY.md` | DISC-* files | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/DISCOVERY.md` |
+| `DECISION.md` | DEC-* files | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/DECISION.md` |
+| `SPIKE.md` | SPIKE-* files | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/SPIKE.md` |
+| `EPIC.md` | EPIC-* files | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/EPIC.md` |
+| `FEATURE.md` | FEAT-* files | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/FEATURE.md` |
+| `STORY.md` | STORY-* files | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/STORY.md` |
+| `IMPEDIMENT.md` | IMP-* files | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/IMPEDIMENT.md` |
 
 ### Problem-Solving & Knowledge Templates
 
-**Location:** `docs/knowledge/exemplars/templates/`
+**Location:** `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/`
 
 Templates for problem-solving artifacts and knowledge documents:
 
 | Template | Use For | Path |
 |----------|---------|------|
-| `adr.md` | Architecture Decision Records | `docs/knowledge/exemplars/templates/adr.md` |
-| `research.md` | Research artifacts | `docs/knowledge/exemplars/templates/research.md` |
-| `analysis.md` | Analysis artifacts | `docs/knowledge/exemplars/templates/analysis.md` |
-| `deep-analysis.md` | Deep analysis | `docs/knowledge/exemplars/templates/deep-analysis.md` |
-| `synthesis.md` | Synthesis documents | `docs/knowledge/exemplars/templates/synthesis.md` |
-| `review.md` | Review artifacts | `docs/knowledge/exemplars/templates/review.md` |
-| `investigation.md` | Investigation reports | `docs/knowledge/exemplars/templates/investigation.md` |
-| `jrn.md` | Journal entries | `docs/knowledge/exemplars/templates/jrn.md` |
-| `use-case-template.md` | Use case specifications | `docs/knowledge/exemplars/templates/use-case-template.md` |
+| `adr.md` | Architecture Decision Records | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/adr.md` |
+| `research.md` | Research artifacts | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/research.md` |
+| `analysis.md` | Analysis artifacts | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/analysis.md` |
+| `deep-analysis.md` | Deep analysis | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/deep-analysis.md` |
+| `synthesis.md` | Synthesis documents | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/synthesis.md` |
+| `review.md` | Review artifacts | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/review.md` |
+| `investigation.md` | Investigation reports | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/investigation.md` |
+| `jrn.md` | Journal entries | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/jrn.md` |
+| `use-case-template.md` | Use case specifications | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/use-case-template.md` |
 
 ### Template Usage Rules
 
@@ -100,7 +100,7 @@ Templates for problem-solving artifacts and knowledge documents:
 ### Directory Structure
 
 ```
-.context/                                                                      # Repository level context
+${CLAUDE_PLUGIN_ROOT}/.context/                                                                      # Repository level context
 └── templates/                                                                 # Repository level Templates
     └── worktracker/                                                           # Templates for Worktracker Artifacts
         ├── BUG.md                                                             # Template for Bug
@@ -114,7 +114,7 @@ Templates for problem-solving artifacts and knowledge documents:
         ├── STORY.md                                                           # Template for Story
         └── TASK.md                                                            # Template for Task
 
-docs/knowledge/exemplars/templates/                                            # Problem-solving templates
+${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/                                            # Problem-solving templates
 ├── adr.md                                                                     # ADR (Michael Nygard format)
 ├── analysis.md                                                                # Analysis artifacts
 ├── deep-analysis.md                                                           # Deep analysis
@@ -134,3 +134,5 @@ docs/knowledge/exemplars/templates/                                            #
 - **System Mappings Rules**: `worktracker-system-mappings.md`
 - **Behavior Rules**: `worktracker-behavior-rules.md`
 - **Directory Structure Rules**: `worktracker-directory-structure.md`
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

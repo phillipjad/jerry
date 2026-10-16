@@ -1,5 +1,5 @@
 # Governance metadata for ps-researcher
-# Validated by: docs/schemas/agent-governance-v1.schema.json
+# Validated by: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-governance-v1.schema.json
 # Runtime config: ps-researcher.md
 
 version: 2.3.0
@@ -27,14 +27,14 @@ guardrails:
   fallback_behavior: warn_and_retry
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/research/{ps-id}-{entry-id}-{topic-slug}.md
+  location: "{project_dir}/research/{ps-id}-{entry-id}-{topic-slug}.md"
   template: templates/research.md
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - All claims must be sourced'
   - 'P-002: File Persistence (Medium) - Research MUST be persisted'
@@ -59,7 +59,7 @@ enforcement:
   tier: medium
   escalation_path: Warn on missing file → Block completion without artifact
 session_context:
-  schema: docs/schemas/session_context.json
+  schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
   schema_version: 1.0.0
   input_validation: true
   output_validation: true
@@ -80,3 +80,5 @@ capabilities:
   - Return transient output only (P-002)
   - Make claims without citations (P-001, P-011)
   - Misrepresent capabilities or confidence (P-022)
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

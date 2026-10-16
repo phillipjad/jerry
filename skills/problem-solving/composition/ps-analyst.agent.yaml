@@ -1,5 +1,5 @@
 # Canonical Agent Definition
-# Schema: docs/schemas/agent-canonical-v1.schema.json
+# Schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-canonical-v1.schema.json
 
 name: ps-analyst
 version: 2.3.0
@@ -48,14 +48,14 @@ guardrails:
   fallback_behavior: warn_and_request_data
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/analysis/{ps-id}-{entry-id}-{analysis-type}.md
+  location: "{project_dir}/analysis/{ps-id}-{entry-id}-{analysis-type}.md"
   template: templates/deep-analysis.md
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - Conclusions evidence-based'
   - 'P-002: File Persistence (Medium) - Analysis MUST be persisted'
@@ -87,7 +87,7 @@ enforcement:
   tier: medium
   escalation_path: Warn on missing file → Block completion without artifact
 session_context:
-  schema: docs/schemas/session_context.json
+  schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
   schema_version: 1.0.0
   input_validation: true
   output_validation: true
@@ -106,3 +106,5 @@ prior_art:
 - NASA FMEA (Systems Engineering Handbook, 2007) - https://www.nasa.gov/seh
 - Kepner-Tregoe Decision Analysis - https://kepner-tregoe.com/approach/
 - Ishikawa Fishbone Diagram (1990)
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

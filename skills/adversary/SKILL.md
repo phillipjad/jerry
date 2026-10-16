@@ -32,7 +32,7 @@ activation-keywords:
 > **Version:** 1.0.0
 > **Framework:** Jerry Adversarial Quality (ADV)
 > **Constitutional Compliance:** Jerry Constitution v1.0
-> **SSOT Reference:** `.context/rules/quality-enforcement.md`
+> **SSOT Reference:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`
 
 ## Document Audience (Triple-Lens)
 
@@ -56,7 +56,7 @@ The Adversary skill provides **on-demand adversarial quality reviews** using str
 - **Strategy Execution** - Loads and runs strategy templates against deliverables with structured finding classification
 - **Quality Scoring** - Implements S-014 LLM-as-Judge rubric scoring with 6-dimension weighted composite
 - **Criticality-Aware** - Automatically adjusts review depth based on deliverable criticality
-- **Template-Driven** - All strategies follow standardized templates from `.context/templates/adversarial/`
+- **Template-Driven** - All strategies follow standardized templates from `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/`
 
 ---
 
@@ -193,7 +193,7 @@ The adversary skill depends on external artifacts created by other enablers. The
 
 ### Strategy Template Files
 
-All 10 strategy templates in `.context/templates/adversarial/` are created by separate enablers:
+All 10 strategy templates in `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/` are created by separate enablers:
 
 | Template | Source Enabler | Status |
 |----------|---------------|--------|
@@ -219,17 +219,17 @@ The skill skeleton (EN-802) defines the structure; the template enablers populat
 
 ### SSOT File
 
-- `.context/rules/quality-enforcement.md` -- MUST exist. All thresholds, strategy IDs, criticality levels, and quality dimensions are sourced from here.
+- `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` -- MUST exist. All thresholds, strategy IDs, criticality levels, and quality dimensions are sourced from here.
 
 ---
 
 ## Adversarial Quality Mode
 
-> **SSOT Reference:** `.context/rules/quality-enforcement.md` -- all thresholds, strategy IDs, criticality levels, and quality dimensions are defined there. NEVER hardcode values; always reference the SSOT.
+> **SSOT Reference:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` -- all thresholds, strategy IDs, criticality levels, and quality dimensions are defined there. NEVER hardcode values; always reference the SSOT.
 
 ### Strategy Catalog
 
-The quality framework provides 10 selected adversarial strategies across 4 mechanistic families. See `.context/rules/quality-enforcement.md` (Strategy Catalog section) for the authoritative list.
+The quality framework provides 10 selected adversarial strategies across 4 mechanistic families. See `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (Strategy Catalog section) for the authoritative list.
 
 | Family | Strategies | Adversary Application |
 |--------|-----------|----------------------|
@@ -240,7 +240,7 @@ The quality framework provides 10 selected adversarial strategies across 4 mecha
 
 ### Strategy Templates
 
-All strategies use standardized templates from `.context/templates/adversarial/`:
+All strategies use standardized templates from `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/`:
 
 | Template | Strategy | Purpose |
 |----------|----------|---------|
@@ -419,8 +419,6 @@ All agents adhere to the **Jerry Constitution v1.0**:
 | Routine code review for quick defect checks | `/problem-solving` (ps-reviewer) | Full adversarial strategy template execution (S-001 through S-014) applied to routine defect detection wastes significant context budget on strategy selection and template loading |
 | Constraint validation (pass/fail compliance) | `/problem-solving` (ps-validator) | Adversarial strategies assess quality dimensions, not binary constraint compliance; ps-validator produces traceability matrices while /adversary produces quality scores |
 | Research, analysis, or root cause investigation | `/problem-solving` (ps-researcher or ps-investigator) | Adversarial agents evaluate existing deliverables, not produce new analysis; no research methodology or causal investigation capability |
-| Security-hardened software design or threat modeling | `/eng-team` | /adversary applies quality assessment strategies (S-001 Red Team Analysis is quality-focused); /eng-team provides STRIDE/DREAD threat modeling and OWASP compliance |
-| Offensive security testing or penetration testing | `/red-team` | /adversary "red team" keyword refers to S-001 quality strategy; /red-team provides MITRE ATT&CK kill chain methodology for authorized penetration testing |
 | C1 routine work with obvious solutions | Self-review (S-010) only | Full adversarial overhead (adv-selector, adv-executor, adv-scorer) applied to C1 routine tasks consumes disproportionate context budget for low-risk work |
 
 ---
@@ -429,10 +427,10 @@ All agents adhere to the **Jerry Constitution v1.0**:
 
 | Source | Content |
 |--------|---------|
-| `.context/rules/quality-enforcement.md` | SSOT for thresholds, strategies, criticality levels |
-| `.context/templates/adversarial/` | Strategy execution templates |
+| `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` | SSOT for thresholds, strategies, criticality levels |
+| `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/` | Strategy execution templates |
 | `skills/problem-solving/SKILL.md` | Integrated adversarial quality mode (ps-critic) |
-| `docs/governance/JERRY_CONSTITUTION.md` | Constitutional principles |
+| `${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md` | Constitutional principles |
 | ADR-EPIC002-001 | Strategy selection and composite scores |
 | ADR-EPIC002-002 | 5-layer enforcement architecture |
 
@@ -440,5 +438,7 @@ All agents adhere to the **Jerry Constitution v1.0**:
 
 *Skill Version: 1.0.0*
 *Constitutional Compliance: Jerry Constitution v1.0*
-*SSOT: `.context/rules/quality-enforcement.md`*
+*SSOT: `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`*
 *Created: 2026-02-15*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

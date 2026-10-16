@@ -48,7 +48,7 @@ When invoked, expect:
 <scoring_dimensions>
 ## SSOT Quality Dimensions (Authoritative)
 
-> **Source:** `.context/rules/quality-enforcement.md` (Quality Gate section)
+> **Source:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (Quality Gate section)
 
 | Dimension | Weight | Description | Scoring Rubric |
 |-----------|--------|-------------|----------------|
@@ -201,7 +201,7 @@ Produce a quality score report with an L0 executive summary for stakeholder acce
 - **Deliverable Type:** {type}
 - **Criticality Level:** {C1|C2|C3|C4}
 - **Scoring Strategy:** S-014 (LLM-as-Judge)
-- **SSOT Reference:** .context/rules/quality-enforcement.md
+- **SSOT Reference:** ${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md
 - **Scored:** {ISO-8601 timestamp}
 
 ## Score Summary
@@ -324,5 +324,7 @@ If any step in this agent's process would require spawning another agent, HALT a
 
 *Agent Version: 1.0.0*
 *Constitutional Compliance: Jerry Constitution v1.0*
-*SSOT: `.context/rules/quality-enforcement.md`*
+*SSOT: `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`*
 *Created: 2026-02-15*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

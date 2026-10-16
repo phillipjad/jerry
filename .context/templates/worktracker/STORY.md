@@ -329,7 +329,7 @@ Maps to: ADO:Effort, SAFe:story_points, JIRA:story_points
 
 <!--
 TEAM-LEVEL DOD: These items are universal standards, not story-specific.
-See .context/templates/worktracker/DOD.md for the shared Definition of Done.
+See ${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/DOD.md for the shared Definition of Done.
 WTI-008a: Do NOT include these items in individual work item Acceptance Criteria.
 -->
 
@@ -543,3 +543,5 @@ WORKTRACKER ALIGNMENT:
 - Status values: pending, in_progress, completed (per work-items.md)
 - Priority/Impact: critical, high, medium, low (per work-items.md)
 -->
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

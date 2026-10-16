@@ -57,7 +57,7 @@ framework context.
    ```python
    from skills.ast.scripts.ast_ops import validate_file
 
-   result = validate_file("projects/${JERRY_PROJECT}/work/EN-001-fix-plugin.md", schema="enabler")
+   result = validate_file("{project_dir}/work/EN-001-fix-plugin.md", schema="enabler")
    # Returns: {"schema_valid": True/False, "schema_violations": [...], ...}
    if not result["schema_valid"]:
        for v in result["schema_violations"]:
@@ -81,7 +81,7 @@ framework context.
    ```python
    from skills.ast.scripts.ast_ops import validate_nav_table_file
 
-   nav_result = validate_nav_table_file("projects/${JERRY_PROJECT}/work/ST-010-story.md")
+   nav_result = validate_nav_table_file("{project_dir}/work/ST-010-story.md")
    # Returns: {"is_valid": bool, "missing_entries": [...], "orphaned_entries": [...]}
    # Use as evidence for H-23/H-24 compliance constraint validation
    ```
@@ -90,7 +90,7 @@ framework context.
    ```python
    from skills.ast.scripts.ast_ops import query_frontmatter
 
-   fm = query_frontmatter("projects/${JERRY_PROJECT}/work/EN-001-fix.md")
+   fm = query_frontmatter("{project_dir}/work/EN-001-fix.md")
    # Returns: {"Type": "enabler", "Status": "completed", "Parent": "FEAT-001", ...}
    status = fm.get("Status", "")
    parent = fm.get("Parent", "")
@@ -138,7 +138,7 @@ This agent adheres to the following principles:
 | Principle | Enforcement | Agent Behavior |
 |-----------|-------------|----------------|
 | P-001 (Truth/Accuracy) | Soft | Validations based on actual evidence |
-| P-002 (File Persistence) | **Medium** | ALL reports persisted to projects/${JERRY_PROJECT}/analysis/ |
+| P-002 (File Persistence) | **Medium** | ALL reports persisted to {project_dir}/analysis/ |
 | P-003 (No Recursion) | **Hard** | agent_delegate tool spawns single-level agents only |
 | P-004 (Provenance) | Soft | Evidence sources and methods documented |
 | P-011 (Evidence-Based) | Soft | All validations cite supporting evidence |
@@ -201,22 +201,10 @@ When invoking this agent, the prompt MUST include:
 After completing validation, you MUST:
 
 1. **Create a file** using the file_write tool at:
-   `projects/${JERRY_PROJECT}/analysis/{ps_id}-{entry_id}-validation.md`
+   `{project_dir}/analysis/{ps_id}-{entry_id}-validation.md`
 
 2. **Follow the template** structure from:
    `templates/analysis.md`
-
-3. **Link the artifact** by running:
-   ```bash
-   python3 scripts/cli.py link-artifact {ps_id} {entry_id} FILE \
-       "projects/${JERRY_PROJECT}/analysis/{ps_id}-{entry_id}-validation.md" \
-       "Validation: {scope}"
-   ```
-
-4. **Mark constraints validated** by running (for each validated constraint):
-   ```bash
-   python3 scripts/cli.py validate-constraint {ps_id} {constraint_id} "{evidence_summary}"
-   ```
 
 DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
 
@@ -275,7 +263,7 @@ Example:
 validator_output:
   ps_id: "{ps_id}"
   entry_id: "{entry_id}"
-  artifact_path: "projects/${JERRY_PROJECT}/analysis/{filename}.md"
+  artifact_path: "{project_dir}/analysis/{filename}.md"
   validated_count: {number}
   total_count: {number}
   pass_rate: "{percentage}"
@@ -295,7 +283,7 @@ validator_output:
 
 ### Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -344,7 +332,7 @@ session_context:
     blockers: []
     confidence: 0.9
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/analysis/{artifact}.md"
+      - path: "{project_dir}/analysis/{artifact}.md"
         type: "validation"
         summary: "{one-line-summary}"
   timestamp: "{ISO-8601-now}"
@@ -394,7 +382,7 @@ You are the ps-validator agent (v2.0.0).
 <role>Validation Specialist with expertise in constraint verification</role>
 <task>Validate domain layer constraints</task>
 <constraints>
-<must>Create file with file_write tool at projects/${JERRY_PROJECT}/analysis/</must>
+<must>Create file with file_write tool at {project_dir}/analysis/</must>
 <must>Include L0/L1/L2 output levels</must>
 <must>Provide evidence for each constraint</must>
 <must>Document all gaps</must>
@@ -411,10 +399,8 @@ You are the ps-validator agent (v2.0.0).
 ## MANDATORY PERSISTENCE (P-002)
 After completing validation, you MUST:
 
-1. Create file at: `projects/${JERRY_PROJECT}/analysis/work-024-e-301-validation.md`
+1. Create file at: `{project_dir}/analysis/work-024-e-301-validation.md`
 2. Include L0 (executive), L1 (technical), L2 (systemic) sections
-3. Run: `python3 scripts/cli.py link-artifact work-024 e-301 FILE "projects/${JERRY_PROJECT}/analysis/work-024-e-301-validation.md" "Validation: Domain layer constraints"`
-4. For each validated constraint, run: `python3 scripts/cli.py validate-constraint work-024 c-XXX "evidence summary"`
 
 ## VALIDATION TASK
 Validate constraints c-001 through c-008 for the domain layer.
@@ -431,19 +417,16 @@ For each constraint:
 
 ```bash
 # 1. File exists
-ls projects/${JERRY_PROJECT}/analysis/{ps_id}-{entry_id}-validation.md
+ls "{project_dir}/analysis/{ps_id}-{entry_id}"-validation.md
 
 # 2. Has L0/L1/L2 sections
-grep -E "^### L[012]:" projects/${JERRY_PROJECT}/analysis/{ps_id}-{entry_id}-validation.md
+grep -E "^### L[012]:" "{project_dir}/analysis/{ps_id}-{entry_id}"-validation.md
 
 # 3. Has traceability matrix
-grep -E "^\| c-\d+" projects/${JERRY_PROJECT}/analysis/{ps_id}-{entry_id}-validation.md
+grep -E "^\| c-\d+" "{project_dir}/analysis/{ps_id}-{entry_id}"-validation.md
 
 # 4. Has evidence table
-grep -E "^\| E-\d+" projects/${JERRY_PROJECT}/analysis/{ps_id}-{entry_id}-validation.md
-
-# 5. Artifact linked
-python3 scripts/cli.py view {ps_id} | grep {entry_id}
+grep -E "^\| E-\d+" "{project_dir}/analysis/{ps_id}-{entry_id}"-validation.md
 ```
 
 ---
@@ -452,3 +435,5 @@ python3 scripts/cli.py view {ps_id} | grep {entry_id}
 *Template Version: 2.0.0*
 *Constitutional Compliance: Jerry Constitution v1.0*
 *Last Updated: 2026-01-08*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

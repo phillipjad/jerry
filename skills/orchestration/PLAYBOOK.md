@@ -647,7 +647,7 @@ Check progress regularly:
 ## Adversarial Quality Integration
 
 > Quality enforcement is embedded by default into every orchestrated workflow.
-> All constants reference `.context/rules/quality-enforcement.md` (SSOT).
+> All constants reference `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (SSOT).
 
 ### Phase Gate Protocol
 
@@ -1148,7 +1148,7 @@ CROSS-SKILL HANDOFF:
 
 - [ORCHESTRATION_PATTERNS.md](../shared/ORCHESTRATION_PATTERNS.md) - 8 canonical patterns with L0/L1/L2
 - [AGENT_TEMPLATE_CORE.md](../shared/AGENT_TEMPLATE_CORE.md) - Agent definition format
-- [Jerry Constitution](../../docs/governance/JERRY_CONSTITUTION.md) - P-003 No Recursive Subagents
+- [Jerry Constitution](${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md) - P-003 No Recursive Subagents
 
 ---
 
@@ -1173,3 +1173,5 @@ CROSS-SKILL HANDOFF:
 *Enhancement: EN-709 Adversarial quality integration (phase gates, barrier quality, strategy selection)*
 *Last Updated: 2026-02-14*
 *Template: PLAYBOOK_TEMPLATE.md v1.0.0*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

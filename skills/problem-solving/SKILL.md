@@ -284,13 +284,13 @@ docs/
 
 ## Adversarial Quality Mode
 
-> **SSOT Reference:** `.context/rules/quality-enforcement.md` -- all thresholds, strategy IDs, and criticality levels are defined there. NEVER hardcode values; always reference the SSOT.
+> **SSOT Reference:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` -- all thresholds, strategy IDs, and criticality levels are defined there. NEVER hardcode values; always reference the SSOT.
 
 The problem-solving skill integrates the adversarial quality framework defined in EPIC-002. This enables structured creator-critic-revision cycles with strategy-specific adversarial review for all PS workflows.
 
 ### Strategy Catalog
 
-The quality framework provides 10 selected adversarial strategies across 4 mechanistic families. See `.context/rules/quality-enforcement.md` (Strategy Catalog section) for the authoritative list with IDs S-001 through S-014, composite scores, and family classifications.
+The quality framework provides 10 selected adversarial strategies across 4 mechanistic families. See `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (Strategy Catalog section) for the authoritative list with IDs S-001 through S-014, composite scores, and family classifications.
 
 | Family | Strategies | PS Application |
 |--------|-----------|----------------|
@@ -318,7 +318,7 @@ Per H-14 (HARD rule), all C2+ deliverables MUST go through a minimum 3-iteration
 
 ### Criticality-Based Activation
 
-Strategy activation follows the SSOT criticality levels (C1-C4). See `.context/rules/quality-enforcement.md` (Criticality Levels section) for the authoritative mapping.
+Strategy activation follows the SSOT criticality levels (C1-C4). See `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (Criticality Levels section) for the authoritative mapping.
 
 | Level | PS Context | Required Strategies | Typical PS Scenario |
 |-------|-----------|---------------------|---------------------|
@@ -328,8 +328,8 @@ Strategy activation follows the SSOT criticality levels (C1-C4). See `.context/r
 | **C4 (Critical)** | Governance, irreversible decisions | All 10 selected strategies | Constitution changes, governance decisions |
 
 **Auto-escalation rules** (AE-001 through AE-006 in the SSOT) apply to PS workflows. Key rules:
-- AE-001: PS artifacts touching `docs/governance/JERRY_CONSTITUTION.md` = auto-C4
-- AE-002: PS artifacts touching `.context/rules/` = auto-C3 minimum
+- AE-001: PS artifacts touching `${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md` = auto-C4
+- AE-002: PS artifacts touching `${CLAUDE_PLUGIN_ROOT}/.context/rules/` = auto-C3 minimum
 - AE-003: New or modified ADR = auto-C3 minimum
 
 ### PS-Specific Strategy Selection
@@ -403,19 +403,19 @@ All agents adhere to the **Jerry Constitution v1.0**:
 
 Problem-solving artifacts should use standardized templates to ensure consistency.
 
-**Location:** `docs/knowledge/exemplars/templates/`
+**Location:** `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/`
 
 | Template | Use For | Path |
 |----------|---------|------|
-| `adr.md` | Architecture Decision Records | `docs/knowledge/exemplars/templates/adr.md` |
-| `research.md` | Research artifacts | `docs/knowledge/exemplars/templates/research.md` |
-| `analysis.md` | Analysis artifacts | `docs/knowledge/exemplars/templates/analysis.md` |
-| `deep-analysis.md` | Deep analysis | `docs/knowledge/exemplars/templates/deep-analysis.md` |
-| `synthesis.md` | Synthesis documents | `docs/knowledge/exemplars/templates/synthesis.md` |
-| `review.md` | Review artifacts | `docs/knowledge/exemplars/templates/review.md` |
-| `investigation.md` | Investigation reports | `docs/knowledge/exemplars/templates/investigation.md` |
-| `jrn.md` | Journal entries | `docs/knowledge/exemplars/templates/jrn.md` |
-| `use-case-template.md` | Use case specifications | `docs/knowledge/exemplars/templates/use-case-template.md` |
+| `adr.md` | Architecture Decision Records | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/adr.md` |
+| `research.md` | Research artifacts | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/research.md` |
+| `analysis.md` | Analysis artifacts | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/analysis.md` |
+| `deep-analysis.md` | Deep analysis | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/deep-analysis.md` |
+| `synthesis.md` | Synthesis documents | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/synthesis.md` |
+| `review.md` | Review artifacts | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/review.md` |
+| `investigation.md` | Investigation reports | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/investigation.md` |
+| `jrn.md` | Journal entries | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/jrn.md` |
+| `use-case-template.md` | Use case specifications | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/use-case-template.md` |
 
 **Usage:** When creating a new artifact, read the appropriate template first to ensure consistent structure and sections.
 
@@ -429,10 +429,7 @@ Problem-solving artifacts should use standardized templates to ensure consistenc
 |-----------|-------------|--------------------------|
 | Simple multi-agent workflow coordination without research | `/orchestration` | Problem-solving loads 9 agent definitions (ps-researcher, ps-analyst, ps-architect, ps-critic, ps-validator, ps-synthesizer, ps-reviewer, ps-investigator, ps-reporter) when task only needs workflow state tracking and checkpoint coordination |
 | Requirements engineering, V&V, or formal technical reviews (SRR/PDR/CDR) | `/nasa-se` | Problem-solving produces research artifacts and ADRs; NASA SE traceability matrices, VCRM tables, and NPR-compliant review packages not generated |
-| Transcript parsing or meeting note extraction (VTT/SRT files) | `/transcript` | Problem-solving has no VTT/SRT parser; transcript-specific agents (ts-parser, ts-extractor) with hybrid Python+LLM architecture not invoked |
 | Standalone adversarial quality review or tournament scoring | `/adversary` | Problem-solving ps-critic operates within creator-critic-revision loops (H-14); standalone one-shot adversarial assessment with strategy template selection requires /adversary |
-| Security-hardened software design or threat modeling | `/eng-team` | Problem-solving lacks STRIDE/DREAD methodology, OWASP ASVS verification, and NIST SSDF governance; security-specific agent team (10 agents) not loaded |
-| Offensive security testing or penetration testing | `/red-team` | Problem-solving produces research artifacts, not attack narratives; no MITRE ATT&CK kill chain coverage or engagement authorization methodology |
 | Work item tracking or entity management | `/worktracker` | Problem-solving has no entity hierarchy management; WORKTRACKER.md manifest operations and WTI integrity rules not available |
 
 ---
@@ -456,3 +453,5 @@ For detailed agent specifications, see:
 *Constitutional Compliance: Jerry Constitution v1.0*
 *Enhancement: EN-707 Adversarial quality mode integration (EPIC-003)*
 *Last Updated: 2026-02-14*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

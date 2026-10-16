@@ -116,7 +116,7 @@ User Request --> MAIN CONTEXT --> Task(wt-verifier) --> Report --> User
 
 ### WTI Rules Enforced
 
-Agents enforce Worktracker Integrity (WTI) rules defined in `.context/templates/worktracker/WTI_RULES.md`:
+Agents enforce Worktracker Integrity (WTI) rules defined in `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/WTI_RULES.md`:
 
 | Rule | Description | Enforcing Agent |
 |------|-------------|-----------------|
@@ -135,8 +135,8 @@ Agent outputs use standardized templates:
 
 | Template | Purpose | Location |
 |----------|---------|----------|
-| VERIFICATION_REPORT.md | wt-verifier output | `.context/templates/worktracker/` |
-| AUDIT_REPORT.md | wt-auditor output | `.context/templates/worktracker/` |
+| VERIFICATION_REPORT.md | wt-verifier output | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/` |
+| AUDIT_REPORT.md | wt-auditor output | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/` |
 
 ### When to Use Agents vs Rules
 
@@ -168,15 +168,15 @@ Agent outputs use standardized templates:
 
 | Template | Path |
 |----------|------|
-| All worktracker templates | `.context/templates/worktracker/` |
-| Epic | `.context/templates/worktracker/EPIC.md` |
-| Feature | `.context/templates/worktracker/FEATURE.md` |
-| Enabler | `.context/templates/worktracker/ENABLER.md` |
-| Story | `.context/templates/worktracker/STORY.md` |
-| Task | `.context/templates/worktracker/TASK.md` |
-| Bug | `.context/templates/worktracker/BUG.md` |
-| Discovery | `.context/templates/worktracker/DISCOVERY.md` |
-| Decision | `.context/templates/worktracker/DECISION.md` |
+| All worktracker templates | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/` |
+| Epic | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/EPIC.md` |
+| Feature | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/FEATURE.md` |
+| Enabler | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/ENABLER.md` |
+| Story | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/STORY.md` |
+| Task | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/TASK.md` |
+| Bug | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/BUG.md` |
+| Discovery | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/DISCOVERY.md` |
+| Decision | `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/DECISION.md` |
 
 ### Key File Locations
 
@@ -184,7 +184,7 @@ Agent outputs use standardized templates:
 |------|---------|
 | `projects/{ProjectId}/WORKTRACKER.md` | Global manifest for project |
 | `projects/{ProjectId}/work/` | Work decomposition folder |
-| `.context/templates/worktracker/` | All worktracker templates |
+| `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/` | All worktracker templates |
 
 ---
 
@@ -229,3 +229,5 @@ For detailed reference, the following rule files are available:
 - **TODO Integration**: [todo-integration-rules.md](./rules/todo-integration-rules.md) - META TODO items, TODO↔Worktracker sync rules
 
 > **Rule Loading Tiers:** Auto-loaded rules (behavior-rules, templates) are loaded via `@` import because they contain enforcement rules needed for every worktracker operation. Reference rules (entity-hierarchy, system-mappings, directory-structure, todo-integration) are loaded on-demand to conserve context budget.
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

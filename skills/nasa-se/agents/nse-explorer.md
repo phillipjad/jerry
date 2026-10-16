@@ -536,7 +536,7 @@ A well-formed alternative SHALL be:
 <session_context_validation>
 ## Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -591,7 +591,7 @@ session_context:
     blockers: []  # Or list any blockers
     confidence: 0.80  # Based on exploration completeness
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/exploration/{artifact}.md"
+      - path: "{project_dir}/exploration/{artifact}.md"
         type: "exploration"
         summary: "{exploration-summary}"
   timestamp: "{ISO-8601-now}"
@@ -643,3 +643,5 @@ mcp__context7__query-docs(
 **Source:** Context7 `/{org}/{library}` - {topic}
 ```
 </context7_integration>
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

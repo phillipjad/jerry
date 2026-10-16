@@ -45,18 +45,18 @@ type-safe results.
 
 1. **Extracting entity metadata via AST (replaces Grep for status/type):**
    ```bash
-   uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast frontmatter projects/PROJ-009/.../EN-001-example.md
+   uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast frontmatter projects/PROJ-009/.../EN-001-example.md
    # Returns: {"Type": "enabler", "Status": "completed", "Parent": "FEAT-001", ...}
    ```
 
 2. **Parsing file structure for hierarchy analysis:**
    ```bash
-   uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast parse projects/PROJ-009/.../EN-001-example.md
+   uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast parse projects/PROJ-009/.../EN-001-example.md
    # Returns: {"has_frontmatter": true, "heading_count": 8, "node_types": [...]}
    ```
 
 **Enforcement (H-33):** For hierarchy diagram generation, MUST use
-`jerry ast frontmatter` via `uv run --directory ${CLAUDE_PLUGIN_ROOT}` to extract entity type, status,
+`jerry ast frontmatter` via `uv run --project "${CLAUDE_PLUGIN_ROOT}"` to extract entity type, status,
 and parent relationships. DO NOT use Grep patterns on `> **Status:**` for
 frontmatter extraction. The AST approach is structurally correct and handles
 edge cases that regex-based extraction misses.
@@ -105,7 +105,7 @@ This agent adheres to the following principles:
 
 | Principle | Enforcement | Agent Behavior |
 |-----------|-------------|----------------|
-| P-002 (File Persistence) | **Medium** | ALL diagrams persisted to projects/${JERRY_PROJECT}/work/**/*-diagram.md |
+| P-002 (File Persistence) | **Medium** | ALL diagrams persisted to {project_dir}/work/**/*-diagram.md |
 | P-003 (No Recursion) | **Hard** | NO subagent spawning allowed |
 
 **Self-Critique Checklist (Before Response):**
@@ -136,7 +136,7 @@ optional:
 After generating the diagram, you MUST:
 
 1. **Create a file** using the Write tool at:
-   `projects/${JERRY_PROJECT}/work/{scope}/{entity-id}-{diagram-type}-diagram.md`
+   `{project_dir}/work/{scope}/{entity-id}-{diagram-type}-diagram.md`
 
 2. **Include:**
    - Diagram metadata (type, generated_at, entities_included)
@@ -320,7 +320,7 @@ pie title FEAT-002 Progress
 visualizer_output:
   root_entity_id: "{entity-id}"
   diagram_type: "{type}"
-  artifact_path: "projects/${JERRY_PROJECT}/work/{scope}/{entity-id}-{type}-diagram.md"
+  artifact_path: "{project_dir}/work/{scope}/{entity-id}-{type}-diagram.md"
   entities_included: {count}
   max_depth_reached: {depth}
   mermaid_syntax_valid: {true|false}
@@ -472,7 +472,7 @@ You are the wt-visualizer agent (v1.0.0).
 <role>Visualization Specialist - Mermaid diagram generation</role>
 <task>Generate hierarchy diagram for FEAT-002 with depth 3</task>
 <constraints>
-<must>Create file with Write tool at projects/${JERRY_PROJECT}/work/</must>
+<must>Create file with Write tool at {project_dir}/work/</must>
 <must>Use valid Mermaid syntax</must>
 <must>Include status color coding</must>
 <must_not>Return transient output only (P-002)</must_not>
@@ -504,13 +504,13 @@ After generating the diagram, you MUST:
 
 ```bash
 # 1. File exists
-ls projects/${JERRY_PROJECT}/work/**/*-diagram.md
+ls "{project_dir}"/work/**/*-diagram.md
 
 # 2. Valid Mermaid syntax
-grep -E "^```mermaid" projects/${JERRY_PROJECT}/work/**/*-diagram.md
+grep -E "^```mermaid" "{project_dir}"/work/**/*-diagram.md
 
 # 3. Has metadata
-grep -E "Entities Included:" projects/${JERRY_PROJECT}/work/**/*-diagram.md
+grep -E "Entities Included:" "{project_dir}"/work/**/*-diagram.md
 ```
 
 ---
@@ -520,3 +520,5 @@ grep -E "Entities Included:" projects/${JERRY_PROJECT}/work/**/*-diagram.md
 *Constitutional Compliance: Jerry Constitution v1.0*
 *Last Updated: 2026-02-02*
 *Created: FEAT-002 (Worktracker Agent Design)*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

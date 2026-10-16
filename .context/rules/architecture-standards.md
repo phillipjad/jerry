@@ -3,15 +3,12 @@ paths:
   - "src/**/*.py"
   - "tests/**/*.py"
   - "scripts/**/*.py"
-  - ".context/patterns/**/*.py"
   - "hooks/**/*.py"
 ---
 
 # Architecture Standards
 
 > Hexagonal Architecture, CQRS, Event Sourcing, and file organization rules.
-
-<!-- L2-REINJECT: rank=4, content="Architecture layer isolation (H-07): (a) domain/ MUST NOT import application/infrastructure/interface/ (stdlib+shared_kernel only); (b) application/ MUST NOT import infrastructure/interface/; (c) only bootstrap.py instantiates infra adapters. One class per file (H-10)." -->
 
 ## Document Sections
 
@@ -118,3 +115,5 @@ Override requires documented justification.
 - *Anti-corruption layer MAY be used for external system integration.*
 - *Read model projections MAY be stored in `infrastructure/read_models/`.*
 - *Orchestration patterns for multi-agent workflows are defined in `skills/orchestration/SKILL.md`. Use `/orchestration` skill for coordinating 3+ agents.*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

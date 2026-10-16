@@ -328,7 +328,7 @@ This will:
 | `ps-validator` | Requirements check | validate, check, verify, compliance | `docs/analysis/` | Validation report |
 | `ps-synthesizer` | Pattern extraction | synthesize, patterns, lessons | `docs/synthesis/` | Pattern catalog |
 | `ps-reviewer` | Quality assessment | review, quality, feedback, audit | `docs/reviews/` | Review findings |
-| `ps-critic` | Iterative refinement | critique, improve, iterate, polish | `projects/${JERRY_PROJECT}/critiques/` | Critique report |
+| `ps-critic` | Iterative refinement | critique, improve, iterate, polish | `{project_dir}/critiques/` | Critique report |
 | `ps-investigator` | Debugging failures | investigate, debug, incident, failure | `docs/investigations/` | Investigation report |
 | `ps-reporter` | Status updates | status, report, progress, dashboard | `docs/reports/` | Status report |
 
@@ -433,7 +433,7 @@ User: "We need to choose a caching solution"
 
 ### Pattern 6: Creator-Critic-Revision Cycle (Adversarial Quality)
 
-> **SSOT Reference:** `.context/rules/quality-enforcement.md` -- all thresholds, strategy IDs, and criticality levels are defined there. NEVER hardcode values; always reference the SSOT.
+> **SSOT Reference:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` -- all thresholds, strategy IDs, and criticality levels are defined there. NEVER hardcode values; always reference the SSOT.
 
 For C2+ deliverables that MUST meet quality gate requirements (H-13, H-14).
 
@@ -1728,7 +1728,7 @@ Problem-solving agents can hand off to NASA SE agents:
 
 - [ORCHESTRATION_PATTERNS.md](../shared/ORCHESTRATION_PATTERNS.md) - 8 canonical patterns
 - [AGENT_TEMPLATE_CORE.md](../shared/AGENT_TEMPLATE_CORE.md) - Agent definition format
-- [Jerry Constitution](../../docs/governance/JERRY_CONSTITUTION.md) - P-002 File Persistence
+- [Jerry Constitution](${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md) - P-002 File Persistence
 
 ---
 
@@ -1753,3 +1753,5 @@ Problem-solving agents can hand off to NASA SE agents:
 *Enhancement: EN-707 Adversarial quality mode integration (EPIC-003)*
 *Last Updated: 2026-02-14*
 *Template: PLAYBOOK_TEMPLATE.md v1.0.0*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

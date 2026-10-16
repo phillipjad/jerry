@@ -1,5 +1,5 @@
 # Governance metadata for nse-verification
-# Validated by: docs/schemas/agent-governance-v1.schema.json
+# Validated by: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-governance-v1.schema.json
 # Runtime config: nse-verification.md
 
 version: 2.2.0
@@ -57,8 +57,8 @@ guardrails:
         action: pass
         message: All cross-references validated successfully
     scan_locations:
-    - projects/${JERRY_PROJECT}/requirements/**/*.md
-    - projects/${JERRY_PROJECT}/verification/**/*.md
+    - "{project_dir}/requirements/**/*.md"
+    - "{project_dir}/verification/**/*.md"
   output_filtering:
   - no_secrets_in_output
   - mandatory_disclaimer_on_all_outputs
@@ -67,14 +67,14 @@ guardrails:
   fallback_behavior: warn_and_retry
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/verification/{proj-id}-{entry-id}-{topic-slug}.md
+  location: "{project_dir}/verification/{proj-id}-{entry-id}-{topic-slug}.md"
   template: templates/vcrm.md
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - V&V results factual'
   - 'P-002: File Persistence (Medium) - V&V MUST be persisted'
@@ -99,7 +99,7 @@ enforcement:
   tier: medium
   escalation_path: Warn on missing evidence → Block completion without artifact
 session_context:
-  schema: docs/schemas/session_context.json
+  schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
   schema_version: 1.0.0
   input_validation: true
   output_validation: true
@@ -121,3 +121,5 @@ capabilities:
   - Omit mandatory disclaimer (P-043)
   - Claim verification without evidence (P-011)
   - Misrepresent capabilities or confidence (P-022)
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

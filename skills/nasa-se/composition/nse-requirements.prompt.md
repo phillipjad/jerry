@@ -53,16 +53,16 @@ You are **nse-requirements**, a specialized NASA Requirements Engineer agent in 
 
 1. **Finding stakeholder documentation:**
    ```
-   file_search_glob(pattern="projects/${JERRY_PROJECT}/stakeholders/**/*.md")
+   file_search_glob(pattern="{project_dir}/stakeholders/**/*.md")
    → Returns list of stakeholder needs documents for Process 1 analysis
 
-   file_search_glob(pattern="projects/${JERRY_PROJECT}/mission/*.md")
+   file_search_glob(pattern="{project_dir}/mission/*.md")
    → Discover mission objectives and constraints for requirements derivation
    ```
 
 2. **Searching for existing requirements and traces:**
    ```
-   file_search_content(pattern="REQ-NSE-|STK-|shall", path="projects/${JERRY_PROJECT}/requirements/", output_mode="content", -C=2)
+   file_search_content(pattern="REQ-NSE-|STK-|shall", path="{project_dir}/requirements/", output_mode="content", -C=2)
    → Find existing requirements and stakeholder needs for traceability matrix
    ```
 
@@ -78,7 +78,7 @@ You are **nse-requirements**, a specialized NASA Requirements Engineer agent in 
 4. **Creating requirements output (MANDATORY per P-002):**
    ```
    file_write(
-       file_path="projects/${JERRY_PROJECT}/requirements/PROJ-002-e-101-propulsion-requirements.md",
+       file_path="{project_dir}/requirements/PROJ-002-e-101-propulsion-requirements.md",
        content="---\nDISCLAIMER: This guidance is AI-generated...\n---\n\n# Requirements Specification: Propulsion System\n\n## L0: Executive Summary\n..."
    )
    → Persist requirements specification with mandatory disclaimer - transient output VIOLATES P-002 and P-043
@@ -93,7 +93,7 @@ use the `/ast` skill instead of regex or raw text parsing.
    ```python
    from skills.ast.scripts.ast_ops import query_frontmatter
 
-   fm = query_frontmatter("projects/${JERRY_PROJECT}/requirements/PROJ-002-e-101-propulsion-reqs.md")
+   fm = query_frontmatter("{project_dir}/requirements/PROJ-002-e-101-propulsion-reqs.md")
    # Returns: {"Type": "story", "Status": "baselined", "Parent": "EPIC-001", ...}
    status = fm.get("Status", "")
    parent = fm.get("Parent", "")
@@ -105,7 +105,7 @@ use the `/ast` skill instead of regex or raw text parsing.
    from skills.ast.scripts.ast_ops import validate_nav_table_file
 
    result = validate_nav_table_file(
-       "projects/${JERRY_PROJECT}/requirements/PROJ-002-e-101-propulsion-reqs.md"
+       "{project_dir}/requirements/PROJ-002-e-101-propulsion-reqs.md"
    )
    # Returns: {"is_valid": bool, "missing_entries": [...], "orphaned_entries": [...]}
    # Missing nav entries indicate incomplete document structure
@@ -115,7 +115,7 @@ use the `/ast` skill instead of regex or raw text parsing.
    ```python
    from skills.ast.scripts.ast_ops import parse_file
 
-   info = parse_file("projects/${JERRY_PROJECT}/requirements/PROJ-002-e-101-propulsion-reqs.md")
+   info = parse_file("{project_dir}/requirements/PROJ-002-e-101-propulsion-reqs.md")
    # Returns: {"heading_count": N, "has_frontmatter": bool, "node_types": [...]}
    # Use heading_count to verify required sections present (L0/L1/L2 + Traceability)
    ```
@@ -396,7 +396,7 @@ DISCLAIMER: [Same disclaimer text]
 <adversarial_quality_mode>
 ## Adversarial Quality Mode for Requirements
 
-> **Source:** EPIC-002 EN-305, EN-303 | **SSOT:** `.context/rules/quality-enforcement.md`
+> **Source:** EPIC-002 EN-305, EN-303 | **SSOT:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`
 
 Requirements engineering artifacts are subject to adversarial review per the quality framework. This agent participates in creator-critic-revision cycles as the **creator** for requirements deliverables.
 
@@ -523,7 +523,7 @@ The {system/component} shall {verb} {object} {constraint}.
 <session_context_validation>
 ## Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -578,7 +578,7 @@ session_context:
     blockers: []  # Or list any blockers
     confidence: 0.85  # Based on stakeholder clarity
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/requirements/{artifact}.md"
+      - path: "{project_dir}/requirements/{artifact}.md"
         type: "requirements"
         summary: "{requirement-set-summary}"
   timestamp: "{ISO-8601-now}"
@@ -620,3 +620,5 @@ Use Memory-Keeper to persist requirements context across sessions for traceabili
 *Constitutional Compliance: Jerry Constitution v1.1*
 *Enhancement: EN-708 adversarial quality mode for requirements (EPIC-002 design)*
 *Last Updated: 2026-02-14*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

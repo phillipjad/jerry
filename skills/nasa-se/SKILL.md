@@ -279,11 +279,11 @@ Each agent uses the allowed tools differently. Here are concrete examples:
 
 ```
 1. Find stakeholder documentation:
-   Glob(pattern="projects/${JERRY_PROJECT}/stakeholders/**/*.md")
+   Glob(pattern="{project_dir}/stakeholders/**/*.md")
    → Returns list of stakeholder needs for requirements derivation
 
 2. Search for existing requirements:
-   Grep(pattern="REQ-NSE-|shall", path="projects/${JERRY_PROJECT}/requirements/", output_mode="content", -C=2)
+   Grep(pattern="REQ-NSE-|shall", path="{project_dir}/requirements/", output_mode="content", -C=2)
    → Find existing requirements for traceability matrix
 
 3. Read NASA standards for compliance:
@@ -293,7 +293,7 @@ Each agent uses the allowed tools differently. Here are concrete examples:
 
 4. Create requirements output (MANDATORY per P-002, P-043):
    Write(
-       file_path="projects/${JERRY_PROJECT}/requirements/proj-002-e-101-auth-requirements.md",
+       file_path="{project_dir}/requirements/proj-002-e-101-auth-requirements.md",
        content="---\nDISCLAIMER: This guidance is AI-generated...\n---\n\n# Requirements: Authentication\n\n## L0: Executive Summary\n..."
    )
    → Persist with mandatory disclaimer - transient output VIOLATES P-002 and P-043
@@ -303,20 +303,20 @@ Each agent uses the allowed tools differently. Here are concrete examples:
 
 ```
 1. Find existing risk artifacts:
-   Glob(pattern="projects/${JERRY_PROJECT}/risks/**/*.md")
+   Glob(pattern="{project_dir}/risks/**/*.md")
    → Discover existing risk register and assessments
 
 2. Search for risk keywords in project:
-   Grep(pattern="risk|threat|vulnerability|5x5", path="projects/${JERRY_PROJECT}/", output_mode="content", -C=2)
+   Grep(pattern="risk|threat|vulnerability|5x5", path="{project_dir}/", output_mode="content", -C=2)
    → Find risk-related discussions across project
 
 3. Read project context for risk identification:
-   Read(file_path="projects/${JERRY_PROJECT}/requirements/requirements-spec.md")
+   Read(file_path="{project_dir}/requirements/requirements-spec.md")
    → Load requirements to identify verification risks
 
 4. Create risk register (MANDATORY per P-002, P-043):
    Write(
-       file_path="projects/${JERRY_PROJECT}/risks/proj-002-e-201-risk-register.md",
+       file_path="{project_dir}/risks/proj-002-e-201-risk-register.md",
        content="---\nDISCLAIMER: This guidance is AI-generated...\n---\n\n# Risk Register: Deployment Phase\n\n## L0: Executive Summary\n..."
    )
    → Persist risk findings with mandatory disclaimer
@@ -326,20 +326,20 @@ Each agent uses the allowed tools differently. Here are concrete examples:
 
 ```
 1. Find review artifacts to evaluate:
-   Glob(pattern="projects/${JERRY_PROJECT}/requirements/**/*.md")
+   Glob(pattern="{project_dir}/requirements/**/*.md")
    → Discover requirements for review gate assessment
 
 2. Search for review readiness indicators:
-   Grep(pattern="Status: (Approved|Baselined)|TBD|TBR", path="projects/${JERRY_PROJECT}/", output_mode="content", -C=2)
+   Grep(pattern="Status: (Approved|Baselined)|TBD|TBR", path="{project_dir}/", output_mode="content", -C=2)
    → Find approval status and unresolved items
 
 3. Read verification status:
-   Read(file_path="projects/${JERRY_PROJECT}/verification/VCRM.md")
+   Read(file_path="{project_dir}/verification/VCRM.md")
    → Load VCRM for review entrance criteria check
 
 4. Create review package (MANDATORY per P-002, P-043):
    Write(
-       file_path="projects/${JERRY_PROJECT}/reviews/proj-002-e-301-PDR-entrance.md",
+       file_path="{project_dir}/reviews/proj-002-e-301-PDR-entrance.md",
        content="---\nDISCLAIMER: This guidance is AI-generated...\n---\n\n# PDR Entrance Checklist\n\n## L0: Executive Summary\n..."
    )
    → Persist review findings with mandatory disclaimer
@@ -387,7 +387,7 @@ projects/PROJ-002-nasa-systems-engineering/
 ## Adversarial Quality Mode
 
 > **Source:** EPIC-002 EN-305 (NASA-SE Skill Enhancement), EN-303 (Situational Applicability Mapping)
-> **SSOT:** `.context/rules/quality-enforcement.md` (canonical constants)
+> **SSOT:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (canonical constants)
 
 The NASA SE skill integrates adversarial quality controls into systems engineering processes. All SE review gates, V&V activities, and risk assessments incorporate structured adversarial challenge through creator-critic-revision cycles.
 
@@ -406,7 +406,7 @@ Verification and validation activities are enhanced with adversarial challenge a
 
 All NSE deliverables at C2+ criticality require quality scoring per the SSOT:
 
-- **Threshold:** >= 0.92 weighted composite score (ref: `.context/rules/quality-enforcement.md` H-13)
+- **Threshold:** >= 0.92 weighted composite score (ref: `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` H-13)
 - **Scoring mechanism:** S-014 (LLM-as-Judge) with dimension-level rubrics
 - **Minimum cycle count:** 3 iterations (creator -> critic -> revision) (ref: H-14)
 - **Self-review:** Required before presenting any deliverable (ref: H-15, S-010)
@@ -422,7 +422,7 @@ All NSE deliverables at C2+ criticality require quality scoring per the SSOT:
 
 ### Criticality-Based Review Intensity
 
-Review intensity scales with decision criticality (ref: `.context/rules/quality-enforcement.md` Criticality Levels):
+Review intensity scales with decision criticality (ref: `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` Criticality Levels):
 
 | Criticality | Review Intensity | Required Strategies | NSE Context Examples |
 |-------------|-----------------|---------------------|---------------------|
@@ -443,7 +443,7 @@ NPR 7123.1D review gates map to adversarial review levels:
 | TRR | Appendix G.4 | C2 | S-011, S-013, S-014 | Test coverage, verification gaps |
 | FRR | Appendix G.5 | C3 | S-001, S-004, S-012, S-014 | Readiness, residual risk |
 
-**Auto-Escalation:** Artifacts touching `docs/governance/JERRY_CONSTITUTION.md` auto-escalate to C4. Artifacts touching `.context/rules/` auto-escalate to C3 minimum (ref: AE-001, AE-002).
+**Auto-Escalation:** Artifacts touching `${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md` auto-escalate to C4. Artifacts touching `${CLAUDE_PLUGIN_ROOT}/.context/rules/` auto-escalate to C3 minimum (ref: AE-001, AE-002).
 
 ### Strategy Catalog Reference for NSE Contexts
 
@@ -520,9 +520,6 @@ All agents adhere to the **Jerry Constitution v1.0** plus NASA SE extensions:
 | Root cause analysis or debugging | `/problem-solving` (ps-investigator) | NASA-SE methodology applied to investigation tasks produces requirements artifacts instead of causal chains; compliance vocabulary (shall statements, VCRMs) obscures root cause isolation |
 | General research or technology survey | `/problem-solving` (ps-researcher) | NASA-SE produces formal requirements and review packages; divergent research methodology for landscape exploration is in ps-researcher, not nse-explorer (which explores design options within a requirements context) |
 | Adversarial quality review or tournament scoring | `/adversary` | NASA-SE nse-reviewer conducts formal technical reviews (SRR/PDR/CDR), not adversarial strategy-template-based quality assessment; S-014 rubric not loaded |
-| Transcript parsing or meeting note extraction | `/transcript` | NASA-SE has no VTT/SRT parser; meeting content extraction requires transcript-specific agents |
-| Offensive security testing | `/red-team` | NASA-SE produces V&V artifacts, not attack narratives; MITRE ATT&CK methodology absent |
-| Security-hardened software design | `/eng-team` | NASA-SE addresses systems engineering risk (NPR 8000.4C), not software security (STRIDE/DREAD, OWASP); security-specific governance layers not available |
 | Simple single-agent task without formal SE rigor | `/problem-solving` | NASA-SE loads 10 agents with NPR-compliant methodology; excessive overhead for tasks not requiring formal systems engineering process |
 
 ---
@@ -558,3 +555,5 @@ For detailed agent specifications, see:
 *Constitutional Compliance: Jerry Constitution v1.0 + P-040, P-041, P-042, P-043*
 *Enhancement: EN-708 adversarial quality mode integration (EPIC-002 design)*
 *Last Updated: 2026-02-14*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

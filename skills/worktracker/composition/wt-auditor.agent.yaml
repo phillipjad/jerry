@@ -1,5 +1,5 @@
 # Canonical Agent Definition
-# Schema: docs/schemas/agent-canonical-v1.schema.json
+# Schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-canonical-v1.schema.json
 
 name: wt-auditor
 version: 1.0.0
@@ -39,7 +39,7 @@ guardrails:
   - all_issues_documented_with_remediation
   fallback_behavior: warn_and_retry
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-002: File Persistence (Medium) - Audit reports MUST be persisted'
   - 'P-003: No Recursive Subagents (Hard) - No spawning other agents'
@@ -60,3 +60,5 @@ portability:
 enforcement:
   tier: medium
   escalation_path: Warn on issues → Generate remediation plan → Await user approval
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

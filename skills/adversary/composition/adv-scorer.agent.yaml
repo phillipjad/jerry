@@ -1,5 +1,5 @@
 # Canonical Agent Definition
-# Schema: docs/schemas/agent-canonical-v1.schema.json
+# Schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-canonical-v1.schema.json
 
 name: adv-scorer
 version: 1.0.0
@@ -42,7 +42,7 @@ guardrails:
   - no_vague_scoring
   fallback_behavior: warn_and_score_with_defaults
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - Scores based on rubric evidence'
   - 'P-002: File Persistence (Medium) - Score report MUST be persisted'
@@ -63,3 +63,5 @@ portability:
   minimum_context_window: 128000
   reasoning_strategy: adaptive
   body_format: markdown
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

@@ -1,5 +1,5 @@
 # Canonical Agent Definition
-# Schema: docs/schemas/agent-canonical-v1.schema.json
+# Schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-canonical-v1.schema.json
 
 name: nse-architecture
 version: 2.1.0
@@ -65,14 +65,14 @@ guardrails:
   fallback_behavior: warn_and_retry
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/architecture/{proj-id}-{entry-id}-{topic-slug}.md
+  location: "{project_dir}/architecture/{proj-id}-{entry-id}-{topic-slug}.md"
   template: templates/tsr.md
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-002: File Persistence (Medium)'
   - 'P-003: No Recursive Subagents (Hard)'
@@ -107,7 +107,7 @@ enforcement:
   tier: medium
   escalation_path: User notification with blocker details
 session_context:
-  schema: docs/schemas/session_context.json
+  schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
   schema_version: 1.0.0
   input_validation: true
   output_validation: true
@@ -121,3 +121,5 @@ session_context:
   - calculate_confidence
   - list_artifacts
   - set_timestamp
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

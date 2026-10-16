@@ -458,10 +458,10 @@ From quality-enforcement.md (MUST NOT modify):
 ### Cross-References
 
 **SSOT and Source Documents:**
-- `.context/rules/quality-enforcement.md` -- Authoritative source for H-13 threshold, dimension weights, criticality levels, strategy catalog
+- `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` -- Authoritative source for H-13 threshold, dimension weights, criticality levels, strategy catalog
 - `ADR-EPIC002-001` -- Strategy selection methodology, composite score 4.10, exclusion rationale
 - `ADR-EPIC002-002` -- 5-layer enforcement architecture, token budgets
-- `.context/templates/adversarial/TEMPLATE-FORMAT.md` -- Canonical format this template conforms to (v1.1.0)
+- `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/TEMPLATE-FORMAT.md` -- Canonical format this template conforms to (v1.1.0)
 
 **Related Strategy Templates:**
 - `s-003-steelman.md` -- MUST run before S-002 (H-16 compliance)
@@ -497,3 +497,5 @@ From quality-enforcement.md (MUST NOT modify):
 -->
 
 <!-- VERSION: 1.0.0 | CREATED: 2026-02-15 | ENABLER: EN-806 | FORMAT: TEMPLATE-FORMAT.md v1.1.0 -->
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

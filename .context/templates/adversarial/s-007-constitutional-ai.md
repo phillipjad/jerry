@@ -60,7 +60,7 @@ Implements H-18 via principle-by-principle constitutional review. C2+ REQUIRED. 
 ### When to Use
 
 1. **C2+ Deliverable Review:** ALL Standard+ deliverables MUST undergo constitutional review (H-18)
-2. **Governance Changes:** Modifications to `.context/rules/`, constitution, templates (AE-001, AE-002)
+2. **Governance Changes:** Modifications to `${CLAUDE_PLUGIN_ROOT}/.context/rules/`, constitution, templates (AE-001, AE-002)
 3. **Architecture/Design:** Deliverables establishing patterns, conventions, constraints
 4. **Pre-Merge Quality Gate:** Work affecting shared infrastructure, APIs, framework behavior
 5. **Post-Failure Analysis:** Root cause diagnosis for failed adversarial strategies
@@ -91,14 +91,14 @@ Systematic constitutional compliance report: enumerates applicable principles, c
 
 - [ ] Deliverable artifact (document, code, design, decision record)
 - [ ] Criticality level classification (C2, C3, or C4)
-- [ ] Jerry Constitution (`docs/governance/JERRY_CONSTITUTION.md`)
-- [ ] Applicable behavioral rules from `.context/rules/`
+- [ ] Jerry Constitution (`${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md`)
+- [ ] Applicable behavioral rules from `${CLAUDE_PLUGIN_ROOT}/.context/rules/`
 - [ ] Quality framework SSOT (`quality-enforcement.md`)
 - [ ] Auto-escalation rules (AE-001 through AE-006) for criticality-based principle selection
 
 ### Context Requirements
 
-Load: `JERRY_CONSTITUTION.md` (P-001–P-043), `.context/rules/*.md` (H-01–H-33), `quality-enforcement.md` (SSOT).
+Load: `JERRY_CONSTITUTION.md` (P-001–P-043), `${CLAUDE_PLUGIN_ROOT}/.context/rules/*.md` (H-01–H-33), `quality-enforcement.md` (SSOT).
 
 **Tier Mapping:** HARD (MUST, SHALL, NEVER, FORBIDDEN, REQUIRED, CRITICAL→Critical), MEDIUM (SHOULD, RECOMMENDED, PREFERRED, EXPECTED→Major), SOFT (MAY, CONSIDER, OPTIONAL, SUGGESTED→Minor).
 
@@ -117,9 +117,9 @@ Load: `JERRY_CONSTITUTION.md` (P-001–P-043), `.context/rules/*.md` (H-01–H-3
 
 **Procedure:**
 
-1. Read `docs/governance/JERRY_CONSTITUTION.md` in full
+1. Read `${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md` in full
 2. Identify deliverable type (code, document, design, template, rule)
-3. Based on type, load applicable rules from `.context/rules/`:
+3. Based on type, load applicable rules from `${CLAUDE_PLUGIN_ROOT}/.context/rules/`:
    - Code deliverables: `architecture-standards.md`, `coding-standards.md`, `python-environment.md`, `testing-standards.md`
    - Document deliverables: `markdown-navigation-standards.md`, `quality-enforcement.md`
    - Template/rule deliverables: ALL rules (AE-002 triggers auto-C3)
@@ -506,3 +506,5 @@ Use this checklist to validate this S-007 template against TEMPLATE-FORMAT.md v1
 ---
 
 <!-- VERSION: 1.0.0 | CREATED: 2026-02-15 | ENABLER: EN-805 | FORMAT: TEMPLATE-FORMAT.md v1.1.0 -->
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

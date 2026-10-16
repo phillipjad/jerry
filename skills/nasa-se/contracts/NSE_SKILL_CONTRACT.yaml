@@ -67,7 +67,7 @@ agents:
       $ref: "#/components/schemas/RequirementsInput"
     output_schema:
       $ref: "#/components/schemas/RequirementsOutput"
-    output_location: "projects/${JERRY_PROJECT}/requirements/{proj_id}-{entry_id}-{topic_slug}.md"
+    output_location: "{project_dir}/requirements/{proj_id}-{entry_id}-{topic_slug}.md"
 
   nse-verification:
     description: "V&V Specialist - Verification and validation planning"
@@ -78,7 +78,7 @@ agents:
       $ref: "#/components/schemas/VerificationInput"
     output_schema:
       $ref: "#/components/schemas/VerificationOutput"
-    output_location: "projects/${JERRY_PROJECT}/verification/{proj_id}-{entry_id}-{topic_slug}.md"
+    output_location: "{project_dir}/verification/{proj_id}-{entry_id}-{topic_slug}.md"
 
   nse-risk:
     description: "Risk Manager - Technical risk identification and mitigation"
@@ -89,7 +89,7 @@ agents:
       $ref: "#/components/schemas/RiskInput"
     output_schema:
       $ref: "#/components/schemas/RiskOutput"
-    output_location: "projects/${JERRY_PROJECT}/risks/{proj_id}-{entry_id}-{topic_slug}.md"
+    output_location: "{project_dir}/risks/{proj_id}-{entry_id}-{topic_slug}.md"
 
   nse-reviewer:
     description: "Technical Review Gate - SRR/PDR/CDR/FRR review packages"
@@ -100,7 +100,7 @@ agents:
       $ref: "#/components/schemas/ReviewerInput"
     output_schema:
       $ref: "#/components/schemas/ReviewerOutput"
-    output_location: "projects/${JERRY_PROJECT}/reviews/{proj_id}-{entry_id}-{review_type}.md"
+    output_location: "{project_dir}/reviews/{proj_id}-{entry_id}-{review_type}.md"
 
   nse-integration:
     description: "System Integration - Interface control and integration"
@@ -111,7 +111,7 @@ agents:
       $ref: "#/components/schemas/IntegrationInput"
     output_schema:
       $ref: "#/components/schemas/IntegrationOutput"
-    output_location: "projects/${JERRY_PROJECT}/integration/{proj_id}-{entry_id}-{topic_slug}.md"
+    output_location: "{project_dir}/integration/{proj_id}-{entry_id}-{topic_slug}.md"
 
   nse-configuration:
     description: "Config Management - Baseline control and change management"
@@ -122,7 +122,7 @@ agents:
       $ref: "#/components/schemas/ConfigurationInput"
     output_schema:
       $ref: "#/components/schemas/ConfigurationOutput"
-    output_location: "projects/${JERRY_PROJECT}/configuration/{proj_id}-{entry_id}-{topic_slug}.md"
+    output_location: "{project_dir}/configuration/{proj_id}-{entry_id}-{topic_slug}.md"
 
   nse-architecture:
     description: "Technical Architect - Trade studies and design decisions"
@@ -133,7 +133,7 @@ agents:
       $ref: "#/components/schemas/ArchitectureInput"
     output_schema:
       $ref: "#/components/schemas/ArchitectureOutput"
-    output_location: "projects/${JERRY_PROJECT}/architecture/{proj_id}-{entry_id}-{topic_slug}.md"
+    output_location: "{project_dir}/architecture/{proj_id}-{entry_id}-{topic_slug}.md"
 
   nse-explorer:
     description: "Exploration Engineer - Divergent concept exploration"
@@ -144,7 +144,7 @@ agents:
       $ref: "#/components/schemas/ExplorerInput"
     output_schema:
       $ref: "#/components/schemas/ExplorerOutput"
-    output_location: "projects/${JERRY_PROJECT}/exploration/{proj_id}-{entry_id}-{topic_slug}.md"
+    output_location: "{project_dir}/exploration/{proj_id}-{entry_id}-{topic_slug}.md"
 
   nse-qa:
     description: "Quality Assurance Specialist - Artifact validation and compliance"
@@ -155,7 +155,7 @@ agents:
       $ref: "#/components/schemas/QAInput"
     output_schema:
       $ref: "#/components/schemas/QAOutput"
-    output_location: "projects/${JERRY_PROJECT}/qa/{proj_id}-{entry_id}-qa-report.md"
+    output_location: "{project_dir}/qa/{proj_id}-{entry_id}-qa-report.md"
 
   nse-reporter:
     description: "SE Status Reporter - Technical assessment and metrics"
@@ -166,7 +166,7 @@ agents:
       $ref: "#/components/schemas/ReporterInput"
     output_schema:
       $ref: "#/components/schemas/ReporterOutput"
-    output_location: "projects/${JERRY_PROJECT}/reports/{proj_id}-{entry_id}-{report_type}.md"
+    output_location: "{project_dir}/reports/{proj_id}-{entry_id}-{report_type}.md"
 
 # =============================================================================
 # COMPONENT SCHEMAS
@@ -1570,3 +1570,5 @@ testing:
         - source: ps-researcher
           target: nse-requirements
           expected: "Research findings transformed to stakeholder needs"
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

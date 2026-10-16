@@ -141,7 +141,7 @@ workflow:
 
 ### Adversarial Synthesis Protocol
 
-> Constants reference `.context/rules/quality-enforcement.md` (SSOT).
+> Constants reference `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (SSOT).
 > Scoring dimensions and weights: see `skills/orchestration/SKILL.md` Adversarial Quality Mode section.
 
 The synthesizer applies adversarial techniques to the final synthesis itself, ensuring the consolidated output meets the same quality standards as individual phase deliverables.
@@ -396,3 +396,5 @@ Use Memory-Keeper to retrieve context from prior phases and cross-pipeline sourc
 *Agent Version: 2.2.0*
 *Skill: orchestration*
 *Updated: 2026-02-14 - EN-709: Added adversarial synthesis protocol, quality trend analysis, adversarial findings integration*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->
