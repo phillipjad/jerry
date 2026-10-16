@@ -1,0 +1,110 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Phillip Miavelstuck
+
+import json
+import os
+import re
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+MANIFEST = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
+SKIPPED_DIRS = {".git", ".venv", "__pycache__", ".pytest_cache", ".ruff_cache"}
+FILE_CAP = 5000
+FRONTMATTER = re.compile(r"---\r?\n(.*?)\r?\n---\r?\n", re.DOTALL)
+
+
+def frontmatter(path: Path) -> dict[str, str]:
+    match = FRONTMATTER.match(path.read_text(encoding="utf-8-sig"))
+    assert match, f"{path.relative_to(ROOT)} has no frontmatter"
+    fields = {}
+    for line in match.group(1).splitlines():
+        key, sep, value = line.partition(":")
+        if sep and not line[:1].isspace() and not line.startswith("-"):
+            fields[key.strip()] = value.strip()
+    return fields
+
+
+def is_single_line(value: str) -> bool:
+    if not value or value[0] in "|>":
+        return False
+    if value[0] in "\"'":
+        return len(value) > 1 and value[-1] == value[0] and not value.endswith("\\" + value[0])
+    return True
+
+
+def skill_files() -> list[Path]:
+    return sorted((ROOT / "skills").glob("*/SKILL.md"))
+
+
+def agent_files() -> list[Path]:
+    return sorted((ROOT / "skills").glob("*/agents/*.md"))
+
+
+def test_should_find_every_agent_listed_in_manifest() -> None:
+    missing = [a for a in MANIFEST["agents"] if not (ROOT / a).is_file()]
+
+    assert missing == []
+
+
+def test_should_list_every_agent_file_in_manifest() -> None:
+    listed = {(ROOT / a).resolve() for a in MANIFEST["agents"]}
+
+    orphans = [p.relative_to(ROOT).as_posix() for p in agent_files() if p.resolve() not in listed]
+
+    assert orphans == []
+
+
+def test_should_find_every_command_listed_in_manifest() -> None:
+    missing = [c for c in MANIFEST["commands"] if not (ROOT / c).is_file()]
+
+    assert missing == []
+
+
+def test_should_give_every_skill_a_single_line_name_and_description() -> None:
+    bad = [
+        f"{p.relative_to(ROOT).as_posix()}: {key}"
+        for p in skill_files()
+        for key in ("name", "description")
+        if not is_single_line(frontmatter(p).get(key, ""))
+    ]
+
+    assert bad == []
+
+
+def test_should_give_skills_unique_names() -> None:
+    names = [frontmatter(p)["name"] for p in skill_files()]
+
+    assert len(names) == len(set(names))
+
+
+def test_should_give_agents_unique_names() -> None:
+    names = [frontmatter(p)["name"] for p in agent_files()]
+
+    assert len(names) == len(set(names))
+
+
+def test_should_parse_hooks_json() -> None:
+    hooks = json.loads((ROOT / "hooks" / "hooks.json").read_text(encoding="utf-8"))
+
+    assert isinstance(hooks["hooks"], dict)
+
+
+def test_should_stay_under_marketplace_file_cap() -> None:
+    count = 0
+    for _, dirs, files in os.walk(ROOT):
+        dirs[:] = [d for d in dirs if d not in SKIPPED_DIRS]
+        count += len(files)
+
+    assert count < FILE_CAP
+
+
+def test_should_ship_no_top_level_bin() -> None:
+    assert not (ROOT / "bin").exists()
+
+
+def test_should_reject_multi_line_values() -> None:
+    assert not is_single_line('"starts here,')
+    assert not is_single_line("|")
+    assert not is_single_line('"ends with an escaped quote\\"')
+    assert is_single_line('"quoted"')
+    assert is_single_line("plain words")
