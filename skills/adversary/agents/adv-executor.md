@@ -261,6 +261,7 @@ Per H-15, before persisting the execution report, verify:
 ```
 Write(file_path="{output_path}", content="{report}")
 ```
+`{output_path}` is the path the caller gives; without one, use `{project_dir}/adv-executor-{strategy-id}-{topic-slug}.md`.
 </execution_process>
 
 <output>
