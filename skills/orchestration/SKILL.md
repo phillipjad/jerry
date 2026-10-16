@@ -1,6 +1,6 @@
 ---
 name: orchestration
-description: Multi-agent workflow orchestration with state tracking, checkpointing, and cross-pollinated pipelines. Use when coordinating parallel agent pipelines, managing sync barriers, or tracking complex workflow execution state across sessions.
+description: Plans and tracks multi-agent workflows with parallel pipelines, sync barriers, quality gates and checkpoints, keeping the state in ORCHESTRATION.yaml so the work resumes across sessions. Use when the user asks for a multi-phase or multi-agent workflow or a pipeline, to coordinate several agents or skills, to run work in parallel, to split a large effort into phases with gates, or to resume or report on such a workflow. Not for single-agent tasks or simple sequential steps (invoke the agent or skill directly), research or root cause analysis (use problem-solving), or requirements and V&V (use nasa-se).
 version: "2.2.0"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, WebSearch, WebFetch, mcp__memory-keeper__context_save, mcp__memory-keeper__context_get, mcp__memory-keeper__context_search
 activation-keywords:

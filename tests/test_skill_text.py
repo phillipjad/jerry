@@ -408,6 +408,16 @@ def test_should_flag_only_the_banned_form(check: Check, rel: str, ctx: str, bad:
     assert not check(rel, ctx, good)
 
 
+def rule_section(heading: str) -> str:
+    text = (ROOT / ".context" / "rules" / "quality-enforcement.md").read_text(encoding="utf-8")
+    return text.split(f"\n## {heading}\n", 1)[1].split("\n## ", 1)[0]
+
+
+def test_should_index_h22_as_a_hard_rule_and_not_retire_it() -> None:
+    assert "\n| H-22 |" in rule_section("HARD Rule Index")
+    assert "\n| H-22 |" not in rule_section("Retired Rule IDs")
+
+
 def test_should_track_frontmatter_and_fences() -> None:
     lines = ["---", "name: x", "---", "text", "````markdown", "```bash", "```", "````", "after"]
 

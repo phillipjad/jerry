@@ -18,7 +18,11 @@ RUN = ROOT / "hooks" / "run.py"
 SID = "goku"
 CLI = f'uv run --project "{ROOT.as_posix()}" jerry'
 LITERAL = "A literal ${CLAUDE_PLUGIN_ROOT} in a Jerry file opened with Read, or in a Bash command, means this path."
-HEAD = f"Jerry plugin root: {ROOT.as_posix()}. {LITERAL}\nJerry CLI: {CLI} <command> --session {SID}\n"
+SKILLS = (
+    "Jerry skills (H-22): when a request matches a Jerry skill's description, invoke that skill (jerry:<name>) "
+    "proactively and early, without waiting for the user to name it; combine skills when the work spans several."
+)
+HEAD = f"Jerry plugin root: {ROOT.as_posix()}. {LITERAL}\nJerry CLI: {CLI} <command> --session {SID}\n{SKILLS}\n"
 PICK_UP = "## Pick up here\n\n1. Find the seventh Dragon Ball."
 ASK = "ask them to pick one of the projects below"
 BUDGET = 9000
@@ -330,7 +334,7 @@ STEPS = {
 
 @pytest.mark.parametrize(
     ("pick_up_chars", "step"),
-    [(100, "done summaries"), (1000, "all summaries"), (1800, "done rows"), (2150, "ids"), (2450, "truncated")],
+    [(100, "done summaries"), (1000, "all summaries"), (1700, "done rows"), (2050, "ids"), (2350, "truncated")],
 )
 def test_should_trim_the_index_in_steps_to_stay_within_the_budget(
     tmp_path: Path, home: Path, capsys: pytest.CaptureFixture[str], pick_up_chars: int, step: str

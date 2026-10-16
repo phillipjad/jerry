@@ -46,11 +46,14 @@
 | H-18 | Constitutional compliance check (S-007) | quality-enforcement |
 | H-19 | Governance escalation per AE rules | quality-enforcement |
 | H-20 | Testing standards (BDD test-first Red phase, 90% line coverage REQUIRED) | quality-enforcement |
+| H-22 | Proactive skill invocation | skill descriptions, SessionStart context |
 | H-23 | Markdown navigation (navigation table NAV-001, anchor links NAV-006) | markdown-navigation-standards |
 | H-31 | Clarify before acting when ambiguous (ask, don't assume) | quality-enforcement |
 | H-33 | AST-based parsing REQUIRED for worktracker entity ops | ast skill |
 
 **H-04 (project focus):** Tracked work (multi-step, or changing files or external systems) runs in a focused project, or in an explicit none. When the user has not named a project, ask them to pick one, create one (`projects new <slug>`), or work without one (`focus none`). Quick questions skip this. Subagents inherit the session's focus and never ask. The SessionStart context carries the runtime instruction and the exact command with its session id; the CLI is `uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry focus show|set|add|none`.
+
+**H-22 (proactive skill invocation):** When a request matches a Jerry skill's description, invoke that skill proactively and early, without waiting for the user to name it, and combine skills when the work spans several (for example orchestration with problem-solving and nasa-se). The skills are adversary, architecture, ast, nasa-se, orchestration, problem-solving and worktracker. Each SKILL.md `description` says what the skill does, when to use it and which skill to use instead, and Claude Code lists these descriptions to the model; the SessionStart context carries the runtime instruction.
 
 ---
 
@@ -72,7 +75,6 @@
 | H-21 | H-20 (sub-item b) | 90% line coverage REQUIRED | 2026-02-21 |
 | H-35 | H-34 (sub-item b) | Constitutional compliance in agent definitions | 2026-02-21 |
 | H-37 | H-36 (sub-item b) | Keyword-first routing below 20 skills | 2026-02-21 |
-| H-22 | — (dropped) | Proactive skill invocation | — |
 | H-25 | — (dropped) | Skill naming and structure | — |
 | H-26 | — (dropped) | Skill description, paths, and registration | — |
 | H-32 | — (dropped) | GitHub Issue parity for jerry repo work items | — |
@@ -162,9 +164,10 @@ Rules are classified by priority:
 | H-15 | 1 |
 | H-19 | 1 |
 | H-20 | 1 |
+| H-22 | 1 |
 | H-23 | 1 |
 | H-33 | 1 |
-| **Tier A Total** | **15** |
+| **Tier A Total** | **16** |
 
 **Tier B** — enforced by compensating controls:
 
@@ -176,7 +179,7 @@ Rules are classified by priority:
 | H-04 (project focus) | SessionStart context, `focus` CLI | 1 |
 | **Tier B Total** | | **4** |
 
-**Total:** 19 HARD rules (15 Tier A + 4 Tier B)
+**Total:** 20 HARD rules (16 Tier A + 4 Tier B)
 
 > **Note:** The compensating controls are the skills, agents and SessionStart hook named in the table.
 
@@ -190,7 +193,7 @@ The ceiling of 25 HARD rules is derived from three independent constraint famili
 
 **Convergence:** All three families independently converge on 25 as the practical upper bound. The absolute maximum is 28.
 
-**Current count:** 19 HARD rules. H-22, H-25, H-26, H-32, H-34 and H-36 are retired because this plugin does not ship the rule files that defined them (see Retired Rule IDs).
+**Current count:** 20 HARD rules. H-25, H-26, H-32, H-34 and H-36 are retired because this plugin does not ship the rule files that defined them (see Retired Rule IDs).
 
 ### HARD Rule Ceiling Exception Mechanism
 
@@ -234,7 +237,7 @@ Temporary ceiling expansion is permitted under controlled conditions:
 
 | Layer | Timing | Function | Context Rot |
 |-------|--------|----------|-------------|
-| L1 | Session and subagent start | SessionStart and SubagentStart hooks inject the project focus | Vulnerable |
+| L1 | Session and subagent start | SessionStart and SubagentStart hooks inject the project focus; SessionStart also states H-22 | Vulnerable |
 | L3 | On demand | `jerry ast validate` checks entity files deterministically (H-33) | Immune |
 | L4 | During work | Skills and agents read these rules and self-review their output (H-15) | Mixed |
 

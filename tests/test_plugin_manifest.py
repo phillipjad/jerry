@@ -75,6 +75,15 @@ def test_should_give_every_skill_a_single_line_name_and_description() -> None:
     assert bad == []
 
 
+def test_should_say_when_to_use_each_skill_within_1024_characters() -> None:
+    descriptions = {p.parent.name: frontmatter(p)["description"].strip("\"'") for p in skill_files()}
+
+    bad = [name for name, text in descriptions.items() if "Use when" not in text or len(text) > 1024]
+
+    assert descriptions
+    assert bad == []
+
+
 def test_should_give_skills_unique_names() -> None:
     names = [frontmatter(p)["name"] for p in skill_files()]
 

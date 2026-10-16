@@ -1,6 +1,6 @@
 ---
 name: ast
-description: Markdown AST operations for Jerry documents. Provides structured parse, frontmatter, modify and validate operations on Jerry markdown files via the jerry ast CLI.
+description: Structured operations on Jerry markdown through the jerry ast CLI. It parses a file to a JSON AST, reads and modifies the blockquote frontmatter of worktracker entity files, and validates navigation tables (H-23) and entity schemas. Use when the user asks to read or extract frontmatter, entity metadata or status, change one frontmatter field such as an entity's status, parse markdown structure, validate an entity file against its schema, or check a file's navigation table. Required for worktracker entity operations (H-33). Not for plain reads or free-form edits (use Read, Write or Edit), or content quality review (use adversary).
 version: "1.1.0"
 allowed-tools: Read, Write, Edit, Bash
 activation-keywords:

@@ -1,6 +1,6 @@
 ---
 name: problem-solving
-description: Structured problem-solving framework with specialized agents for research, analysis, architecture decisions, validation, synthesis, reviews, investigations, and reporting. Use when tackling complex problems that need systematic exploration, evidence-based decisions, and persistent artifacts.
+description: Structured research, analysis and investigation through nine specialist agents (researcher, analyst, architect, critic, validator, synthesizer, reviewer, investigator, reporter) that each write a persistent L0/L1/L2 report. Use when the user asks to research, analyze, investigate, explore, compare or evaluate something, to find a root cause, debug, troubleshoot or diagnose a failure, to figure out why something happens or what went wrong, to synthesize findings, review code or a design, validate constraints, or improve a deliverable through creator-critic-revision cycles. Not for requirements, V&V, risk registers or formal technical reviews (use nasa-se), a one-shot adversarial critique or quality score (use adversary), multi-agent pipelines with state across sessions (use orchestration), or work items (use worktracker).
 version: "2.2.0"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, WebSearch, WebFetch, mcp__context7__resolve-library-id, mcp__context7__query-docs, mcp__memory-keeper__context_save, mcp__memory-keeper__context_get, mcp__memory-keeper__context_search
 activation-keywords:

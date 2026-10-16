@@ -1,6 +1,6 @@
 ---
 name: architecture
-description: "This skill should be used when the user asks to design a system, create an ADR, review architecture, or mentions architectural decisions."
+description: Architecture guidance for hexagonal (ports and adapters), DDD and CQRS designs. It checks layer dependencies and import boundaries, reviews design documents against checklists, draws Mermaid, PlantUML or ASCII diagrams, and writes Architecture Decision Records. Use when the user asks to design a system or major component, create or record an ADR, review an architecture or design for compliance, check layer dependencies, draw an architecture diagram, or apply DDD patterns. Not for root cause analysis or debugging (use problem-solving), formal trade studies, requirements or V&V (use nasa-se), or adversarial critique (use adversary).
 version: 1.0.0
 allowed-tools:
   - Read

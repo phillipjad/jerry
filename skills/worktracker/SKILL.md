@@ -1,6 +1,6 @@
 ---
 name: worktracker
-description: Work item tracking and task management using the Jerry Framework hierarchy (Initiative, Epic, Feature, Story, Task, Enabler, Bug, Impediment). Manages WORKTRACKER.md manifests, tracks progress, and enforces template usage for consistent work decomposition.
+description: Work item tracking in WORKTRACKER.md manifests with the Jerry hierarchy (Initiative, Epic, Feature, Story, Task, Enabler, Bug, Impediment), entity templates and integrity rules, plus agents that verify acceptance criteria, audit integrity and draw Mermaid hierarchy diagrams. Use when the user asks to create, update, decompose, close or track work items, epics, features, stories, tasks, enablers, bugs or impediments, to update the WORKTRACKER, to check progress on tracked work, to verify an item is ready to close, to audit the tracker, or to visualize the hierarchy. Not for research (use problem-solving) or multi-agent workflow state (use orchestration).
 version: "1.1.0"
 allowed-tools: Read, Write, Glob, Agent, Edit
 activation-keywords:
