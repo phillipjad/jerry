@@ -1,225 +1,53 @@
 [project]
 name = "jerry"
-version = "0.31.9"
-description = "A framework for behavior and workflow guardrails with knowledge accrual"
+version = "1.0.0.dev0"
+description = "Project-based work for Claude Code: multi-project discovery, per-session focus and nested projects"
 readme = "README.md"
 license = { text = "Apache-2.0" }
 requires-python = ">=3.11"
 authors = [
-    { name = "Jerry Framework Contributors" }
+    { name = "Phillip Miavelstuck" },
+    { name = "Jerry Framework Contributors" },
 ]
-keywords = [
-    "claude-code",
-    "ai-agent",
-    "workflow",
-    "guardrails",
-    "hexagonal-architecture",
-    "domain-driven-design"
-]
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Software Development :: Libraries :: Application Frameworks",
-]
-
-# Zero external dependencies for core
-# Libraries added here should be pre-installed in Claude Code Web environment
 dependencies = [
-    "jsonschema[test]>=4.26.0",
-    "webvtt-py>=0.5.1",
-    "tiktoken>=0.13.0",  # EN-026: Token counting for chunking (BUG-001 fix)
-    "filelock>=3.32.2",
     "markdown-it-py>=4.2.0,<5.0.0",
     "mdformat>=1.0.0,<2.0.0",
-    "mdit-py-plugins>=0.6.1",
-    "pyyaml>=6.0",  # EN-005: StalenessDetector ORCHESTRATION.yaml parsing
-    "requests>=2.34.2",
-    "pygments>=2.19.3",
-    "pymdown-extensions>=11.0.1",
-]
-
-[project.optional-dependencies]
-dev = [
-    "mypy>=2.3.0",
-    "ruff>=0.16.1",
-    "filelock>=3.32.2",
-    "jsonschema>=4.21.0",
-]
-test = [
-    "pytest>=9.1.1",
-    "pytest-archon>=0.0.6",
-    "pytest-bdd>=8.0.0",
-    "pytest-cov>=7.1.0",
-]
-# EN-020: Transcript bounded context dependencies (TDD-FEAT-004 v1.2.0)
-transcript = [
-    "webvtt-py>=0.5.1",           # VTT/SRT parsing (deterministic)
-    "charset-normalizer>=3.4.9",  # Encoding detection fallback
 ]
 
 [project.scripts]
-jerry = "src.interface.cli.main:main"
-# EN-001: Removed deprecated session entry point (TD-005). Hook now calls main CLI
+jerry = "jerry.cli:main"
+
+[dependency-groups]
+test = [
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src"]
+packages = ["src/jerry"]
 
-[tool.pyright]
-pythonVersion = "3.11"
-venvPath = "."
-venv = ".venv"
-typeCheckingMode = "standard"
-
-[tool.mypy]
-python_version = "3.11"
-strict = true
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-
-[tool.ruff]
-target-version = "py311"
-line-length = 100
-# Exclude completed PoC/spike scripts from linting. These are one-off research
-# artifacts that served their purpose (EN-001 R-01 PoC) and are preserved as
-# reference material, not production code. See BUG-001 for context.
-exclude = [
-    "projects/*/work/**/EN-*/r01_poc.py",
-]
-
-[tool.ruff.lint]
-select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # Pyflakes
-    "I",   # isort
-    "B",   # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "UP",  # pyupgrade
-    "S506",  # WI-004: Ban unsafe YAML APIs (yaml.load, yaml.unsafe_load) (T-YF-07, M-01)
-]
-ignore = [
-    "E501",  # line too long (handled by formatter)
-    "B017",  # pytest.raises(Exception) - used intentionally for frozen dataclass tests
-]
-
-[tool.ruff.lint.isort]
-known-first-party = ["src"]
+[tool.uv]
+default-groups = []
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
-testpaths = ["tests", "scripts/tests"]
+testpaths = ["tests"]
+addopts = "--strict-markers"
 markers = [
-    "happy-path: marks tests as happy path scenarios",
-    "negative: marks tests as negative/error scenarios",
-    "edge-case: marks tests as edge case scenarios",
-    "boundary: marks tests as boundary value scenarios",
-    "e2e: marks end-to-end tests (slow, full stack)",
-    "integration: marks integration tests (external dependencies)",
-    "subprocess: marks tests that invoke external processes",
-    "security: marks security/adversarial test scenarios",
-    "regression: marks regression test scenarios",
+    "happy_path: expected-input scenario",
+    "negative: invalid-input scenario",
+    "edge_case: boundary scenario",
 ]
 
-# =============================================================================
-# Commitizen Configuration (EN-108)
-# =============================================================================
-# Used for commit message linting (pre-commit hook) only.
-# Version bumping is handled by bump-my-version, NOT commitizen.
-[tool.commitizen]
-name = "cz_conventional_commits"
-version_provider = "pep621"
-tag_format = "v$version"
+[tool.coverage.run]
+source = ["jerry"]
+branch = true
 
-# =============================================================================
-# Version Bumping Configuration (EN-108)
-# =============================================================================
-# Uses bump-my-version for multi-file version synchronization.
-# SSOT: [project].version above.
-# Trigger: .github/workflows/version-bump.yml
-# Validation: scripts/sync_versions.py --check
-#
-# References:
-#   - EN-108: Version Bumping Strategy
-#   - design-version-bumping-process.md
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
 
-[tool.bumpversion]
-current_version = "0.31.9"
-commit = true
-tag = true
-tag_name = "v{new_version}"
-commit_message = "chore(release): bump version to v{new_version} [skip-bump]"
-tag_message = "Release v{new_version}"
-allow_dirty = false
-
-# Pre-release version support (SemVer format)
-parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)(-(?P<pre_l>alpha|beta|rc)\\.(?P<pre_n>\\d+))?"
-serialize = [
-    "{major}.{minor}.{patch}-{pre_l}.{pre_n}",
-    "{major}.{minor}.{patch}",
-]
-
-# --- File 1: pyproject.toml (SSOT) ---
-[[tool.bumpversion.files]]
-filename = "pyproject.toml"
-search = 'version = "{current_version}"'
-replace = 'version = "{new_version}"'
-
-# --- File 2: .claude-plugin/plugin.json ---
-[[tool.bumpversion.files]]
-filename = ".claude-plugin/plugin.json"
-search = '"version": "{current_version}"'
-replace = '"version": "{new_version}"'
-
-# --- File 3: .claude-plugin/marketplace.json (plugins[0].version only) ---
-# NOTE: Top-level "version" (1.0.0) is a marketplace schema version and is
-# intentionally NOT synced with the framework version (REV-1 from adversarial review).
-[[tool.bumpversion.files]]
-filename = ".claude-plugin/marketplace.json"
-search = """"source": "./",
-      "version": "{current_version}\""""
-replace = """"source": "./",
-      "version": "{new_version}\""""
-
-# --- File 4: CLAUDE.md (inline CLI version reference) ---
-[[tool.bumpversion.files]]
-filename = "CLAUDE.md"
-search = "(v{current_version})"
-replace = "(v{new_version})"
-
-# =============================================================================
-# Security: CVE floor constraints for transitive dependencies
-# Fixes: PYSEC-2026-141/142 (urllib3), PYSEC-2026-196/CVE-2026-3219/CVE-2026-6357 (pip),
-#        GHSA-6v7p-g79w-8964 (msgpack), GHSA-4xgf-cpjx-pc3j (pydantic-settings),
-#        CVE-2026-44307 (mako)
-# =============================================================================
-[tool.uv]
-constraint-dependencies = [
-    "urllib3>=2.7.0",
-    "pip>=26.1.2",
-    "msgpack>=1.2.1",
-    "pydantic-settings>=2.14.2",
-    "mako>=1.3.12",
-    "click>=8.3.3",
-]
-
-[dependency-groups]
-dev = [
-    "bump-my-version>=1.5.0",
-    "mkdocs-material>=9.7.7",
-    "pip-audit>=2.10.1",
-    "pip-licenses>=5.5.5",
-    "pre-commit>=4.6.1",
-    "pyright>=1.1.411",
-    "pytest>=9.1.1",
-    "pytest-cov>=7.1.0",
-    "ruff>=0.16.1",
-]
+# Modified from geekatron/jerry v0.31.9; see NOTICE.
