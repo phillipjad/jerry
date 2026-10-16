@@ -27,6 +27,9 @@ ASK = (
     "for a picked or named project). Quick questions skip this. If you cannot ask (non-interactive), use none.\n"
 )
 SUBAGENT_TAIL = ". Use the project the task names, else the primary; never run focus commands."
+LITERAL_ROOT = (
+    "A literal ${CLAUDE_PLUGIN_ROOT} in a Jerry file opened with Read, or in a Bash command, means this path."
+)
 
 
 def units(text: str) -> int:
@@ -122,7 +125,7 @@ def session_start(payload: object) -> dict:
     session.prune(sid)
     found = projects.discover(Path(state.cwd), roots=[Path(root) for root in state.roots])
     cli = f'uv run --project "{PLUGIN_ROOT.as_posix()}" jerry'
-    text = f"Jerry plugin root: {PLUGIN_ROOT.as_posix()}\nJerry CLI: {cli} <command> --session {sid}\n"
+    text = f"Jerry plugin root: {PLUGIN_ROOT.as_posix()}. {LITERAL_ROOT}\nJerry CLI: {cli} <command> --session {sid}\n"
 
     if state.none or state.focus:
         text += session.render_head(state, found)
