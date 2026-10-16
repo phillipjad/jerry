@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 import pytest
+from conftest import make_project
 
 from jerry import cli
 
@@ -179,3 +180,14 @@ def test_should_not_import_the_upstream_src_package() -> None:
     import jerry.markdown_ast  # noqa: F401
 
     assert not [name for name in sys.modules if name == "src" or name.startswith("src.")]
+
+
+def test_should_focus_a_project_through_the_installed_command(tmp_path: Path, home: Path) -> None:
+    project = make_project(tmp_path / "projects", "PROJ-001-sample")
+    (project / "RESUME.md").write_text("## Pick up here\n\nSpar with Piccolo.\n", encoding="utf-8")
+
+    result = run_jerry(["focus", "add", "PROJ-001", "--session", "goku"], cwd=tmp_path)
+
+    assert result.returncode == 0, result.stderr
+    assert "## Pick up here\n\nSpar with Piccolo.\n" in result.stdout
+    assert (home / ".jerry" / "sessions" / "goku.json").is_file()

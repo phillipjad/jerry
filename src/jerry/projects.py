@@ -21,8 +21,10 @@ the project environment.
 
 from __future__ import annotations
 
+import contextlib
 import os
 import re
+import shutil
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -34,10 +36,19 @@ INVERSES = {"related": "related", "depends_on": "blocks", "supersedes": "superse
 SHOWN_LINKS = ("related", "depends_on", "blocks", "supersedes", "superseded_by", "uses", "used_by")
 KNOWN_FILES = ("RESUME.md", "WORKTRACKER.md", "PLAN.md", "ORCHESTRATION.yaml")
 MAX_SLUG = 40
+MAX_PICK_UP = 3000
+MAX_RELATIVE_PATH = 180
+REGISTRY = "README.md"
+INDEX_START = "<!-- jerry:index:start -->"
+INDEX_END = "<!-- jerry:index:end -->"
 
 _FOLDER = re.compile(r"^(PROJ-(\d{3}(?:\.\d+)*))-([a-z][a-z0-9]*(?:-[a-z0-9]+)*)$")
 _ID = re.compile(r"^PROJ-\d{3}(?:\.\d+)*$")
 _KEYS = {"title", "status", "summary", *LINK_TYPES}
+_BAD_NAME = "not a valid project folder name"
+_FENCE = re.compile(r"\s*(`{3,}(?=[^`]*$)|~{3,})")
+_LINK = re.compile(r"\]\(\s*<?([^)>\s]+)")
+_TOML_ESCAPES = {ord('"'): '\\"', ord("\\"): "\\\\"} | {c: f"\\u{c:04X}" for c in (*range(0x20), 0x7F)}
 
 
 @dataclass(frozen=True)
@@ -195,10 +206,12 @@ def _scan(root: Path, found: Discovery) -> list[Project]:
             name = parse_folder(child.name)
             if name is None:
                 if child.name.startswith("PROJ-"):
-                    found.warnings.append(
-                        f"{child.as_posix()}: not a valid project folder name "
-                        f"(PROJ-<NNN>[.<n>...]-<slug>, lowercase slug of at most {MAX_SLUG} characters); skipped"
+                    reason = (
+                        f"slug is longer than {MAX_SLUG} characters"
+                        if _FOLDER.match(child.name)
+                        else f"PROJ-<NNN>[.<n>...]-<slug>, lowercase slug of at most {MAX_SLUG} characters"
                     )
+                    found.warnings.append(f"{child.as_posix()}: {_BAD_NAME} ({reason}); skipped")
                 continue
             data, error = _load(child / PROJECT_FILE)
             if error:
@@ -313,3 +326,205 @@ def render_show(found: Discovery, project_id: str) -> str | None:
     if files:
         lines.append(f"files: {', '.join(files)}")
     return "\n".join(lines) + "\n"
+
+
+def pick_up_here(text: str) -> str | None:
+    """Return the ``## Pick up here`` section if it is the first level-2 heading, else None.
+
+    The section runs to the next level-1 or level-2 heading or the end, with LF
+    line endings and trailing whitespace stripped. Headings inside fenced code
+    blocks do not count.
+    """
+    lines = text.replace("\r\n", "\n").split("\n")
+    fence = ""
+    start = None
+    for i, line in enumerate(lines):
+        match = _FENCE.match(line)
+        if fence:
+            if match and match.group(1)[0] == fence[0] and len(match.group(1)) >= len(fence):
+                fence = ""
+        elif match:
+            fence = match.group(1)
+        elif start is None and line.startswith("## "):
+            if not line[3:].startswith("Pick up here"):
+                return None
+            start = i
+        elif start is not None and line.startswith(("# ", "## ")):
+            return "\n".join(lines[start:i]).rstrip()
+    return None if start is None else "\n".join(lines[start:]).rstrip()
+
+
+def _link_child(resume: Path, line: str) -> None:
+    """Add ``line`` to the end of the Pick up here section of ``resume``, else to the end of the file.
+
+    A missing file is left missing. The file's BOM and newline style are kept.
+    """
+    try:
+        raw = resume.read_bytes().decode("utf-8")
+    except FileNotFoundError:
+        return
+    text = raw.replace("\r\n", "\n")
+    section = pick_up_here(text.lstrip("\ufeff"))
+    if section is None:
+        text = f"{text.rstrip()}\n\n{line}\n"
+    else:
+        end = text.index(section) + len(section)
+        text = f"{text[:end]}\n{line}{text[end:]}"
+    resume.write_bytes((text.replace("\n", "\r\n") if "\r\n" in raw else text).encode("utf-8"))
+
+
+def new_project(found: Discovery, slug: str, parent_id: str | None = None, title: str | None = None) -> Path:
+    """Create the next-numbered project with ``project.toml`` and a RESUME.md stub; return its path.
+
+    A top-level project is numbered after the highest number in any root and
+    created in the nearest root; a sub-project after its parent's highest child,
+    and the parent's RESUME.md gains a link to the new one.
+    Raises ValueError or OSError, leaving nothing behind.
+    """
+    parent = found.projects.get(parent_id) if parent_id else None
+    if parent_id and parent is None:
+        raise ValueError(f"unknown parent project: {parent_id}")
+    if not found.roots:
+        raise ValueError("no projects root found; create a projects/ folder or pass --root")
+    base = parent.number if parent else ()
+    folders = [parse_folder(d.name) for c in ([parent.path] if parent else found.roots) for d in _subdirs(c)]
+    taken = [
+        p.number[len(base)]
+        for p in [*found.all_projects, *filter(None, folders)]
+        if p.number[: len(base)] == base and p.number != base
+    ]
+    number = max(taken, default=0) + 1
+    project_id = f"{parent.id}.{number}" if parent else f"PROJ-{number:03d}"
+    name = f"{project_id}-{slug}"
+    if parse_folder(name) is None:
+        raise ValueError(
+            f"'{name}' is not a valid project folder name: the slug needs lowercase letters, digits and "
+            f"single hyphens, starting with a letter, at most {MAX_SLUG} characters"
+        )
+    title = title if title and title.strip() else slug
+    root = parent.root if parent else found.roots[0]
+    path = (parent.path if parent else root) / name
+    path.mkdir()
+    try:
+        (path / PROJECT_FILE).write_text(
+            f'title = "{title.translate(_TOML_ESCAPES)}"\nstatus = "active"\nsummary = ""\n', encoding="utf-8"
+        )
+        (path / "RESUME.md").write_text(
+            f"# {project_id} -- Resume\n\n## Pick up here\n\n- Write the first next step here.\n", encoding="utf-8"
+        )
+        after = discover(path, roots=found.roots)
+        if any(p.id == project_id and p.path != path.resolve() for p in after.all_projects) or any(
+            e.startswith(f"{project_id} is defined twice") for e in after.errors
+        ):
+            raise ValueError(f"{project_id} was also created elsewhere at the same time; removed ours, run new again")
+        if parent:
+            _link_child(parent.path / "RESUME.md", f"- [{project_id}]({name}/RESUME.md) {' '.join(title.split())}")
+    except BaseException:
+        shutil.rmtree(path, ignore_errors=True)
+        raise
+    with contextlib.suppress(OSError, ValueError):
+        sync_registry(after, root, write=True)
+    return path
+
+
+def render_index(found: Discovery, root: Path) -> str:
+    """Render the registry table of every project in ``root``, in number order."""
+    rows = ["| ID | Title | Status | Summary | Links |", "|---|---|---|---|---|"]
+    for p in found.all_projects:
+        if p.root == root:
+            links = "; ".join(f"{link_type} {', '.join(ids)}" for link_type, ids in p.links.items())
+            cells = (" ".join(c.splitlines()).replace("|", "\\|") for c in (p.id, p.title, p.status, p.summary, links))
+            rows.append("| " + " | ".join(cells) + " |")
+    return "\n".join(rows) + "\n"
+
+
+def _splice(text: str, table: str) -> str | None:
+    lines = text.splitlines(keepends=True)
+    starts = [i for i, line in enumerate(lines) if line.strip() == INDEX_START]
+    ends = [i for i, line in enumerate(lines) if line.strip() == INDEX_END]
+    if not starts and not ends:
+        return None
+    if len(starts) != 1 or len(ends) != 1 or starts[0] > ends[0]:
+        raise ValueError(f"expected one '{INDEX_START}' line followed by one '{INDEX_END}' line")
+    newline = "\r\n" if lines[starts[0]].endswith("\r\n") else "\n"
+    return "".join([*lines[: starts[0] + 1], *(row + newline for row in table.splitlines()), *lines[ends[0] :]])
+
+
+def sync_registry(found: Discovery, root: Path, write: bool = False) -> bool | None:
+    """Compare, and with ``write`` rewrite, the table between the markers of ``root``'s README.md.
+
+    Returns None when there is no README.md or it has no marker lines, True when
+    the table was out of date, False when it was current. Raises ValueError on
+    misplaced markers. The file's BOM and newline style are kept.
+    """
+    readme = root / REGISTRY
+    try:
+        text = readme.read_bytes().decode("utf-8")
+    except FileNotFoundError:
+        return None
+    updated = _splice(text, render_index(found, root))
+    if updated is None or updated == text:
+        return None if updated is None else False
+    if write:
+        readme.write_bytes(updated.encode("utf-8"))
+    return True
+
+
+def _check_resume(found: Discovery, p: Project) -> list[str]:
+    resume = p.path / "RESUME.md"
+    label = resume.as_posix()
+    try:
+        text = resume.read_text(encoding="utf-8-sig")
+    except FileNotFoundError:
+        return [f"{label}: missing"]
+    except (OSError, UnicodeDecodeError) as exc:
+        return [f"{label}: cannot read: {exc}"]
+    errors = []
+    section = pick_up_here(text)
+    if section is None:
+        errors.append(f"{label}: must open with '## Pick up here' (its first level-2 heading)")
+    elif len(section) > MAX_PICK_UP:
+        errors.append(f"{label}: '## Pick up here' is {len(section):,} characters; the maximum is {MAX_PICK_UP:,}")
+    targets = {(p.path / target.split("#")[0]).resolve() for target in _LINK.findall(text)}
+    for child in found.all_projects:
+        if child.root == p.root and child.parent == p.id and (child.path / "RESUME.md").resolve() not in targets:
+            errors.append(f"{label}: does not link to {child.id}'s RESUME.md")
+    return errors
+
+
+def _check_paths(p: Project) -> list[str]:
+    errors = []
+    for folder, dirs, files in os.walk(p.path):
+        base = Path(p.path.name, Path(folder).relative_to(p.path))
+        for name in [*dirs, *files]:
+            relative = (base / name).as_posix()
+            if len(relative) > MAX_RELATIVE_PATH:
+                errors.append(
+                    f"{p.root.as_posix()}/{relative}: path is {len(relative)} characters relative to its root; "
+                    f"the maximum is {MAX_RELATIVE_PATH}"
+                )
+                if name in dirs:
+                    dirs.remove(name)
+    return errors
+
+
+def check(found: Discovery) -> tuple[list[str], list[str]]:
+    """Return the errors and warnings of every rule ``jerry projects check`` enforces."""
+    errors = list(found.errors)
+    warnings = []
+    for warning in found.warnings:
+        (errors if _BAD_NAME in warning else warnings).append(warning)
+    if not found.roots:
+        errors.append("no projects root found")
+    for root in found.roots:
+        label = (root / REGISTRY).as_posix()
+        try:
+            if sync_registry(found, root):
+                errors.append(f"{label}: registry is stale; run `jerry projects index --write`")
+        except (OSError, ValueError) as exc:
+            errors.append(f"{label}: {exc}")
+    for p in found.all_projects:
+        errors += _check_resume(found, p)
+        if p.parent is None:
+            errors += _check_paths(p)
+    return errors, warnings
