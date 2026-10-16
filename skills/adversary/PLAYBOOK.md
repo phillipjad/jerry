@@ -15,7 +15,7 @@ agents_covered:
 > **Version:** 1.0.0
 > **Skill:** adversary
 > **Purpose:** On-demand adversarial quality reviews using strategy templates
-> **SSOT Reference:** `.context/rules/quality-enforcement.md`
+> **SSOT Reference:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`
 > **Created:** 2026-02-15
 
 ---
@@ -68,7 +68,7 @@ START: What is the criticality level?
 
 AUTO-ESCALATION CHECKS:
   - Touches JERRY_CONSTITUTION.md? → Auto-C4 (AE-001)
-  - Touches .context/rules/? → Auto-C3 minimum (AE-002)
+  - Touches ${CLAUDE_PLUGIN_ROOT}/.context/rules/? → Auto-C3 minimum (AE-002)
   - New or modified ADR? → Auto-C3 minimum (AE-003)
   - Modifies baselined ADR? → Auto-C4 (AE-004)
   - Security-relevant code? → Auto-C3 minimum (AE-005)
@@ -103,7 +103,7 @@ Use this table to quickly determine the correct criticality level and strategy s
 |----------|--------|-------------|---------------------|---------------------|
 | Reversible within 1 day? Files ≤10? No API changes? | YES | **C2** | S-007, S-002, S-014 | S-003 (H-16), S-010 |
 | >1 day to reverse? Files >10? API changes? | YES | **C3** | C2 + S-004, S-012, S-013 | S-001, S-003, S-010, S-011 |
-| Touches `.context/rules/`? | YES | **Auto-C3** (AE-002) | C3 strategy set | — |
+| Touches `${CLAUDE_PLUGIN_ROOT}/.context/rules/`? | YES | **Auto-C3** (AE-002) | C3 strategy set | — |
 | Touches `JERRY_CONSTITUTION.md`? | YES | **Auto-C4** (AE-001) | All 10 strategies | None |
 | Modifies baselined ADR? | YES | **Auto-C4** (AE-004) | All 10 strategies | None |
 | New or modified ADR? | YES | **Auto-C3** (AE-003) | C3 strategy set | — |
@@ -155,7 +155,7 @@ Step 1: Strategy Selection (with optional user overrides)
 Step 2: Execute S-003 Steelman (H-16 compliance)
   Agent: adv-executor
   Input: Strategy=S-003, deliverable path,
-         template=.context/templates/adversarial/s-003-steelman.md
+         template=${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-003-steelman.md
   Output: Steelman report — strongest version of the argument
 
   Purpose: Ensure fair assessment by strengthening before challenging.
@@ -163,13 +163,13 @@ Step 2: Execute S-003 Steelman (H-16 compliance)
 Step 3: Execute S-007 Constitutional AI Critique
   Agent: adv-executor
   Input: Strategy=S-007, deliverable path,
-         template=.context/templates/adversarial/s-007-constitutional-ai.md
+         template=${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-007-constitutional-ai.md
   Output: Constitutional compliance findings (Critical/Major/Minor)
 
 Step 4: Execute S-002 Devil's Advocate
   Agent: adv-executor
   Input: Strategy=S-002, deliverable path,
-         template=.context/templates/adversarial/s-002-devils-advocate.md
+         template=${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-002-devils-advocate.md
   Output: Assumption challenges and alternative perspectives
 
 Step 5: Score with S-014 LLM-as-Judge
@@ -296,7 +296,7 @@ Prerequisites:
 Step 1: Execute S-003 Steelman Technique
   Agent: adv-executor
   Input: Strategy=S-003, deliverable path,
-         template=.context/templates/adversarial/s-003-steelman.md
+         template=${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-003-steelman.md
   Process:
     1. Read the deliverable thoroughly
     2. Identify the core argument and supporting evidence
@@ -311,7 +311,7 @@ Step 1: Execute S-003 Steelman Technique
 Step 2: Execute S-002 Devil's Advocate
   Agent: adv-executor
   Input: Strategy=S-002, deliverable path,
-         template=.context/templates/adversarial/s-002-devils-advocate.md,
+         template=${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-002-devils-advocate.md,
          steelman_output (from Step 1)
   Process:
     1. Read the deliverable AND the steelman output
@@ -373,7 +373,7 @@ PROCEDURE: C4 Tournament Review
 Prerequisites:
   - Deliverable confirmed as C4 (irreversible, architecture/governance/public)
   - OR auto-escalated to C4 (AE-001: constitution, AE-004: baselined ADR)
-  - All strategy templates available in .context/templates/adversarial/
+  - All strategy templates available in ${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/
 
 Phase 1: Strategy Selection
   Agent: adv-selector
@@ -402,7 +402,7 @@ Phase 2: Strategy Execution (Groups A-E)
   Agent: adv-executor (invoked once per strategy by orchestrator)
 
   For each strategy 1-9:
-    1. Load template from .context/templates/adversarial/
+    1. Load template from ${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/
     2. Execute strategy against deliverable
     3. Classify findings: Critical / Major / Minor
     4. Persist execution report to file (P-002)
@@ -435,7 +435,7 @@ Phase 5: Persist Tournament Summary
 ### Example
 
 ```
-User: "Run full C4 tournament on docs/governance/JERRY_CONSTITUTION.md changes"
+User: "Run full C4 tournament on ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md changes"
 
 Phase 1: adv-selector → all 10 strategies, C4 confirmed (AE-001)
 
@@ -532,7 +532,7 @@ To extract a specific section:
 **Example (C4 Tournament):**
 
 ```
-User: "Run full C4 tournament on docs/governance/JERRY_CONSTITUTION.md"
+User: "Run full C4 tournament on ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md"
 
 Phase 1: adv-selector → identifies all 10 strategies
 Phase 2: adv-executor runs 9 strategies (S-001 through S-013)
@@ -639,5 +639,7 @@ The MAIN CONTEXT (Claude session) orchestrates ALL agent sequences. Agents retur
 *Playbook Version: 1.0.0*
 *Skill: adversary*
 *Constitutional Compliance: Jerry Constitution v1.0*
-*SSOT: `.context/rules/quality-enforcement.md`*
+*SSOT: `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`*
 *Created: 2026-02-15*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

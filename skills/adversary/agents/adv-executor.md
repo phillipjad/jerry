@@ -37,7 +37,7 @@ When invoked, expect:
 - **Strategy ID:** {S-001|S-002|S-003|S-004|S-007|S-010|S-011|S-012|S-013}
 - **Strategy Name:** {Human-readable name}
 - **Deliverable Path:** {path to deliverable file}
-- **Template Path:** {path to strategy template in .context/templates/adversarial/}
+- **Template Path:** {path to strategy template in ${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/}
 
 ## OPTIONAL CONTEXT
 - **Prior Strategy Outputs:** {paths to prior execution reports, if chaining}
@@ -179,17 +179,17 @@ consuming the full content in the strategy execution context.
 
 ```bash
 # 1. Identify entity type from frontmatter (replaces guessing from filename)
-uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast frontmatter {deliverable_path}
+uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast frontmatter "{deliverable_path}"
 # Returns: {"Type": "story", "Status": "in_progress", "Parent": "FEAT-001", ...}
 # Use the "Type" field as entity_type for schema validation
 
 # 2. Check structural completeness (nav table, heading count)
-uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast parse {deliverable_path}
+uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast parse "{deliverable_path}"
 # Returns: {"has_frontmatter": true, "heading_count": 8, "node_types": [...]}
 # Use heading_count to assess completeness before executing strategy steps
 
 # 3. Validate entity schema for schema-backed deliverables (stories, enablers, etc.)
-uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast validate {deliverable_path} --schema {entity_type}
+uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast validate "{deliverable_path}" --schema {entity_type}
 # Returns: {"schema_valid": true/false, "schema_violations": [...]}
 # Schema violations are themselves potential findings (Major severity)
 ```
@@ -348,5 +348,7 @@ If any step in this agent's process would require spawning another agent, HALT a
 
 *Agent Version: 1.0.0*
 *Constitutional Compliance: Jerry Constitution v1.0*
-*SSOT: `.context/rules/quality-enforcement.md`*
+*SSOT: `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`*
 *Created: 2026-02-15*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

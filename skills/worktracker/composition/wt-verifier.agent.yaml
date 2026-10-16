@@ -1,5 +1,5 @@
 # Canonical Agent Definition
-# Schema: docs/schemas/agent-canonical-v1.schema.json
+# Schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-canonical-v1.schema.json
 
 name: wt-verifier
 version: 1.0.0
@@ -39,14 +39,14 @@ guardrails:
   fallback_behavior: warn_and_retry
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/work/**/*-verification-report.md
-  template: .context/templates/worktracker/VERIFICATION_REPORT.md
+  location: "{project_dir}/work/**/*-verification-report.md"
+  template: ${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/VERIFICATION_REPORT.md
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - Verification is evidence-based'
   - 'P-002: File Persistence (Medium) - Verification report MUST be persisted'
@@ -74,3 +74,5 @@ portability:
 enforcement:
   tier: medium
   escalation_path: Warn on missing evidence → Block completion without 80% AC verified
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

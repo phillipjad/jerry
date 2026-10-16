@@ -25,7 +25,7 @@
 
 These rules ensure the worktracker remains a **single source of truth** that is accurate, honest, and verifiable.
 
-> **SSOT:** `.context/templates/worktracker/WTI_RULES.md` is the authoritative source for all WTI rule definitions. Consult the SSOT for full rationale, enforcement details, examples, and violation remediation procedures. The table below is a compact reference index.
+> **SSOT:** `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/WTI_RULES.md` is the authoritative source for all WTI rule definitions. Consult the SSOT for full rationale, enforcement details, examples, and violation remediation procedures. The table below is a compact reference index.
 
 | WTI Rule | Name | Tier | Summary |
 |----------|------|------|---------|
@@ -35,11 +35,11 @@ These rules ensure the worktracker remains a **single source of truth** that is 
 | WTI-004 | Synchronize Before Reporting | HARD | Read fresh state before any status report. Never rely on cached state. |
 | WTI-005 | Atomic Task State | HARD | Update child file AND parent reference atomically in the same operation. |
 | WTI-006 | Evidence-Based Closure | HARD | Evidence section MUST contain verifiable links before closure. |
-| WTI-007 | Mandatory Template Usage | HARD | Read canonical template from `.context/templates/worktracker/` before creating entity files. Never create from memory. |
+| WTI-007 | Mandatory Template Usage | HARD | Read canonical template from `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/` before creating entity files. Never create from memory. |
 | WTI-008 | Content Quality Standards | HARD | Work item content (Summary, AC, Description) MUST meet content quality standards. |
 | WTI-009 | Collaboration Before Creation | HARD | Validate understanding with user before creating work items with AC. |
 
-> **Full details:** For enforcement procedures, violation examples, correct examples, anti-patterns, remediation severity levels, and compliance verification, see [WTI_RULES.md](../../../.context/templates/worktracker/WTI_RULES.md).
+> **Full details:** For enforcement procedures, violation examples, correct examples, anti-patterns, remediation severity levels, and compliance verification, see [WTI_RULES.md](${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/WTI_RULES.md).
 
 ---
 
@@ -166,8 +166,10 @@ Use MCP Memory-Keeper to help you remember and maintain the structure and relati
 ## Cross-References
 
 - **Content Quality Standards**: `worktracker-content-standards.md` (detailed examples, anti-patterns, SPIDR framework)
-- **Definition of Done**: `.context/templates/worktracker/DOD.md` (team-level DoD, referenced by WTI-008a)
+- **Definition of Done**: `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/DOD.md` (team-level DoD, referenced by WTI-008a)
 - **Entity Hierarchy Rules**: `worktracker-entity-hierarchy.md`
 - **System Mappings Rules**: `worktracker-system-mappings.md`
 - **Directory Structure Rules**: `worktracker-directory-structure.md`
 - **Template Usage Rules**: `worktracker-templates.md`
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

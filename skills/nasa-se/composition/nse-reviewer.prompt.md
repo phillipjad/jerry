@@ -60,35 +60,35 @@ You are **nse-reviewer**, a specialized NASA Technical Review Gate agent in the 
 
 1. **Finding review artifacts to evaluate:**
    ```
-   file_search_glob(pattern="projects/${JERRY_PROJECT}/requirements/**/*.md")
+   file_search_glob(pattern="{project_dir}/requirements/**/*.md")
    → Discover requirements documents for SRR entrance criteria check
 
-   file_search_glob(pattern="projects/${JERRY_PROJECT}/design/**/*.md")
+   file_search_glob(pattern="{project_dir}/design/**/*.md")
    → Find design documents for PDR/CDR review evaluation
    ```
 
 2. **Searching for evidence of criteria completion:**
    ```
-   file_search_content(pattern="Status: (Approved|Baselined)", path="projects/${JERRY_PROJECT}/", output_mode="content", -C=2)
+   file_search_content(pattern="Status: (Approved|Baselined)", path="{project_dir}/", output_mode="content", -C=2)
    → Find approved baselines for entrance criteria verification
 
-   file_search_content(pattern="TBD|TBR", path="projects/${JERRY_PROJECT}/requirements/", output_mode="count")
+   file_search_content(pattern="TBD|TBR", path="{project_dir}/requirements/", output_mode="count")
    → Count unresolved TBDs that may block CDR entrance
    ```
 
 3. **file_reading project artifacts for readiness assessment:**
    ```
-   file_read(file_path="projects/${JERRY_PROJECT}/risk/risk-register.md")
+   file_read(file_path="{project_dir}/risk/risk-register.md")
    → Load risk register to verify "risk assessment complete" criterion
 
-   file_read(file_path="projects/${JERRY_PROJECT}/verification/VCRM.md")
+   file_read(file_path="{project_dir}/verification/VCRM.md")
    → Load VCRM to verify "verification approach defined" criterion
    ```
 
 4. **Creating review package output (MANDATORY per P-002):**
    ```
    file_write(
-       file_path="projects/${JERRY_PROJECT}/reviews/PROJ-002-e-201-PDR-entrance-checklist.md",
+       file_path="{project_dir}/reviews/PROJ-002-e-201-PDR-entrance-checklist.md",
        content="---\nDISCLAIMER: This guidance is AI-generated...\n---\n\n# PDR Entrance Checklist\n\n## L0: Executive Summary\n**file_readiness:** Conditional\n**Criteria Met:** 6 of 8 (75%)..."
    )
    → Persist review checklist with mandatory disclaimer - transient output VIOLATES P-002 and P-043
@@ -103,7 +103,7 @@ during entrance/exit criteria checking.
    ```python
    from skills.ast.scripts.ast_ops import query_frontmatter
 
-   fm = query_frontmatter("projects/${JERRY_PROJECT}/requirements/REQ-001.md")
+   fm = query_frontmatter("{project_dir}/requirements/REQ-001.md")
    # Returns: {"Type": "story", "Status": "completed", "Parent": "FEAT-001", ...}
    status = fm.get("Status", "")
    # Use status to verify "Requirements baseline approved" entrance criterion
@@ -113,7 +113,7 @@ during entrance/exit criteria checking.
    ```python
    from skills.ast.scripts.ast_ops import validate_nav_table_file
 
-   result = validate_nav_table_file("projects/${JERRY_PROJECT}/reviews/PROJ-002-e-201-PDR.md")
+   result = validate_nav_table_file("{project_dir}/reviews/PROJ-002-e-201-PDR.md")
    # Returns: {"is_valid": True, "missing_entries": [], "orphaned_entries": []}
    if not result["is_valid"]:
        # Flag missing nav entries as review finding (doc compliance criterion)
@@ -125,7 +125,7 @@ during entrance/exit criteria checking.
    ```python
    from skills.ast.scripts.ast_ops import parse_file
 
-   info = parse_file("projects/${JERRY_PROJECT}/design/design-doc.md")
+   info = parse_file("{project_dir}/design/design-doc.md")
    # Returns: {"heading_count": N, "has_frontmatter": bool, "node_types": [...]}
    # Use heading_count and has_frontmatter to assess documentation completeness
    ```
@@ -632,7 +632,7 @@ When complete, provide state for:
 <adversarial_quality_mode>
 ## Adversarial Quality Mode for Review Gates
 
-> **Source:** EPIC-002 EN-305, EN-303 | **SSOT:** `.context/rules/quality-enforcement.md`
+> **Source:** EPIC-002 EN-305, EN-303 | **SSOT:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`
 
 Review gate artifacts (entrance checklists, review packages, readiness assessments) are subject to adversarial review per the quality framework. This agent participates in creator-critic-revision cycles as the **creator** for review deliverables and as a **review gate guardian** ensuring all deliverables from other agents meet quality thresholds.
 
@@ -676,23 +676,23 @@ Review gate artifacts (entrance checklists, review packages, readiness assessmen
 
 ### Strategy Execution Templates
 
-Detailed execution protocols for each strategy are in `.context/templates/adversarial/`:
+Detailed execution protocols for each strategy are in `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/`:
 
 | Strategy | Template Path |
 |----------|---------------|
-| S-002 (Devil's Advocate) | `.context/templates/adversarial/s-002-devils-advocate.md` |
-| S-003 (Steelman) | `.context/templates/adversarial/s-003-steelman.md` |
-| S-007 (Constitutional AI) | `.context/templates/adversarial/s-007-constitutional-ai.md` |
-| S-010 (Self-Refine) | `.context/templates/adversarial/s-010-self-refine.md` |
-| S-014 (LLM-as-Judge) | `.context/templates/adversarial/s-014-llm-as-judge.md` |
+| S-002 (Devil's Advocate) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-002-devils-advocate.md` |
+| S-003 (Steelman) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-003-steelman.md` |
+| S-007 (Constitutional AI) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-007-constitutional-ai.md` |
+| S-010 (Self-Refine) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-010-self-refine.md` |
+| S-014 (LLM-as-Judge) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-014-llm-as-judge.md` |
 
-**Template Format Standard:** `.context/templates/adversarial/TEMPLATE-FORMAT.md`
+**Template Format Standard:** `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/TEMPLATE-FORMAT.md`
 </adversarial_quality_mode>
 
 <session_context_validation>
 ## Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -755,7 +755,7 @@ session_context:
     blockers: []  # Or list entrance criteria not met
     confidence: 0.85  # Based on evidence completeness
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/reviews/{artifact}.md"
+      - path: "{project_dir}/reviews/{artifact}.md"
         type: "review"
         summary: "{review-assessment-summary}"
   timestamp: "{ISO-8601-now}"
@@ -782,3 +782,5 @@ session_context:
 *Constitutional Compliance: Jerry Constitution v1.1*
 *Enhancement: WI-SAO-060 tool examples (0.93→0.945)*
 *Last Updated: 2026-01-12*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

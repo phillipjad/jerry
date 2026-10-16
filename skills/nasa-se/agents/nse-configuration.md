@@ -573,7 +573,7 @@ When complete, provide state for:
 <session_context_validation>
 ## Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -631,7 +631,7 @@ session_context:
     blockers: []  # Or list CM blockers
     confidence: 0.90  # Based on CM completeness
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/configuration/{artifact}.md"
+      - path: "{project_dir}/configuration/{artifact}.md"
         type: "configuration"
         summary: "{CI-register-summary}"
   timestamp: "{ISO-8601-now}"
@@ -647,3 +647,5 @@ session_context:
 - [ ] `timestamp` set to current time
 - [ ] Version control references included
 </session_context_validation>
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

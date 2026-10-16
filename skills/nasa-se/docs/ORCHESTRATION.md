@@ -549,7 +549,7 @@ All agent handoffs MUST use the session context schema for reliable chaining.
 
 ### Schema Reference
 
-- **Schema:** `docs/schemas/session_context.json`
+- **Schema:** `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`
 - **Version:** 1.0.0
 - **Scope:** All nse-* agents and cross-skill handoffs
 
@@ -970,3 +970,5 @@ All orchestrated workflows MUST comply with:
 
 *Document Version: 1.0.0*
 *Last Updated: 2026-01-09*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

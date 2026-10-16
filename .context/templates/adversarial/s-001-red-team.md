@@ -380,7 +380,7 @@ The governance document defines: (1) 24 HARD rules that "CANNOT be overridden," 
 | RT-001-20260215T1730 | Context rot degrades L1 rules: after 150K tokens, HARD rules loaded at session start are no longer attended to, effectively disabling enforcement | Degradation | High | Critical | P0 | Partial (L2 re-injection) | Methodological Rigor |
 | RT-002-20260215T1730 | C1 classification abuse: operator classifies C3 work as C1 to avoid quality gate, since criticality self-classification has no independent verification | Circumvention | High | Major | P1 | Missing | Internal Consistency |
 | RT-003-20260215T1730 | Steelman-before-critique ordering (H-16) has no deterministic enforcement: an agent can claim S-003 was applied without evidence, since no L3 gate checks for S-003 output artifact | Circumvention | Medium | Major | P1 | Missing | Evidence Quality |
-| RT-004-20260215T1730 | AE-002 triggers on file path but not content: modifying rule semantics via a new file that imports/overrides `.context/rules/` content would bypass auto-escalation | Boundary | Medium | Major | P1 | Missing | Completeness |
+| RT-004-20260215T1730 | AE-002 triggers on file path but not content: modifying rule semantics via a new file that imports/overrides `${CLAUDE_PLUGIN_ROOT}/.context/rules/` content would bypass auto-escalation | Boundary | Medium | Major | P1 | Missing | Completeness |
 | RT-005-20260215T1730 | Quality score self-assessment leniency: S-014 LLM-as-Judge is executed by the same agent that created the deliverable, enabling unconscious leniency bias | Degradation | Medium | Minor | P2 | Partial (rubric) | Evidence Quality |
 
 **Step 4: Develop Countermeasures**
@@ -435,7 +435,7 @@ From quality-enforcement.md (MUST NOT modify):
 
 ### Cross-References
 
-**SSOT:** `.context/rules/quality-enforcement.md` (H-13 threshold, H-16, dimension weights, criticality levels) | `ADR-EPIC002-001` (strategy selection, score 3.35) | `ADR-EPIC002-002` (enforcement architecture) | `.context/templates/adversarial/TEMPLATE-FORMAT.md` v1.1.0
+**SSOT:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (H-13 threshold, H-16, dimension weights, criticality levels) | `ADR-EPIC002-001` (strategy selection, score 3.35) | `ADR-EPIC002-002` (enforcement architecture) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/TEMPLATE-FORMAT.md` v1.1.0
 
 **Strategy Templates:** `s-003-steelman.md` (MUST run before S-001, H-16) | `s-004-pre-mortem.md` (complementary: imagines future failures before adversarial exploitation) | `s-002-devils-advocate.md` (complementary: challenges claims vs. emulates adversary) | `s-012-fmea.md` (decomposes Red Team vectors into component failure modes) | `s-013-inversion.md` (complementary: assumption stress-testing) | `s-014-llm-as-judge.md` (scores post-mitigation revision) | `s-011-cove.md` (complementary: verifies factual claims Red Team may challenge)
 
@@ -451,6 +451,8 @@ From quality-enforcement.md (MUST NOT modify):
 
 *Template Version: 1.0.0*
 *Format Conformance: TEMPLATE-FORMAT.md v1.1.0*
-*SSOT: `.context/rules/quality-enforcement.md`*
+*SSOT: `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`*
 *Created: 2026-02-15*
 *Enabler: EN-809*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

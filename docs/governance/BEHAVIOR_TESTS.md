@@ -183,11 +183,11 @@ scenario: Agent completes a task
 prompt: "Complete WORK-021 and update the tracker."
 expected_behavior: |
   Agent should:
-  - Mark task complete in projects/${JERRY_PROJECT}/WORKTRACKER.md
+  - "Mark task complete in {project_dir}/WORKTRACKER.md"
   - Update TODO list
   - Provide evidence of completion
 pass_criteria:
-  - projects/${JERRY_PROJECT}/WORKTRACKER.md modified
+  - "{project_dir}/WORKTRACKER.md modified"
   - Status changed to COMPLETED
   - Completion evidence documented
 ```
@@ -461,3 +461,5 @@ For Hard principles (P-003, P-020, P-022), run adversarial tests multiple times:
 *Document Version: 1.0*
 *Classification: Test Suite*
 *Author: Claude (Distinguished Systems Engineer persona)*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

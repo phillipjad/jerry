@@ -53,7 +53,7 @@ When invoked, expect:
 <scoring_dimensions>
 ## SSOT Quality Dimensions (Authoritative)
 
-> **Source:** `.context/rules/quality-enforcement.md` (Quality Gate section)
+> **Source:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (Quality Gate section)
 
 | Dimension | Weight | Description | Scoring Rubric |
 |-----------|--------|-------------|----------------|
@@ -107,17 +107,17 @@ document content into the scoring context prematurely.
 
 ```bash
 # 1. Extract entity context for scoring setup
-uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast frontmatter {deliverable_path}
+uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast frontmatter "{deliverable_path}"
 # Returns: {"Type": "story", "Status": "in_progress", "Parent": "FEAT-001", ...}
 # Use entity type to apply the correct rubric interpretation
 
 # 2. Check nav table compliance for H-23/H-24 (affects Completeness dimension)
-uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast validate {deliverable_path} --nav
+uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast validate "{deliverable_path}" --nav
 # Returns: {"is_valid": true/false, "missing_entries": [...], "orphaned_entries": [...]}
 # Nav table violations reduce the Completeness dimension score
 
 # 3. Parse document structure for structural completeness assessment
-uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast parse {deliverable_path}
+uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast parse "{deliverable_path}"
 # Returns: {"heading_count": N, "has_frontmatter": true/false, "node_types": [...]}
 # Use heading_count as a proxy for section coverage (Completeness dimension)
 ```
@@ -200,7 +200,7 @@ Produce a quality score report with an L0 executive summary for stakeholder acce
 - **Deliverable Type:** {type}
 - **Criticality Level:** {C1|C2|C3|C4}
 - **Scoring Strategy:** S-014 (LLM-as-Judge)
-- **SSOT Reference:** .context/rules/quality-enforcement.md
+- **SSOT Reference:** ${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md
 - **Scored:** {ISO-8601 timestamp}
 
 ## Score Summary
@@ -323,5 +323,7 @@ If any step in this agent's process would require spawning another agent, HALT a
 
 *Agent Version: 1.0.0*
 *Constitutional Compliance: Jerry Constitution v1.0*
-*SSOT: `.context/rules/quality-enforcement.md`*
+*SSOT: `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`*
 *Created: 2026-02-15*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

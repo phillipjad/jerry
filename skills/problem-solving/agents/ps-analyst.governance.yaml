@@ -1,5 +1,5 @@
 # Governance metadata for ps-analyst
-# Validated by: docs/schemas/agent-governance-v1.schema.json
+# Validated by: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-governance-v1.schema.json
 # Runtime config: ps-analyst.md
 
 version: 2.3.0
@@ -29,14 +29,14 @@ guardrails:
   fallback_behavior: warn_and_request_data
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/analysis/{ps-id}-{entry-id}-{analysis-type}.md
+  location: "{project_dir}/analysis/{ps-id}-{entry-id}-{analysis-type}.md"
   template: templates/deep-analysis.md
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - Conclusions evidence-based'
   - 'P-002: File Persistence (Medium) - Analysis MUST be persisted'
@@ -62,7 +62,7 @@ enforcement:
   tier: medium
   escalation_path: Warn on missing file → Block completion without artifact
 session_context:
-  schema: docs/schemas/session_context.json
+  schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
   schema_version: 1.0.0
   input_validation: true
   output_validation: true
@@ -83,3 +83,5 @@ capabilities:
   - Return transient output only (P-002)
   - Draw conclusions without evidence (P-001, P-011)
   - Misrepresent capabilities or confidence (P-022)
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

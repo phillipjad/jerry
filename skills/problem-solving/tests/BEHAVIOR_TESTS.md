@@ -69,14 +69,14 @@ prompt: |
 expected_behavior: |
   Agent should:
   - Read the artifact to critique
-  - Create file in projects/${JERRY_PROJECT}/critiques/
+  - "Create file in {project_dir}/critiques/"
   - Include quality_score (0.0-1.0)
   - Include criterion-by-criterion breakdown
   - Include actionable improvement recommendations
   - Include L0/L1/L2 output levels
   - Return critic_output state with threshold_met boolean
 pass_criteria:
-  - File created at projects/${JERRY_PROJECT}/critiques/work-024-e-400-iter1-critique.md
+  - "File created at {project_dir}/critiques/work-024-e-400-iter1-critique.md"
   - quality_score present and in range 0.0-1.0
   - All 5 criteria evaluated with individual scores
   - Improvement areas include "what" and "how"
@@ -392,7 +392,7 @@ evaluation:
 
 ## References
 
-- [Jerry Constitution v1.0](docs/governance/JERRY_CONSTITUTION.md)
+- [Jerry Constitution v1.0](${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md)
 - [PS_AGENT_TEMPLATE v2.0](skills/problem-solving/agents/PS_AGENT_TEMPLATE.md)
 - [Orchestration PATTERNS.md](skills/orchestration/docs/PATTERNS.md)
 - [DeepEval G-Eval](https://deepeval.com/docs/metrics-llm-evals)
@@ -403,3 +403,5 @@ evaluation:
 *Document Version: 1.0*
 *Created: 2026-01-11*
 *Work Item: WI-SAO-007*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

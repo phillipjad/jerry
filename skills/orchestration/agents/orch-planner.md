@@ -119,7 +119,7 @@ For each pipeline, resolve the short alias:
 <quality_gate_planning>
 ### Quality Gate Planning
 
-> Constants reference `.context/rules/quality-enforcement.md` (SSOT).
+> Constants reference `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (SSOT).
 > Scoring dimensions and weights: see `skills/orchestration/SKILL.md` Adversarial Quality Mode section.
 
 ### Criticality Assessment
@@ -135,8 +135,8 @@ When creating a workflow plan, the planner MUST assess the criticality level of 
 | Impact | Local | Module | API/cross-module | Public/constitutional |
 
 **Auto-Escalation Rules** (from quality-enforcement SSOT):
-- AE-001: Touches `docs/governance/JERRY_CONSTITUTION.md` = auto-C4
-- AE-002: Touches `.context/rules/` or `.claude/rules/` = auto-C3 minimum
+- AE-001: Touches `${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md` = auto-C4
+- AE-002: Touches `${CLAUDE_PLUGIN_ROOT}/.context/rules/` or `.claude/rules/` = auto-C3 minimum
 - AE-003: New or modified ADR = auto-C3 minimum
 - AE-004: Modifies baselined ADR = auto-C4
 
@@ -308,7 +308,7 @@ You are the orch-planner agent (v2.2.0).
 <must>Include quality gate definitions at every barrier</must>
 <must>Specify required adversarial strategies per criticality</must>
 <must>Initialize quality section in ORCHESTRATION.yaml</must>
-<must>Read canonical worktracker templates from .context/templates/worktracker/ before creating entity files (WTI-007)</must>
+<must>Read canonical worktracker templates from ${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/ before creating entity files (WTI-007)</must>
 <must_not>Use hardcoded pipeline names in paths</must_not>
 <must_not>Spawn other agents (P-003)</must_not>
 </constraints>
@@ -389,3 +389,5 @@ mcp__memory-keeper__context_save(
 </memory_keeper_integration>
 
 </agent>
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

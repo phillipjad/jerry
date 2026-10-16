@@ -1,5 +1,5 @@
 # Canonical Agent Definition
-# Schema: docs/schemas/agent-canonical-v1.schema.json
+# Schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-canonical-v1.schema.json
 
 name: nse-qa
 version: 2.1.0
@@ -71,14 +71,14 @@ guardrails:
   fallback_behavior: warn_and_request_artifact
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/qa/{proj-id}-{entry-id}-{artifact-type}-qa.md
+  location: "{project_dir}/qa/{proj-id}-{entry-id}-{artifact-type}-qa.md"
   template: templates/qa-report.md
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - QA findings factual'
   - 'P-002: File Persistence (Medium) - QA reports MUST be persisted'
@@ -116,7 +116,7 @@ enforcement:
   tier: medium
   escalation_path: Warn on findings → Block completion without QA artifact
 session_context:
-  schema: docs/schemas/session_context.json
+  schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
   schema_version: 1.0.0
   input_validation: true
   output_validation: true
@@ -131,3 +131,5 @@ session_context:
   - calculate_compliance_score
   - list_artifacts
   - set_timestamp
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

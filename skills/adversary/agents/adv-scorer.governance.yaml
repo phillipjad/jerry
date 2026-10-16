@@ -1,5 +1,5 @@
 # Governance metadata for adv-scorer
-# Validated by: docs/schemas/agent-governance-v1.schema.json
+# Validated by: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-governance-v1.schema.json
 # Runtime config: adv-scorer.md
 
 version: 1.0.0
@@ -28,7 +28,7 @@ guardrails:
   - no_vague_scoring
   fallback_behavior: warn_and_score_with_defaults
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - Scores based on rubric evidence'
   - 'P-002: File Persistence (Medium) - Score report MUST be persisted'
@@ -52,3 +52,5 @@ capabilities:
   - Select strategies (adv-selector responsibility)
   - Execute non-scoring strategies (adv-executor responsibility)
   - Inflate scores or hide quality issues (P-022)
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

@@ -1,5 +1,5 @@
 # Governance metadata for nse-risk
-# Validated by: docs/schemas/agent-governance-v1.schema.json
+# Validated by: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-governance-v1.schema.json
 # Runtime config: nse-risk.md
 
 version: 2.2.0
@@ -59,14 +59,14 @@ guardrails:
   fallback_behavior: warn_and_retry
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/risks/{proj-id}-{entry-id}-{topic-slug}.md
+  location: "{project_dir}/risks/{proj-id}-{entry-id}-{topic-slug}.md"
   template: templates/risk.md
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - Risks based on evidence'
   - 'P-002: File Persistence (Medium) - Risks MUST be persisted'
@@ -92,7 +92,7 @@ enforcement:
   tier: medium
   escalation_path: Warn on missing risks → Escalate RED risks → Block suppression
 session_context:
-  schema: docs/schemas/session_context.json
+  schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
   schema_version: 1.0.0
   input_validation: true
   output_validation: true
@@ -115,3 +115,5 @@ capabilities:
   - Suppress or minimize identified risks (P-042)
   - Hide RED risks from user (P-042)
   - Misrepresent capabilities or confidence (P-022)
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

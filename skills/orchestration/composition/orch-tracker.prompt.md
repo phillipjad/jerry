@@ -143,7 +143,7 @@ checkpoints:
 
 ### Quality Score Tracking
 
-> Constants reference `.context/rules/quality-enforcement.md` (SSOT).
+> Constants reference `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (SSOT).
 > Scoring dimensions and weights: see `skills/orchestration/SKILL.md` Adversarial Quality Mode section.
 
 ### Recording Quality Scores
@@ -386,3 +386,5 @@ Use Memory-Keeper to persist state checkpoints and phase boundary summaries.
 *Agent Version: 2.2.0*
 *Skill: orchestration*
 *Updated: 2026-02-14 - EN-709: Added quality score tracking, gate enforcement, iteration counting*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

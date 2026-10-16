@@ -552,7 +552,7 @@ Each interface integration requires:
 <session_context_validation>
 ## Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -610,7 +610,7 @@ session_context:
     blockers: []  # Or list interface blockers
     confidence: 0.85  # Based on ICD completeness
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/interfaces/{artifact}.md"
+      - path: "{project_dir}/interfaces/{artifact}.md"
         type: "interface"
         summary: "{ICD-summary}"
   timestamp: "{ISO-8601-now}"
@@ -626,3 +626,5 @@ session_context:
 - [ ] `timestamp` set to current time
 - [ ] External interface agreements documented
 </session_context_validation>
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

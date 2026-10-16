@@ -1,5 +1,5 @@
 # Governance metadata for orch-planner
-# Validated by: docs/schemas/agent-governance-v1.schema.json
+# Validated by: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-governance-v1.schema.json
 # Runtime config: orch-planner.md
 
 version: 2.2.0
@@ -53,15 +53,15 @@ guardrails:
   fallback_behavior: warn_and_retry
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/ORCHESTRATION_PLAN.md
+  location: "{project_dir}/ORCHESTRATION_PLAN.md"
   secondary_artifacts:
-  - projects/${JERRY_PROJECT}/ORCHESTRATION.yaml
+  - "{project_dir}/ORCHESTRATION.yaml"
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-002: File Persistence (Medium) - Creates ORCHESTRATION_PLAN.md and ORCHESTRATION.yaml'
   - 'P-003: No Recursive Subagents (Hard) - Does NOT spawn other agents'
@@ -83,7 +83,7 @@ enforcement:
   tier: medium
   escalation_path: Warn on invalid workflow spec -> Block without valid project context
 session_context:
-  schema: docs/schemas/session_context.json
+  schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
   schema_version: 1.0.0
   input_validation: true
   output_validation: true
@@ -106,3 +106,5 @@ capabilities:
   - Use hardcoded pipeline names in paths
   - Use bash brace expansion for directory scaffolding (GH #53 — creates cartesian product of empty dirs)
   - Misrepresent capabilities or confidence (P-022)
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

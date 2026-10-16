@@ -462,7 +462,7 @@ From quality-enforcement.md (MUST NOT modify):
 
 ### Cross-References
 
-**SSOT:** `.context/rules/quality-enforcement.md` (H-13 threshold, dimension weights, criticality levels) | `ADR-EPIC002-001` (strategy selection, score 4.25) | `ADR-EPIC002-002` (enforcement architecture) | `.context/templates/adversarial/TEMPLATE-FORMAT.md` v1.1.0
+**SSOT:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (H-13 threshold, dimension weights, criticality levels) | `ADR-EPIC002-001` (strategy selection, score 4.25) | `ADR-EPIC002-002` (enforcement architecture) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/TEMPLATE-FORMAT.md` v1.1.0
 
 **Strategy Templates:** `s-003-steelman.md` (prerequisite via H-16 for C3+ sequence) | `s-004-pre-mortem.md` (complementary: temporal failure vs. assumption stress-testing) | `s-012-fmea.md` (complementary: component decomposition vs. assumption-level analysis) | `s-014-llm-as-judge.md` (scores post-mitigation revision) | `s-002-devils-advocate.md` (complementary: argument attack vs. assumption inversion)
 
@@ -478,6 +478,8 @@ From quality-enforcement.md (MUST NOT modify):
 
 *Template Version: 1.0.0*
 *Format Conformance: TEMPLATE-FORMAT.md v1.1.0*
-*SSOT: `.context/rules/quality-enforcement.md`*
+*SSOT: `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`*
 *Created: 2026-02-15*
 *Enabler: EN-808*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

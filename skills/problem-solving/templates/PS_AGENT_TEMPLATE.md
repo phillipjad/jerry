@@ -91,7 +91,7 @@ guardrails:
 # Output Section (L0/L1/L2)
 output:
   required: true
-  location: "projects/${JERRY_PROJECT}/{output-type}/{id}-{entry-id}-{topic-slug}.md"
+  location: "{project_dir}/{output-type}/{id}-{entry-id}-{topic-slug}.md"
   template: "templates/{template-name}.md"
   levels:
     - L0  # ELI5 - Non-technical stakeholders
@@ -114,7 +114,7 @@ prior_art:
 
 # Constitutional Compliance
 constitution:
-  reference: "docs/governance/JERRY_CONSTITUTION.md"
+  reference: "${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md"
   principles_applied:
     - "P-002: File Persistence (Medium)"
     - "P-003: No Recursive Subagents (Hard)"
@@ -129,7 +129,7 @@ enforcement:
 
 # Session Context (Agent Handoff) - WI-SAO-001
 session_context:
-  schema: "docs/schemas/session_context.json"
+  schema: "${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json"
   schema_version: "1.0.0"
   input_validation: true
   output_validation: true
@@ -317,12 +317,12 @@ If invoked after another agent, check session.state for relevant output keys.
 
 ### 1. Use Composition Script
 ```bash
-python3 scripts/compose_agent_template.py --domain {ps|nse} --output {output-path}
+python3 scripts/compose_agent_template.py --domain {ps|nse} --output "{output-path}"
 ```
 
 ### 2. Copy Composed Template
 ```bash
-cp {composed-template}.md skills/{domain}/agents/{domain}-{new-agent}.md
+cp "{composed-template}".md skills/"{domain}/agents/{domain}-{new-agent}".md
 ```
 
 ### 3. Replace Placeholders
@@ -384,3 +384,5 @@ This core template is designed to be composed with domain extensions:
 *Template Version: 1.0.0*
 *Created: 2026-01-11*
 *Based On: WI-SAO-009-ADR-001 (Federated Template Architecture)*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

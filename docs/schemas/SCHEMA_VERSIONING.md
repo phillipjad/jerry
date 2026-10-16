@@ -16,7 +16,7 @@ compatibility rules for all machine-readable schemas in the Jerry framework.
 
 | Schema | Location | Current Version |
 |--------|----------|-----------------|
-| Session Context | `docs/schemas/session_context.json` | 1.0.0 |
+| Session Context | `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json` | 1.0.0 |
 | Tool Registry | `TOOL_REGISTRY.yaml` | 1.0.0 |
 | Orchestration Template | `skills/orchestration/templates/ORCHESTRATION.template.yaml` | 2.0.0 |
 | Agent Template | `.claude/agents/TEMPLATE.md` | 1.0.0 |
@@ -240,7 +240,7 @@ def get_json_schema_version(path: str) -> str:
 
 | Schema Type | Path Pattern |
 |-------------|--------------|
-| Core schemas | `docs/schemas/{name}.json` |
+| Core schemas | `${CLAUDE_PLUGIN_ROOT}/docs/schemas/{name}.json` |
 | Type definitions | `docs/schemas/types/{name}.{ts,py}` |
 | Skill contracts | `skills/{skill}/contracts/{NAME}_CONTRACT.yaml` |
 | Templates | `skills/{skill}/templates/*.template.yaml` |
@@ -253,7 +253,7 @@ Schemas should reference this document:
 
 ```yaml
 # In any schema file
-# Schema Evolution: See docs/schemas/SCHEMA_VERSIONING.md
+# Schema Evolution: See ${CLAUDE_PLUGIN_ROOT}/docs/schemas/SCHEMA_VERSIONING.md
 ```
 
 ---
@@ -277,10 +277,12 @@ Schemas should reference this document:
 - [Semantic Versioning 2.0.0](https://semver.org/)
 - [JSON Schema Versioning](https://json-schema.org/understanding-json-schema/reference/schema.html)
 - [OpenAPI Versioning](https://spec.openapis.org/oas/v3.0.3#versions)
-- [Jerry Constitution P-002](../governance/JERRY_CONSTITUTION.md) - File Persistence
+- [Jerry Constitution P-002](${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md) - File Persistence
 
 ---
 
 *Document Version: 1.0.0*
 *Created: 2026-01-12*
 *Work Item: WI-SAO-018*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

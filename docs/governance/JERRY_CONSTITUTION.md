@@ -104,7 +104,7 @@ When encountering errors or limitations, agents SHALL:
 ### P-010: Task Tracking Integrity
 **Category:** Hard Requirement | **Enforcement:** Medium
 
-Agents SHALL maintain accurate task state in the active project's WORKTRACKER.md (`projects/${JERRY_PROJECT}/WORKTRACKER.md`). Agents SHALL:
+Agents SHALL maintain accurate task state in the active project's WORKTRACKER.md (`{project_dir}/WORKTRACKER.md`). Agents SHALL:
 - Update task status immediately upon completion
 - Never mark tasks complete without evidence
 - Track all discoveries, bugs, and tech debt
@@ -387,7 +387,7 @@ This constitution is validated through behavioral testing per WORK-028 research:
 | Test Suite | Coverage | Method |
 |------------|----------|--------|
 | `tests/governance/test_constitution.py` | All principles | LLM-as-a-Judge |
-| `docs/governance/BEHAVIOR_TESTS.md` | Golden dataset | Scenario-based |
+| `${CLAUDE_PLUGIN_ROOT}/docs/governance/BEHAVIOR_TESTS.md` | Golden dataset | Scenario-based |
 | Adversarial tests | Hard principles | Red-team scenarios |
 
 **Industry Alignment:**
@@ -424,3 +424,5 @@ This constitution is validated through behavioral testing per WORK-028 research:
 *Document Version: 1.1*
 *Classification: Governance*
 *Author: Claude (Distinguished Systems Engineer persona)*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

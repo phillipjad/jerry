@@ -421,16 +421,16 @@ Each orchestration workflow uses tools for state management. Here are concrete e
 
 ```
 1. Find existing orchestration artifacts:
-   Glob(pattern="projects/${JERRY_PROJECT}/orchestration/**/*.yaml")
+   Glob(pattern="{project_dir}/orchestration/**/*.yaml")
    → Returns list of existing workflow state files
 
 2. Read project context for workflow design:
-   Read(file_path="projects/${JERRY_PROJECT}/PLAN.md")
+   Read(file_path="{project_dir}/PLAN.md")
    → Load project plan to understand workflow scope
 
 3. Create orchestration plan (MANDATORY per P-002):
    Write(
-       file_path="projects/${JERRY_PROJECT}/orchestration/sao-crosspoll-20260112-001/ORCHESTRATION_PLAN.md",
+       file_path="{project_dir}/orchestration/sao-crosspoll-20260112-001/ORCHESTRATION_PLAN.md",
        content="# Orchestration Plan: Cross-Pollinated Pipeline\n\n## Workflow Diagram\n```\nPipeline A             Pipeline B\n..."
    )
    → Persist strategic plan - transient planning VIOLATES P-002
@@ -440,16 +440,16 @@ Each orchestration workflow uses tools for state management. Here are concrete e
 
 ```
 1. Read current workflow state (SSOT):
-   Read(file_path="projects/${JERRY_PROJECT}/orchestration/sao-crosspoll-20260112-001/ORCHESTRATION.yaml")
+   Read(file_path="{project_dir}/orchestration/sao-crosspoll-20260112-001/ORCHESTRATION.yaml")
    → Load machine-readable state as single source of truth
 
 2. Search for agent completion artifacts:
-   Glob(pattern="projects/${JERRY_PROJECT}/orchestration/**/phase-*/**/*.md")
+   Glob(pattern="{project_dir}/orchestration/**/phase-*/**/*.md")
    → Find all agent output artifacts for status reconciliation
 
 3. Update workflow state (MANDATORY per P-002):
    Write(
-       file_path="projects/${JERRY_PROJECT}/orchestration/sao-crosspoll-20260112-001/ORCHESTRATION.yaml",
+       file_path="{project_dir}/orchestration/sao-crosspoll-20260112-001/ORCHESTRATION.yaml",
        content="workflow:\n  id: 'sao-crosspoll-20260112-001'\n  status: ACTIVE\n..."
    )
    → Persist state changes - in-memory-only state VIOLATES P-002
@@ -459,16 +459,16 @@ Each orchestration workflow uses tools for state management. Here are concrete e
 
 ```
 1. Find all barrier artifacts:
-   Glob(pattern="projects/${JERRY_PROJECT}/orchestration/**/barriers/*.md")
+   Glob(pattern="{project_dir}/orchestration/**/barriers/*.md")
    → Collect cross-pollination artifacts for synthesis
 
 2. Read pipeline outputs:
-   Read(file_path="projects/${JERRY_PROJECT}/orchestration/sao-crosspoll-20260112-001/ps/phase-2/agent-a-002/analysis.md")
+   Read(file_path="{project_dir}/orchestration/sao-crosspoll-20260112-001/ps/phase-2/agent-a-002/analysis.md")
    → Load agent outputs for pattern extraction
 
 3. Create final synthesis (MANDATORY per P-002):
    Write(
-       file_path="projects/${JERRY_PROJECT}/orchestration/sao-crosspoll-20260112-001/synthesis/final-synthesis.md",
+       file_path="{project_dir}/orchestration/sao-crosspoll-20260112-001/synthesis/final-synthesis.md",
        content="# Workflow Synthesis\n\n## L0: Executive Summary\n..."
    )
    → Persist synthesis - transient findings VIOLATES P-002
@@ -479,7 +479,7 @@ Each orchestration workflow uses tools for state management. Here are concrete e
 ## Adversarial Quality Mode
 
 > Adversarial quality enforcement is embedded by default into every orchestrated workflow.
-> Constants referenced from `.context/rules/quality-enforcement.md` (SSOT).
+> Constants referenced from `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (SSOT).
 
 ### Phase Gate Definitions
 
@@ -584,8 +584,8 @@ The orchestrator selects adversarial strategies based on criticality level (per 
 | C4 (Critical) | L4 | All 10 selected strategies | None -- all required |
 
 **Auto-Escalation** (per quality-enforcement SSOT AE rules):
-- Artifacts touching `.context/rules/` = auto-C3 minimum (AE-002)
-- Artifacts touching `docs/governance/JERRY_CONSTITUTION.md` = auto-C4 (AE-001)
+- Artifacts touching `${CLAUDE_PLUGIN_ROOT}/.context/rules/` = auto-C3 minimum (AE-002)
+- Artifacts touching `${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md` = auto-C4 (AE-001)
 - Modifying baselined ADRs = auto-C4 (AE-004)
 - Security-relevant code changes = auto-C3 minimum (AE-005)
 - Token exhaustion at C3+ criticality = human escalation required (AE-006)
@@ -645,7 +645,7 @@ quality:
 | H-13 | NEVER accept C2+ deliverables below 0.92 weighted composite score | Sub-threshold deliverables accepted without quality enforcement |
 | H-14 | NEVER skip creator-critic-revision cycle -- minimum 3 iterations | Single-pass review misses blind spots |
 | H-15 | NEVER present deliverables without self-review (S-010) first | Obvious defects consume critic cycles unnecessarily |
-| WTI-007 | NEVER create entity files without canonical templates from `.context/templates/worktracker/` | Inconsistent entity format; worktracker integrity degraded |
+| WTI-007 | NEVER create entity files without canonical templates from `${CLAUDE_PLUGIN_ROOT}/.context/templates/worktracker/` | Inconsistent entity format; worktracker integrity degraded |
 
 ---
 
@@ -670,7 +670,6 @@ quality:
 | Research, analysis, or root cause investigation | `/problem-solving` | Orchestration agents (orch-planner, orch-tracker, orch-synthesizer) coordinate workflows but have no research or analytical methodology |
 | Requirements engineering or V&V activities | `/nasa-se` | Orchestration manages workflow state, not requirements traceability; NPR-compliant artifacts not generated |
 | Adversarial quality review or scoring | `/adversary` | Orchestration has no quality scoring rubric or adversarial strategy templates; orch-synthesizer produces workflow synthesis, not quality assessment |
-| Transcript parsing or meeting note extraction | `/transcript` | Orchestration has no VTT/SRT parser; transcript-specific agents not available |
 
 ---
 
@@ -706,3 +705,5 @@ For workflow examples and step-by-step guides, see:
 *Enhancement: EN-709 Adversarial Quality Mode integration (phase gates, creator-critic-revision, quality scoring)*
 *Created: 2026-01-10*
 *Last Updated: 2026-02-14*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

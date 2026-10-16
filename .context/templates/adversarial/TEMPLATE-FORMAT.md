@@ -47,9 +47,9 @@ This document defines the **canonical format** for all adversarial strategy exec
 
 **Scope:** 10 selected strategies from ADR-EPIC002-001.
 
-**Authority:** All constants (thresholds, weights, criticality levels) are sourced from `.context/rules/quality-enforcement.md`. Templates MUST NOT redefine these constants.
+**Authority:** All constants (thresholds, weights, criticality levels) are sourced from `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`. Templates MUST NOT redefine these constants.
 
-**File naming:** `.context/templates/adversarial/{S-NNN}-{strategy-slug}.md`
+**File naming:** `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/{S-NNN}-{strategy-slug}.md`
 
 **Target length per template:** Templates SHOULD target 200-400 lines. Templates exceeding 500 lines are acceptable when the excess is justified by comprehensive examples, detailed scoring rubrics, or extensive execution protocol steps that materially improve strategy execution quality.
 
@@ -292,7 +292,7 @@ Every template MUST include an Integration section with:
 | C3 | C2 + S-004, S-012, S-013 | S-001, S-003, S-010, S-011 |
 | C4 | All 10 selected | None |
 
-**Cross-References:** Links to `.context/rules/quality-enforcement.md` and related strategy templates.
+**Cross-References:** Links to `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` and related strategy templates.
 
 ---
 
@@ -325,7 +325,7 @@ Use this checklist to validate any strategy template against this format.
 
 ## Constants Reference
 
-All values sourced from `.context/rules/quality-enforcement.md`. MUST NOT be redefined in templates.
+All values sourced from `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`. MUST NOT be redefined in templates.
 
 ### Quality Gate
 
@@ -367,7 +367,7 @@ All values sourced from `.context/rules/quality-enforcement.md`. MUST NOT be red
 
 | ID | Condition | Relevance to Templates |
 |----|-----------|------------------------|
-| AE-002 | Touches `.context/rules/` or `.context/templates/` | Changes to this format or any strategy template require C3+ review |
+| AE-002 | Touches `${CLAUDE_PLUGIN_ROOT}/.context/rules/` or `${CLAUDE_PLUGIN_ROOT}/.context/templates/` | Changes to this format or any strategy template require C3+ review |
 
 ### Relevant HARD Rules
 
@@ -403,7 +403,7 @@ Each strategy template is created by instantiating this format:
 ### Maintenance
 
 - This format document is versioned per the Versioning Protocol above
-- Changes to this format or any strategy template require **C3+ review** (AE-002 applies: touches `.context/templates/`)
+- Changes to this format or any strategy template require **C3+ review** (AE-002 applies: touches `${CLAUDE_PLUGIN_ROOT}/.context/templates/`)
 - `quality-enforcement.md` remains the SSOT for all quality constants
 
 ### Traceability Map
@@ -422,3 +422,5 @@ Each strategy template is created by instantiating this format:
 ---
 
 <!-- TEMPLATE NOTES: See "Template Instantiation Guide" section for operational guidance. VERSION: 1.1.0 | CREATED: 2026-02-14 | REVISED: 2026-02-15 | ENABLER: EN-801 -->
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

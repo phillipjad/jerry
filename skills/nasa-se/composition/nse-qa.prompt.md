@@ -318,7 +318,7 @@ Example:
 
 ### Adversarial Quality Mode for Quality Assurance
 
-> **Source:** EPIC-002 EN-305, EN-303 | **SSOT:** `.context/rules/quality-enforcement.md`
+> **Source:** EPIC-002 EN-305, EN-303 | **SSOT:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`
 
 QA audit artifacts (compliance reports, artifact validations, quality assessments) are subject to adversarial review per the quality framework. This agent participates in creator-critic-revision cycles as the **creator** for QA deliverables and as a **compliance auditor** ensuring all artifacts meet NASA and constitutional standards.
 
@@ -402,7 +402,7 @@ qa_output:
 
 ### Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -455,7 +455,7 @@ session_context:
     blockers: []
     confidence: 0.90
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/qa/{artifact}.md"
+      - path: "{project_dir}/qa/{artifact}.md"
         type: "qa-report"
         summary: "{one-line-summary}"
   timestamp: "{ISO-8601-now}"
@@ -506,7 +506,7 @@ You are the nse-qa agent (v1.0.0).
 <role>Quality Assurance Specialist for NASA SE artifacts</role>
 <task>Validate authentication requirements against NPR 7123.1D</task>
 <constraints>
-<must>Create file with file_write tool at projects/${JERRY_PROJECT}/qa/</must>
+<must>Create file with file_write tool at {project_dir}/qa/</must>
 <must>Include mandatory disclaimer</must>
 <must>Include L0/L1/L2 output levels</must>
 <must>Complete Requirements Artifact Checklist</must>
@@ -537,19 +537,19 @@ Provide compliance score, findings, and remediation recommendations.
 
 ```bash
 # 1. File exists
-ls projects/${JERRY_PROJECT}/qa/{proj-id}-{entry-id}-{artifact-type}-qa.md
+ls "{project_dir}/qa/{proj-id}-{entry-id}-{artifact-type}"-qa.md
 
 # 2. Has disclaimer
-grep -E "^DISCLAIMER:" projects/${JERRY_PROJECT}/qa/*.md
+grep -E "^DISCLAIMER:" "{project_dir}"/qa/*.md
 
 # 3. Has L0/L1/L2 sections
-grep -E "^### L[012]:" projects/${JERRY_PROJECT}/qa/*.md
+grep -E "^### L[012]:" "{project_dir}"/qa/*.md
 
 # 4. Has compliance score
-grep -E "Compliance Score.*[0-9]+%" projects/${JERRY_PROJECT}/qa/*.md
+grep -E "Compliance Score.*[0-9]+%" "{project_dir}"/qa/*.md
 
 # 5. Has assessment
-grep -E "Assessment.*(COMPLIANT|ISSUES|REJECTED)" projects/${JERRY_PROJECT}/qa/*.md
+grep -E "Assessment.*(COMPLIANT|ISSUES|REJECTED)" "{project_dir}"/qa/*.md
 ```
 
 ---
@@ -559,3 +559,5 @@ grep -E "Assessment.*(COMPLIANT|ISSUES|REJECTED)" projects/${JERRY_PROJECT}/qa/*
 *Constitutional Compliance: Jerry Constitution v1.0 + P-040, P-041, P-042, P-043*
 *Created: 2026-01-11*
 *Work Item: WI-SAO-008*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

@@ -1,5 +1,5 @@
 # Governance metadata for adv-executor
-# Validated by: docs/schemas/agent-governance-v1.schema.json
+# Validated by: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-governance-v1.schema.json
 # Runtime config: adv-executor.md
 
 version: 1.1.0
@@ -33,7 +33,7 @@ guardrails:
   - all_claims_must_have_citations
   fallback_behavior: warn_and_request_strategy_id
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - Findings based on deliverable evidence'
   - 'P-002: File Persistence (Medium) - Execution report MUST be persisted'
@@ -66,3 +66,5 @@ capabilities:
   - Select strategies (adv-selector responsibility)
   - Score deliverables with S-014 rubric (adv-scorer responsibility)
   - Inflate or minimize findings (P-022)
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

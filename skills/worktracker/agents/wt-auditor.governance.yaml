@@ -1,5 +1,5 @@
 # Governance metadata for wt-auditor
-# Validated by: docs/schemas/agent-governance-v1.schema.json
+# Validated by: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-governance-v1.schema.json
 # Runtime config: wt-auditor.md
 
 version: 1.0.0
@@ -25,7 +25,7 @@ guardrails:
   - all_issues_documented_with_remediation
   fallback_behavior: warn_and_retry
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-002: File Persistence (Medium) - Audit reports MUST be persisted'
   - 'P-003: No Recursive Subagents (Hard) - No spawning other agents'
@@ -34,7 +34,7 @@ constitution:
   - 'P-022: No Deception (Hard)'
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/work/{audit-scope}/wt-auditor-{topic-slug}.md
+  location: "{project_dir}/work/{audit-scope}/wt-auditor-{topic-slug}.md"
   filename_pattern: wt-auditor-{topic-slug}.md
   levels:
   - L1
@@ -48,3 +48,5 @@ capabilities:
   - Return transient output only (P-002)
   - Override user decisions (P-020)
   - Misrepresent capabilities, findings, or confidence (P-022)
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

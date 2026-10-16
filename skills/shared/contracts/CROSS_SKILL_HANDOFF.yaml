@@ -2,7 +2,7 @@
 # OpenAPI 3.0-inspired schema for ps-* <-> nse-* agent handoffs
 #
 # Version: 1.0.0
-# Reference: docs/schemas/session_context.json
+# Reference: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
 # Skills: problem-solving (ps-*), nasa-se (nse-*)
 
 openapi: "3.0.3"
@@ -362,7 +362,7 @@ handoff_patterns:
 session_context:
   description: |
     All cross-skill handoffs MUST use the session context schema for reliable chaining.
-    Reference: docs/schemas/session_context.json
+    Reference: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
 
   schema_version: "1.0.0"
 
@@ -851,3 +851,5 @@ examples:
           - "Perform root cause analysis on prior migration failure"
           - "Identify contributing factors beyond primary cause"
           - "Develop corrective actions to mitigate RISK-001"
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

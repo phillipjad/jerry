@@ -58,7 +58,7 @@ The `skills/shared/` directory contains reusable infrastructure that multiple Je
 **Usage:** Use the composition script to generate complete agent templates:
 
 ```bash
-python3 scripts/compose_agent_template.py --domain {ps|nse} --output {output-path}
+python3 scripts/compose_agent_template.py --domain {ps|nse} --output "{output-path}"
 ```
 
 **Sections:**
@@ -229,7 +229,7 @@ Common tasks for skill authors and which shared resource to use:
 
 1. **Pick your domain** - Determine if the agent belongs to `ps` (problem-solving), `nse` (NASA SE), or a new domain
 2. **Check for domain extension** - Look for `{DOMAIN}_EXTENSION.md` in your skill directory (e.g., `PS_EXTENSION.md`)
-3. **Run composition** - `python3 scripts/compose_agent_template.py --domain {domain} --output agents/{agent-name}.md`
+3. **Run composition** - `python3 scripts/compose_agent_template.py --domain {domain} --output agents/"{agent-name}".md`
 4. **Fill placeholders** - Replace all 9 `{PLACEHOLDER}` values with agent-specific content
 5. **Validate** - Ensure P-002 (file persistence), P-003 (no recursive subagents), P-022 (no deception) compliance
 6. **Register** - Add the agent to your skill's SKILL.md agent table
@@ -290,12 +290,14 @@ Shared resources adhere to the **Jerry Constitution v1.0**:
 
 - Agent Template ADR: `docs/decisions/wi-sao-009-adr-unified-template-architecture.md`
 - Orchestration Patterns Source: SAO-INIT-007 Deep Research (DISCOVERY-008)
-- Session Context Schema: `docs/schemas/session_context.json`
-- Jerry Constitution: `docs/governance/JERRY_CONSTITUTION.md`
-- Quality Enforcement SSOT: `.context/rules/quality-enforcement.md`
+- Session Context Schema: `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`
+- Jerry Constitution: `${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md`
+- Quality Enforcement SSOT: `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`
 
 ---
 
 *Directory Version: 1.0.0*
 *Last Updated: 2026-02-16*
 *Constitutional Compliance: Jerry Constitution v1.0*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

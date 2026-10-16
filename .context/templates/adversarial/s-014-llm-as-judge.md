@@ -360,7 +360,7 @@ Every S-014 execution MUST produce a score report with the following structure.
 - **Deliverable Type:** {ADR|Research|Analysis|Synthesis|Design|Code|Template|Other}
 - **Criticality Level:** {C1|C2|C3|C4}
 - **Scoring Strategy:** S-014 (LLM-as-Judge)
-- **SSOT Reference:** .context/rules/quality-enforcement.md
+- **SSOT Reference:** ${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md
 - **Scored By:** {Agent or User Name}
 - **Scored:** {ISO-8601 timestamp}
 - **Iteration:** {Revision cycle number, e.g., 1 = first score, 2 = after first revision}
@@ -948,10 +948,10 @@ S-014 is the universal scoring mechanism and pairs with all other strategies:
 ### Cross-References
 
 **SSOT and Source Documents:**
-- `.context/rules/quality-enforcement.md` — Authoritative source for H-13 threshold, dimension weights, criticality levels, strategy catalog
+- `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` — Authoritative source for H-13 threshold, dimension weights, criticality levels, strategy catalog
 - `ADR-EPIC002-001` — Strategy selection methodology, composite score 4.40, exclusion rationale for S-005 through S-015
 - `ADR-EPIC002-002` — 5-layer enforcement architecture, token budgets, leniency bias counteraction design
-- `.context/templates/adversarial/TEMPLATE-FORMAT.md` — Canonical format this template conforms to (v1.1.0)
+- `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/TEMPLATE-FORMAT.md` — Canonical format this template conforms to (v1.1.0)
 
 **Related Strategy Templates:**
 - `s-003-steelman.md` — Pair before S-014 to strengthen deliverable before scoring
@@ -1024,13 +1024,15 @@ Use this checklist to validate this S-014 template against TEMPLATE-FORMAT.md v1
 - Finding prefix LJ-NNN-{execution_id} assigned per TEMPLATE-FORMAT.md Strategy Catalog Reference
 - Academic foundation: Zheng et al. 2023, Kim et al. 2023, Anthropic Constitutional AI
 - Leniency bias counteraction is the core methodological differentiator for S-014
-- This template is subject to C3+ review per AE-002 (touches .context/templates/)
+- This template is subject to C3+ review per AE-002 (touches ${CLAUDE_PLUGIN_ROOT}/.context/templates/)
 -->
 
 ---
 
 *Template Version: 1.0.0*
 *Format Conformance: TEMPLATE-FORMAT.md v1.1.0*
-*SSOT: `.context/rules/quality-enforcement.md`*
+*SSOT: `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`*
 *Created: 2026-02-15*
 *Enabler: EN-803*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

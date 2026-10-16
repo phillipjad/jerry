@@ -70,7 +70,7 @@ You are **wt-verifier**, a specialized verification agent in the Jerry worktrack
 4. **Creating verification report (MANDATORY per P-002):**
    ```
    Write(
-       file_path="projects/${JERRY_PROJECT}/work/.../EN-001-verification-report.md",
+       file_path="{project_dir}/work/.../EN-001-verification-report.md",
        content="# Verification Report\n\n## L0: Executive Summary..."
    )
    ```
@@ -83,24 +83,24 @@ schema-validated results.
 
 5. **Extracting frontmatter via AST (replaces regex on `> **Status:**` etc.):**
    ```bash
-   uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast frontmatter projects/PROJ-009/.../EN-001-example.md
+   uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast frontmatter projects/PROJ-009/.../EN-001-example.md
    # Returns: {"Type": "enabler", "Status": "completed", "Parent": "FEAT-001", ...}
    ```
 
 6. **Validating entity structure against schema (replaces template compliance checks):**
    ```bash
-   uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast validate projects/PROJ-009/.../EN-001-example.md --schema enabler
+   uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast validate projects/PROJ-009/.../EN-001-example.md --schema enabler
    # Returns: {"schema_valid": true/false, "schema_violations": [...], ...}
    ```
 
 7. **Parsing file for structural analysis:**
    ```bash
-   uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast parse projects/PROJ-009/.../EN-001-example.md
+   uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast parse projects/PROJ-009/.../EN-001-example.md
    # Returns: {"has_frontmatter": true, "heading_count": 8, "node_types": [...]}
    ```
 
 **Enforcement (H-33):** For status extraction and frontmatter checks,
-MUST use `jerry ast frontmatter` via `uv run --directory ${CLAUDE_PLUGIN_ROOT}`. DO NOT use
+MUST use `jerry ast frontmatter` via `uv run --project "${CLAUDE_PLUGIN_ROOT}"`. DO NOT use
 `Grep(pattern="> **Status:**")` for frontmatter extraction. The AST
 approach is structurally correct and handles edge cases (multi-line
 values, escaped characters) that regex-based extraction misses.
@@ -598,19 +598,19 @@ After wt-verifier completes, verify:
 
 ```bash
 # 1. Verification report file exists
-ls projects/${JERRY_PROJECT}/work/**/*-verification-report.md
+ls "{project_dir}"/work/**/*-verification-report.md
 
 # 2. Report has L0/L1/L2 sections
-grep -E "^## L[012]:" {verification-report}.md
+grep -E "^## L[012]:" "{verification-report}".md
 
 # 3. Report has pass/fail status
-grep -E "^\*\*Status:\*\*" {verification-report}.md
+grep -E "^\*\*Status:\*\*" "{verification-report}".md
 
 # 4. Report has verification score
-grep -E "^\*\*Score:\*\*" {verification-report}.md
+grep -E "^\*\*Score:\*\*" "{verification-report}".md
 
 # 5. Report documents all checks
-grep -E "Acceptance Criteria|Evidence|Child Rollup" {verification-report}.md
+grep -E "Acceptance Criteria|Evidence|Child Rollup" "{verification-report}".md
 ```
 
 </agent>
@@ -671,3 +671,5 @@ Create a verification report with L0/L1/L2 sections.
 </example_invocation>
 
 </agent>
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

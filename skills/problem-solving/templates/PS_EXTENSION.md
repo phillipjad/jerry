@@ -82,15 +82,15 @@ prior_art:
 
 | Agent | Output Directory | Template | Description |
 |-------|------------------|----------|-------------|
-| **ps-researcher** | `projects/${JERRY_PROJECT}/research/` | `templates/research.md` | Primary research, literature reviews, web findings |
-| **ps-analyst** | `projects/${JERRY_PROJECT}/analysis/` | `templates/deep-analysis.md` | Gap analysis, trade-offs, deep dives |
-| **ps-architect** | `projects/${JERRY_PROJECT}/decisions/` | `templates/adr.md` | Architecture Decision Records (ADRs) |
-| **ps-critic** | `projects/${JERRY_PROJECT}/critiques/` | `templates/critique.md` | Quality evaluation for generator-critic loops |
-| **ps-investigator** | `projects/${JERRY_PROJECT}/investigations/` | `templates/investigation.md` | Root cause analysis, incident reports |
-| **ps-reporter** | `projects/${JERRY_PROJECT}/reports/` | `templates/report.md` | Status reports, summaries, dashboards |
-| **ps-reviewer** | `projects/${JERRY_PROJECT}/reviews/` | `templates/review.md` | Code reviews, design reviews, security reviews |
-| **ps-synthesizer** | `projects/${JERRY_PROJECT}/synthesis/` | `templates/synthesis.md` | Cross-document pattern synthesis, meta-analysis |
-| **ps-validator** | `projects/${JERRY_PROJECT}/analysis/` | `templates/analysis.md` | Constraint validation reports |
+| **ps-researcher** | `{project_dir}/research/` | `templates/research.md` | Primary research, literature reviews, web findings |
+| **ps-analyst** | `{project_dir}/analysis/` | `templates/deep-analysis.md` | Gap analysis, trade-offs, deep dives |
+| **ps-architect** | `{project_dir}/decisions/` | `templates/adr.md` | Architecture Decision Records (ADRs) |
+| **ps-critic** | `{project_dir}/critiques/` | `templates/critique.md` | Quality evaluation for generator-critic loops |
+| **ps-investigator** | `{project_dir}/investigations/` | `templates/investigation.md` | Root cause analysis, incident reports |
+| **ps-reporter** | `{project_dir}/reports/` | `templates/report.md` | Status reports, summaries, dashboards |
+| **ps-reviewer** | `{project_dir}/reviews/` | `templates/review.md` | Code reviews, design reviews, security reviews |
+| **ps-synthesizer** | `{project_dir}/synthesis/` | `templates/synthesis.md` | Cross-document pattern synthesis, meta-analysis |
+| **ps-validator** | `{project_dir}/analysis/` | `templates/analysis.md` | Constraint validation reports |
 
 #### Artifact Naming Convention
 
@@ -116,12 +116,6 @@ prior_art:
 
 1. **Create file** using Write tool at the designated output directory
 2. **Follow template** structure from the specified template file
-3. **Link artifact** by running:
-   ```bash
-   python3 scripts/cli.py link-artifact {ps_id} {entry_id} FILE \
-       "projects/${JERRY_PROJECT}/{output-type}/{artifact-name}.md" \
-       "{description}"
-   ```
 
 **P-002 Violation Conditions:**
 - Returning results without file creation
@@ -157,17 +151,10 @@ When invoking a PS agent, the prompt MUST include:
 After completing the task:
 
 1. **Create a file** using the Write tool at:
-   `projects/${JERRY_PROJECT}/{output-type}/{ps_id}-{entry_id}-{topic_slug}.md`
+   `{project_dir}/{output-type}/{ps_id}-{entry_id}-{topic_slug}.md`
 
 2. **Follow the template** structure from:
    `templates/{template-name}.md`
-
-3. **Link the artifact** by running:
-   ```bash
-   python3 scripts/cli.py link-artifact {ps_id} {entry_id} FILE \
-       "projects/${JERRY_PROJECT}/{output-type}/{ps_id}-{entry_id}-{topic_slug}.md" \
-       "{description}"
-   ```
 
 DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
 Failure to persist is a P-002 violation.
@@ -193,3 +180,5 @@ If invoked after another PS agent, check session.state for:
 *Extension Version: 1.0.0*
 *Created: 2026-01-11*
 *Domain: Problem-Solving (ps-*)*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

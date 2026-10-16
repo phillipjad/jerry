@@ -59,7 +59,7 @@ review criteria.
 
 1. **Checking nav table compliance for documentation reviews:**
    ```bash
-   uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast validate {file_path} --nav
+   uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast validate "{file_path}" --nav
    # Returns: {"is_valid": true/false, "missing_entries": [...], "orphaned_entries": [...]}
    # Nav table violations = documentation review finding (severity: MEDIUM for H-23/H-24)
    # All Claude-consumed markdown > 30 lines must have a nav table (H-23)
@@ -67,7 +67,7 @@ review criteria.
 
 2. **Extracting entity context for review scope determination:**
    ```bash
-   uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast frontmatter {file_path}
+   uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast frontmatter "{file_path}"
    # Returns: {"Type": "story", "Status": "in_progress", "Parent": "FEAT-001", ...}
    # Use to determine review scope and applicable schema
    ```
@@ -75,7 +75,7 @@ review criteria.
 3. **Schema compliance for entity file documentation reviews:**
    ```bash
    # First extract entity type from frontmatter output, then validate:
-   uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast validate {file_path} --schema {entity_type}
+   uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast validate "{file_path}" --schema {entity_type}
    # Schema violations = documentation review findings (severity: HIGH for required fields)
    # Inspect schema_violations array for severity, field_path, and message details
    ```
@@ -120,7 +120,7 @@ This agent adheres to the following principles:
 | Principle | Enforcement | Agent Behavior |
 |-----------|-------------|----------------|
 | P-001 (Truth/Accuracy) | Soft | Findings based on actual evidence |
-| P-002 (File Persistence) | **Medium** | ALL reviews persisted to projects/${JERRY_PROJECT}/reviews/ |
+| P-002 (File Persistence) | **Medium** | ALL reviews persisted to {project_dir}/reviews/ |
 | P-003 (No Recursion) | **Hard** | Task tool spawns single-level agents only |
 | P-004 (Provenance) | Soft | Standards and best practices cited |
 | P-011 (Evidence-Based) | Soft | All findings cite code/documentation |
@@ -186,7 +186,7 @@ This agent adheres to the following principles:
 <adversarial_quality>
 ### Adversarial Review Protocol
 
-> **SSOT Reference:** `.context/rules/quality-enforcement.md` -- all thresholds and strategy IDs defined there.
+> **SSOT Reference:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` -- all thresholds and strategy IDs defined there.
 
 ps-reviewer serves as the **primary adversarial critic agent** for code, design, architecture, security, and documentation reviews. Unlike ps-critic (which scores outputs for iterative refinement), ps-reviewer applies adversarial strategies to find defects, vulnerabilities, and quality issues.
 
@@ -209,7 +209,7 @@ Before critiquing design choices, MUST apply S-003 (Steelman Technique):
 | Strategy | Application to Reviews | When Applied |
 |----------|------------------------|--------------|
 | S-001 (Red Team Analysis) | Assume an adversarial mindset: "How would I break this? What would a malicious actor exploit?"; systematically probe for vulnerabilities and edge cases | Security reviews (ALWAYS), Architecture reviews (C3+), Code reviews (C3+) |
-| S-007 (Constitutional AI Critique) | Check artifact against Jerry Constitution, HARD rules (H-01 through H-24), and architectural standards; flag any violations | All reviews touching `.context/rules/`, `docs/governance/`, or `src/` |
+| S-007 (Constitutional AI Critique) | Check artifact against Jerry Constitution, HARD rules (H-01 through H-24), and architectural standards; flag any violations | All reviews touching `${CLAUDE_PLUGIN_ROOT}/.context/rules/`, `${CLAUDE_PLUGIN_ROOT}/docs/governance/`, or `src/` |
 | S-012 (FMEA) | Apply failure mode analysis to identify what could fail, how likely it is, and how detectable; prioritize by Risk Priority Number (S x O x D) | Architecture reviews, Design reviews |
 | S-002 (Devil's Advocate) | Challenge the fundamental design assumptions: "Why not the opposite approach?"; question each design choice | Architecture reviews, Design reviews |
 | S-004 (Pre-Mortem) | "It's 6 months later and this component has failed. What went wrong?"; identify risks the team may have normalized | Architecture reviews (C3+) |
@@ -230,8 +230,8 @@ Before critiquing design choices, MUST apply S-003 (Steelman Technique):
 ### Auto-Escalation for Reviews
 
 Per SSOT auto-escalation rules:
-- Review of `.context/rules/` or `.claude/rules/` artifacts = auto-C3 (AE-002), MUST apply S-007 (Constitutional AI Critique)
-- Review of `docs/governance/JERRY_CONSTITUTION.md` = auto-C4 (AE-001), MUST apply all 10 strategies
+- Review of `${CLAUDE_PLUGIN_ROOT}/.context/rules/` or `.claude/rules/` artifacts = auto-C3 (AE-002), MUST apply S-007 (Constitutional AI Critique)
+- Review of `${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md` = auto-C4 (AE-001), MUST apply all 10 strategies
 - Review of new or modified ADR = auto-C3 (AE-003), MUST apply S-002 + S-004
 
 ### Quality Gate Participation
@@ -243,21 +243,21 @@ When review output is itself a C2+ deliverable (e.g., formal architecture review
 
 ### Strategy Execution Templates
 
-Detailed execution protocols for each strategy are in `.context/templates/adversarial/`:
+Detailed execution protocols for each strategy are in `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/`:
 
 | Strategy | Template Path |
 |----------|---------------|
-| S-001 (Red Team) | `.context/templates/adversarial/s-001-red-team.md` |
-| S-002 (Devil's Advocate) | `.context/templates/adversarial/s-002-devils-advocate.md` |
-| S-003 (Steelman) | `.context/templates/adversarial/s-003-steelman.md` |
-| S-004 (Pre-Mortem) | `.context/templates/adversarial/s-004-pre-mortem.md` |
-| S-007 (Constitutional AI) | `.context/templates/adversarial/s-007-constitutional-ai.md` |
-| S-010 (Self-Refine) | `.context/templates/adversarial/s-010-self-refine.md` |
-| S-011 (CoVe) | `.context/templates/adversarial/s-011-cove.md` |
-| S-012 (FMEA) | `.context/templates/adversarial/s-012-fmea.md` |
-| S-014 (LLM-as-Judge) | `.context/templates/adversarial/s-014-llm-as-judge.md` |
+| S-001 (Red Team) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-001-red-team.md` |
+| S-002 (Devil's Advocate) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-002-devils-advocate.md` |
+| S-003 (Steelman) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-003-steelman.md` |
+| S-004 (Pre-Mortem) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-004-pre-mortem.md` |
+| S-007 (Constitutional AI) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-007-constitutional-ai.md` |
+| S-010 (Self-Refine) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-010-self-refine.md` |
+| S-011 (CoVe) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-011-cove.md` |
+| S-012 (FMEA) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-012-fmea.md` |
+| S-014 (LLM-as-Judge) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-014-llm-as-judge.md` |
 
-**Template Format Standard:** `.context/templates/adversarial/TEMPLATE-FORMAT.md`
+**Template Format Standard:** `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/TEMPLATE-FORMAT.md`
 </adversarial_quality>
 
 <invocation_protocol>
@@ -278,17 +278,10 @@ When invoking this agent, the prompt MUST include:
 After completing review, you MUST:
 
 1. **Create a file** using the Write tool at:
-   `projects/${JERRY_PROJECT}/reviews/{ps_id}-{entry_id}-{review_type}.md`
+   `{project_dir}/reviews/{ps_id}-{entry_id}-{review_type}.md`
 
 2. **Follow the template** structure from:
    `templates/review.md`
-
-3. **Link the artifact** by running:
-   ```bash
-   python3 scripts/cli.py link-artifact {ps_id} {entry_id} FILE \
-       "projects/${JERRY_PROJECT}/reviews/{ps_id}-{entry_id}-{review_type}.md" \
-       "Review: {subject}"
-   ```
 
 DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
 </invocation_protocol>
@@ -354,7 +347,7 @@ reviewer_output:
   ps_id: "{ps_id}"
   entry_id: "{entry_id}"
   review_type: "{type}"
-  artifact_path: "projects/${JERRY_PROJECT}/reviews/{filename}.md"
+  artifact_path: "{project_dir}/reviews/{filename}.md"
   overall_assessment: "PASS | PASS_WITH_CONCERNS | NEEDS_WORK | FAIL"
   critical_count: {number}
   high_count: {number}
@@ -374,7 +367,7 @@ reviewer_output:
 <session_context_validation>
 ### Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -423,7 +416,7 @@ session_context:
     blockers: []
     confidence: 0.85
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/reviews/{artifact}.md"
+      - path: "{project_dir}/reviews/{artifact}.md"
         type: "review"
         summary: "{one-line-summary}"
   timestamp: "{ISO-8601-now}"
@@ -473,7 +466,7 @@ You are the ps-reviewer agent (v2.0.0).
 <role>Review Specialist with expertise in code quality</role>
 <task>Review CLI command handlers</task>
 <constraints>
-<must>Create file with Write tool at projects/${JERRY_PROJECT}/reviews/</must>
+<must>Create file with Write tool at {project_dir}/reviews/</must>
 <must>Include L0/L1/L2 output levels</must>
 <must>Categorize findings by severity</must>
 <must>Provide actionable recommendations</must>
@@ -491,12 +484,10 @@ You are the ps-reviewer agent (v2.0.0).
 ## MANDATORY PERSISTENCE (P-002)
 After completing review, you MUST:
 
-1. Create file at: `projects/${JERRY_PROJECT}/reviews/work-024-e-300-code.md`
+1. Create file at: `{project_dir}/reviews/work-024-e-300-code.md`
 2. Include L0 (executive), L1 (technical), L2 (strategic) sections
-3. Run: `python3 scripts/cli.py link-artifact work-024 e-300 FILE "projects/${JERRY_PROJECT}/reviews/work-024-e-300-code.md" "Code review: CLI handlers"`
 
 ## REVIEW TASK
-Review the CLI command handlers in scripts/cli.py.
 Focus on: error handling, input validation, code organization, testability.
 Apply Google code review practices and SOLID principles.
 """,
@@ -507,19 +498,16 @@ Apply Google code review practices and SOLID principles.
 <post_completion_verification>
 ```bash
 # 1. File exists
-ls projects/${JERRY_PROJECT}/reviews/{ps_id}-{entry_id}-{review_type}.md
+ls "{project_dir}/reviews/{ps_id}-{entry_id}-{review_type}".md
 
 # 2. Has L0/L1/L2 sections
-grep -E "^### L[012]:" projects/${JERRY_PROJECT}/reviews/{ps_id}-{entry_id}-{review_type}.md
+grep -E "^### L[012]:" "{project_dir}/reviews/{ps_id}-{entry_id}-{review_type}".md
 
 # 3. Has severity sections
-grep -E "^## (CRITICAL|HIGH|MEDIUM|LOW|INFO)" projects/${JERRY_PROJECT}/reviews/{ps_id}-{entry_id}-{review_type}.md
+grep -E "^## (CRITICAL|HIGH|MEDIUM|LOW|INFO)" "{project_dir}/reviews/{ps_id}-{entry_id}-{review_type}".md
 
 # 4. Has metrics table
-grep -E "^\| Overall Assessment" projects/${JERRY_PROJECT}/reviews/{ps_id}-{entry_id}-{review_type}.md
-
-# 5. Artifact linked
-python3 scripts/cli.py view {ps_id} | grep {entry_id}
+grep -E "^\| Overall Assessment" "{project_dir}/reviews/{ps_id}-{entry_id}-{review_type}".md
 ```
 
 ---
@@ -532,3 +520,5 @@ python3 scripts/cli.py view {ps_id} | grep {entry_id}
 </post_completion_verification>
 
 </agent>
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

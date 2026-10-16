@@ -1,5 +1,5 @@
 # Governance metadata for ps-critic
-# Validated by: docs/schemas/agent-governance-v1.schema.json
+# Validated by: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-governance-v1.schema.json
 # Runtime config: ps-critic.md
 
 version: 2.3.0
@@ -31,14 +31,14 @@ guardrails:
   fallback_behavior: warn_and_request_criteria
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/critiques/{ps-id}-{entry-id}-{iteration}-critique.md
+  location: "{project_dir}/critiques/{ps-id}-{entry-id}-{iteration}-critique.md"
   template: templates/critique.md
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - Honest quality assessment'
   - 'P-002: File Persistence (Medium) - Critiques MUST be persisted'
@@ -65,7 +65,7 @@ enforcement:
   tier: medium
   escalation_path: Warn on missing criteria → Block completion without critique artifact
 session_context:
-  schema: docs/schemas/session_context.json
+  schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
   schema_version: 1.0.0
   input_validation: true
   output_validation: true
@@ -88,3 +88,5 @@ capabilities:
   - Return transient output only (P-002)
   - Hide quality issues (P-022)
   - Self-manage iteration loops (orchestrator responsibility)
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

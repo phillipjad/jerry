@@ -78,10 +78,10 @@ See [Routing Disambiguation](#routing-disambiguation) for full exclusion conditi
 ## Operations Reference
 
 All operations are invoked via `jerry ast <command>`. In agent context, use the
-`--directory` prefix:
+`--project` prefix:
 
 ```bash
-uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast <command> [args]
+uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast <command> [args]
 ```
 
 ### jerry ast parse
@@ -214,19 +214,19 @@ uv run jerry ast modify projects/PROJ-005-markdown-ast/work/EPIC-001-markdown-as
 ### Validate a rule file for H-23/H-24 compliance
 
 ```bash
-uv run jerry ast validate --nav .context/rules/quality-enforcement.md
+uv run jerry ast validate --nav "${CLAUDE_PLUGIN_ROOT}"/.context/rules/quality-enforcement.md
 ```
 
 ### Extract L2-REINJECT directives from a rule file
 
 ```bash
-uv run jerry ast reinject .context/rules/quality-enforcement.md
+uv run jerry ast reinject "${CLAUDE_PLUGIN_ROOT}"/.context/rules/quality-enforcement.md
 ```
 
 ### Parse a file and inspect its structure
 
 ```bash
-uv run jerry ast parse .context/rules/quality-enforcement.md
+uv run jerry ast parse "${CLAUDE_PLUGIN_ROOT}"/.context/rules/quality-enforcement.md
 ```
 
 ### Validate an entity file against a schema
@@ -288,5 +288,7 @@ interface layer (H-07 enforced by architecture boundary tests).
 | CLI parser | `src/interface/cli/parser.py` |
 | Unit tests | `tests/unit/interface/cli/test_ast_commands.py` |
 | Integration tests | `tests/integration/cli/test_ast_subprocess.py` |
-| H-23/H-24 rules | `.context/rules/markdown-navigation-standards.md` |
-| Quality enforcement | `.context/rules/quality-enforcement.md` |
+| H-23/H-24 rules | `${CLAUDE_PLUGIN_ROOT}/.context/rules/markdown-navigation-standards.md` |
+| Quality enforcement | `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` |
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

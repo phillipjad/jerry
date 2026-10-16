@@ -246,7 +246,7 @@ Every S-003 execution MUST produce a Steelman Report with the following sections
 - **Deliverable Type:** {{ADR|Research|Analysis|Synthesis|Design|Code|Template|Other}}
 - **Criticality Level:** {{C1|C2|C3|C4}}
 - **Strategy:** S-003 (Steelman Technique)
-- **SSOT Reference:** .context/rules/quality-enforcement.md
+- **SSOT Reference:** ${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md
 - **Steelman By:** {{Agent or User}} | **Date:** {{ISO-8601}} | **Original Author:** {{if different}}
 ```
 
@@ -457,7 +457,7 @@ S-003 is the canonical FIRST strategy in all adversarial review sequences:
 
 ### Cross-References
 
-**SSOT:** `.context/rules/quality-enforcement.md` (H-13 threshold, H-16, dimension weights, criticality levels, strategy catalog) | `ADR-EPIC002-001` (strategy selection, score 4.30) | `ADR-EPIC002-002` (enforcement architecture) | `.context/templates/adversarial/TEMPLATE-FORMAT.md` v1.1.0
+**SSOT:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (H-13 threshold, H-16, dimension weights, criticality levels, strategy catalog) | `ADR-EPIC002-001` (strategy selection, score 4.30) | `ADR-EPIC002-002` (enforcement architecture) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/TEMPLATE-FORMAT.md` v1.1.0
 
 **Strategy Templates:** `s-002-devils-advocate.md`, `s-004-pre-mortem.md`, `s-001-red-team.md` (downstream H-16 consumers) | `s-014-llm-as-judge.md` (scores reconstruction) | `s-007-constitutional-ai.md` (constitutional review) | `s-010-self-refine.md` (may precede S-003)
 
@@ -473,6 +473,8 @@ S-003 is the canonical FIRST strategy in all adversarial review sequences:
 
 *Template Version: 1.0.0*
 *Format Conformance: TEMPLATE-FORMAT.md v1.1.0*
-*SSOT: `.context/rules/quality-enforcement.md`*
+*SSOT: `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`*
 *Created: 2026-02-15*
 *Enabler: EN-807*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

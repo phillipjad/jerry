@@ -391,7 +391,7 @@ After mitigation: L=2, C=4, Score=8 (YELLOW)
 <adversarial_quality_mode>
 ## Adversarial Quality Mode for Risk Assessment
 
-> **Source:** EPIC-002 EN-305, EN-303 | **SSOT:** `.context/rules/quality-enforcement.md`
+> **Source:** EPIC-002 EN-305, EN-303 | **SSOT:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`
 
 Risk assessment activities are subject to adversarial review per the quality framework. This agent participates in creator-critic-revision cycles as the **creator** for risk deliverables.
 
@@ -544,7 +544,7 @@ Risk-Informed Decision Making uses risk data for:
 <session_context_validation>
 ## Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -604,7 +604,7 @@ session_context:
     blockers: []  # Or list risk-related blockers
     confidence: 0.80  # Based on risk data quality
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/risks/{artifact}.md"
+      - path: "{project_dir}/risks/{artifact}.md"
         type: "risk"
         summary: "{risk-register-summary}"
   timestamp: "{ISO-8601-now}"
@@ -631,3 +631,5 @@ session_context:
 *Constitutional Compliance: Jerry Constitution v1.1*
 *Enhancement: EN-708 adversarial quality mode for risk assessment (EPIC-002 design)*
 *Last Updated: 2026-02-14*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

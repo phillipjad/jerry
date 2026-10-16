@@ -28,24 +28,6 @@
 
 > These are the authoritative HARD rules. Each rule CANNOT be overridden. See source files for consequences.
 
-<!-- L2-REINJECT: rank=1, content="Constitutional: No recursive subagents (P-003). User decides, never override (P-020). No deception (P-022). These are HARD constraints that CANNOT be overridden." -->
-
-<!-- L2-REINJECT: rank=2, content="Quality gate >= 0.92 weighted composite for C2+ deliverables (H-13). Creator-critic-revision cycle REQUIRED, minimum 3 iterations (H-14). Below threshold = REJECTED." -->
-
-<!-- L2-REINJECT: rank=2, content="Ambiguity resolution (H-31): When requirements have multiple valid interpretations, unclear scope, or imply destructive action -- MUST ask clarifying questions before proceeding. Do NOT assume. Do NOT ask when requirements are clear or answers are in the codebase." -->
-
-<!-- L2-REINJECT: rank=3, content="UV only for Python (H-05). NEVER use python/pip directly. Use uv run for execution, uv add for deps." -->
-
-<!-- L2-REINJECT: rank=4, content="LLM-as-Judge scoring (S-014): Apply strict rubric. Leniency bias must be actively counteracted." -->
-
-<!-- L2-REINJECT: rank=5, content="Self-review REQUIRED before presenting any deliverable (H-15, S-010)." -->
-
-<!-- L2-REINJECT: rank=8, content="Governance escalation REQUIRED per AE rules (H-19). Touches .context/rules/ = auto-C3. Touches constitution = auto-C4." -->
-
-<!-- L2-REINJECT: rank=9, tokens=40, content="AE-006 graduated escalation: NOMINAL=no-op, WARNING=log+consider-checkpoint, CRITICAL=auto-checkpoint+reduce-verbosity, EMERGENCY=mandatory-checkpoint+warn-user, COMPACTION=human-escalation-C3+." -->
-
-<!-- L2-REINJECT: rank=10, tokens=30, content="AST-based parsing REQUIRED for worktracker entity operations (H-33). Use jerry ast frontmatter and jerry ast validate CLI commands. NEVER use regex for frontmatter extraction." -->
-
 | ID | Rule | Source |
 |----|------|--------|
 | H-01 | No recursive subagents (max 1 level) | P-003 |
@@ -98,8 +80,6 @@
 ---
 
 ## Quality Gate
-
-<!-- L2-REINJECT: rank=6, content="Criticality levels: C1 Routine (reversible 1 session, HARD only). C2 Standard (reversible 1 day, HARD+MEDIUM). C3 Significant (>1 day, all tiers). C4 Critical (irreversible, all tiers + tournament). AE-002: .context/rules/ = auto-C3. AE-001/AE-004: constitution/baselined ADR = auto-C4." -->
 
 **Threshold:** >= 0.92 weighted composite score (C2+ deliverables)
 
@@ -241,8 +221,8 @@ Temporary ceiling expansion is permitted under controlled conditions:
 
 | ID | Condition | Escalation |
 |----|-----------|------------|
-| AE-001 | Touches `docs/governance/JERRY_CONSTITUTION.md` | Auto-C4 |
-| AE-002 | Touches `.context/rules/` or `.claude/rules/` | Auto-C3 minimum |
+| AE-001 | Touches `${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md` | Auto-C4 |
+| AE-002 | Touches `${CLAUDE_PLUGIN_ROOT}/.context/rules/` or `.claude/rules/` | Auto-C3 minimum |
 | AE-003 | New or modified ADR | Auto-C3 minimum |
 | AE-004 | Modifies baselined ADR | Auto-C4 |
 | AE-005 | Security-relevant code | Auto-C3 minimum |
@@ -307,9 +287,9 @@ Temporary ceiling expansion is permitted under controlled conditions:
 - Strategy execution via templates (adv-executor agent)
 - Quality scoring with S-014 rubric (adv-scorer agent)
 
-**Strategy Templates:** All 10 selected strategies have execution templates in `.context/templates/adversarial/`:
+**Strategy Templates:** All 10 selected strategies have execution templates in `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/`:
 
-- Template format standard: `.context/templates/adversarial/TEMPLATE-FORMAT.md`
+- Template format standard: `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/TEMPLATE-FORMAT.md`
 - Individual strategy templates: `s-{NNN}-{strategy-slug}.md`
 
 **Agent Implementation:** Three specialized agents in `skills/adversary/agents/`:
@@ -350,3 +330,5 @@ Use this table to determine which skill or agent handles a given quality request
 | ADR-EPIC002-001 | Strategy selection, composite scores, exclusion rationale | `projects/PROJ-001-oss-release/decisions/ADR-EPIC002-001-strategy-selection.md` |
 | ADR-EPIC002-002 | 5-layer enforcement architecture, token budgets | `projects/PROJ-001-oss-release/decisions/ADR-EPIC002-002-enforcement-architecture.md` |
 | EPIC-002 Final Synthesis | Consolidated design, auto-escalation rules, per-criticality sets | — |
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

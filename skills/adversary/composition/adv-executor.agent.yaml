@@ -1,5 +1,5 @@
 # Canonical Agent Definition
-# Schema: docs/schemas/agent-canonical-v1.schema.json
+# Schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-canonical-v1.schema.json
 
 name: adv-executor
 version: 1.0.0
@@ -46,7 +46,7 @@ guardrails:
   - no_vague_findings
   fallback_behavior: warn_and_request_strategy_id
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - Findings based on deliverable evidence'
   - 'P-002: File Persistence (Medium) - Execution report MUST be persisted'
@@ -67,3 +67,5 @@ portability:
   minimum_context_window: 128000
   reasoning_strategy: adaptive
   body_format: markdown
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

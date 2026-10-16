@@ -25,7 +25,7 @@ If not set, prompt the user to specify which project to work on or create a new 
 When invoked, this command:
 
 1. **Verifies active project** via `JERRY_PROJECT` environment variable
-2. **Creates/updates PLAN.md** in `projects/${JERRY_PROJECT}/PLAN.md`
+2. **Creates/updates PLAN.md** in `{project_dir}/PLAN.md`
 3. **Analyzes the task** for scope, complexity, and risks
 4. **Identifies alternatives** and documents trade-offs
 5. **Defines implementation steps** with dependencies
@@ -153,3 +153,5 @@ Please specify your project:
 
 Which project should this plan belong to?
 ```
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

@@ -30,7 +30,7 @@ agents:
       $ref: "#/components/schemas/ResearcherInput"
     output_schema:
       $ref: "#/components/schemas/ResearcherOutput"
-    output_location: "projects/${JERRY_PROJECT}/research/{ps_id}-{entry_id}-{topic_slug}.md"
+    output_location: "{project_dir}/research/{ps_id}-{entry_id}-{topic_slug}.md"
 
   ps-analyst:
     description: "Analysis Specialist - Deep analysis (5 Whys, FMEA, trade-offs)"
@@ -40,7 +40,7 @@ agents:
       $ref: "#/components/schemas/AnalystInput"
     output_schema:
       $ref: "#/components/schemas/AnalystOutput"
-    output_location: "projects/${JERRY_PROJECT}/analysis/{ps_id}-{entry_id}-{analysis_type}.md"
+    output_location: "{project_dir}/analysis/{ps_id}-{entry_id}-{analysis_type}.md"
 
   ps-architect:
     description: "Architecture Specialist - Creates ADRs with Nygard format"
@@ -50,7 +50,7 @@ agents:
       $ref: "#/components/schemas/ArchitectInput"
     output_schema:
       $ref: "#/components/schemas/ArchitectOutput"
-    output_location: "projects/${JERRY_PROJECT}/decisions/{ps_id}-{entry_id}-adr-{slug}.md"
+    output_location: "{project_dir}/decisions/{ps_id}-{entry_id}-adr-{slug}.md"
 
   ps-critic:
     description: "Quality Evaluator - Iterative refinement with quality scores"
@@ -60,7 +60,7 @@ agents:
       $ref: "#/components/schemas/CriticInput"
     output_schema:
       $ref: "#/components/schemas/CriticOutput"
-    output_location: "projects/${JERRY_PROJECT}/critiques/{ps_id}-{entry_id}-critique.md"
+    output_location: "{project_dir}/critiques/{ps_id}-{entry_id}-critique.md"
 
   ps-validator:
     description: "Validation Specialist - Verifies constraints with evidence"
@@ -70,7 +70,7 @@ agents:
       $ref: "#/components/schemas/ValidatorInput"
     output_schema:
       $ref: "#/components/schemas/ValidatorOutput"
-    output_location: "projects/${JERRY_PROJECT}/analysis/{ps_id}-{entry_id}-validation.md"
+    output_location: "{project_dir}/analysis/{ps_id}-{entry_id}-validation.md"
 
   ps-synthesizer:
     description: "Synthesis Specialist - Pattern extraction across documents"
@@ -80,7 +80,7 @@ agents:
       $ref: "#/components/schemas/SynthesizerInput"
     output_schema:
       $ref: "#/components/schemas/SynthesizerOutput"
-    output_location: "projects/${JERRY_PROJECT}/synthesis/{ps_id}-{entry_id}-synthesis.md"
+    output_location: "{project_dir}/synthesis/{ps_id}-{entry_id}-synthesis.md"
 
   ps-reviewer:
     description: "Review Specialist - Code/design/security quality reviews"
@@ -90,7 +90,7 @@ agents:
       $ref: "#/components/schemas/ReviewerInput"
     output_schema:
       $ref: "#/components/schemas/ReviewerOutput"
-    output_location: "projects/${JERRY_PROJECT}/reviews/{ps_id}-{entry_id}-{review_type}.md"
+    output_location: "{project_dir}/reviews/{ps_id}-{entry_id}-{review_type}.md"
 
   ps-investigator:
     description: "Investigation Specialist - Root cause of failures"
@@ -100,7 +100,7 @@ agents:
       $ref: "#/components/schemas/InvestigatorInput"
     output_schema:
       $ref: "#/components/schemas/InvestigatorOutput"
-    output_location: "projects/${JERRY_PROJECT}/investigations/{ps_id}-{entry_id}-investigation.md"
+    output_location: "{project_dir}/investigations/{ps_id}-{entry_id}-investigation.md"
 
   ps-reporter:
     description: "Reporting Specialist - Status and progress reports"
@@ -110,7 +110,7 @@ agents:
       $ref: "#/components/schemas/ReporterInput"
     output_schema:
       $ref: "#/components/schemas/ReporterOutput"
-    output_location: "projects/${JERRY_PROJECT}/reports/{ps_id}-{entry_id}-{report_type}.md"
+    output_location: "{project_dir}/reports/{ps_id}-{entry_id}-{report_type}.md"
 
 # =============================================================================
 # COMPONENT SCHEMAS
@@ -1123,3 +1123,5 @@ testing:
           expected: "Warn but attempt processing"
         - input_version: null
           expected: "Reject with validation error"
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

@@ -531,7 +531,7 @@ projects/{PROJECT}/
 ## Adversarial Quality Cycles at Review Gates
 
 > **Source:** EPIC-002 EN-305, EN-303, ADR-EPIC002-001
-> **SSOT:** `.context/rules/quality-enforcement.md`
+> **SSOT:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`
 
 ### Creator-Critic-Revision Cycle for SE Reviews
 
@@ -647,7 +647,7 @@ SE ARTIFACT CRITICALITY ASSESSMENT:
 
 1. Check auto-escalation rules (SSOT AE-001 through AE-006):
    - Touches constitution?        -> C4 (auto-escalate per AE-001)
-   - Touches .context/rules/?     -> C3 minimum (auto-escalate per AE-002)
+   - Touches ${CLAUDE_PLUGIN_ROOT}/.context/rules/?     -> C3 minimum (auto-escalate per AE-002)
    - New/modified ADR?            -> C3 minimum (auto-escalate per AE-003)
    - Safety-critical code?        -> C3 minimum (auto-escalate per AE-005)
 
@@ -1085,7 +1085,7 @@ CROSS-SKILL HANDOFF:
 Internal References:
 - [ORCHESTRATION_PATTERNS.md](../shared/ORCHESTRATION_PATTERNS.md) - 8 canonical patterns
 - [AGENT_TEMPLATE_CORE.md](../shared/AGENT_TEMPLATE_CORE.md) - Agent definition format
-- [Jerry Constitution](../../docs/governance/JERRY_CONSTITUTION.md) - P-040, P-041, P-042, P-043
+- [Jerry Constitution](${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md) - P-040, P-041, P-042, P-043
 
 ---
 
@@ -1110,3 +1110,5 @@ Internal References:
 *Enhancement: EN-708 adversarial quality cycles at review gates (EPIC-002 design)*
 *Last Updated: 2026-02-14*
 *Template: PLAYBOOK_TEMPLATE.md v1.0.0*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

@@ -407,7 +407,7 @@ DISCLAIMER: [Same disclaimer text]
 <adversarial_quality_mode>
 ## Adversarial Quality Mode for Verification
 
-> **Source:** EPIC-002 EN-305, EN-303 | **SSOT:** `.context/rules/quality-enforcement.md`
+> **Source:** EPIC-002 EN-305, EN-303 | **SSOT:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md`
 
 V&V activities are subject to adversarial review per the quality framework. This agent participates in creator-critic-revision cycles as the **creator** for verification deliverables.
 
@@ -545,7 +545,7 @@ Each verification result MUST include:
 <session_context_validation>
 ## Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -602,7 +602,7 @@ session_context:
     blockers: []  # Or list verification blockers
     confidence: 0.90  # Based on verification coverage
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/verification/{artifact}.md"
+      - path: "{project_dir}/verification/{artifact}.md"
         type: "verification"
         summary: "{VCRM-summary}"
   timestamp: "{ISO-8601-now}"
@@ -629,3 +629,5 @@ session_context:
 *Constitutional Compliance: Jerry Constitution v1.1*
 *Enhancement: EN-708 adversarial quality mode for verification (EPIC-002 design)*
 *Last Updated: 2026-02-14*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

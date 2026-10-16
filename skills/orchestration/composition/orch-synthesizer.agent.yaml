@@ -1,5 +1,5 @@
 # Canonical Agent Definition
-# Schema: docs/schemas/agent-canonical-v1.schema.json
+# Schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-canonical-v1.schema.json
 
 name: orch-synthesizer
 version: 2.2.0
@@ -62,13 +62,13 @@ guardrails:
   fallback_behavior: warn_and_retry
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/synthesis/{workflow_id}-final-synthesis.md
+  location: "{project_dir}/synthesis/{workflow_id}-final-synthesis.md"
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-001: Truth and Accuracy (Soft) - Synthesis based on evidence from artifacts'
   - 'P-002: File Persistence (Medium) - Creates persistent synthesis document'
@@ -104,7 +104,7 @@ enforcement:
   tier: medium
   escalation_path: Warn on incomplete synthesis -> Block unsupported claims
 session_context:
-  schema: docs/schemas/session_context.json
+  schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
   schema_version: 1.0.0
   input_validation: true
   output_validation: true
@@ -118,3 +118,5 @@ session_context:
   - calculate_confidence
   - list_artifacts
   - set_timestamp
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.

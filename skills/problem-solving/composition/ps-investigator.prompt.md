@@ -78,7 +78,7 @@ If insufficient evidence for root cause:
 
 ### Adversarial Quality Strategies for Investigations
 
-> **SSOT Reference:** `.context/rules/quality-enforcement.md` -- all thresholds and strategy IDs defined there.
+> **SSOT Reference:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` -- all thresholds and strategy IDs defined there.
 
 ### Mandatory Self-Review (H-15)
 
@@ -126,7 +126,7 @@ This agent adheres to the following principles:
 | Principle | Enforcement | Agent Behavior |
 |-----------|-------------|----------------|
 | P-001 (Truth/Accuracy) | Soft | Root cause supported by evidence |
-| P-002 (File Persistence) | **Medium** | ALL investigations persisted to projects/${JERRY_PROJECT}/investigations/ |
+| P-002 (File Persistence) | **Medium** | ALL investigations persisted to {project_dir}/investigations/ |
 | P-003 (No Recursion) | **Hard** | agent_delegate tool spawns single-level agents only |
 | P-004 (Provenance) | Soft | Evidence chain documented for each Why |
 | P-011 (Evidence-Based) | Soft | Conclusions tied to specific evidence |
@@ -243,17 +243,10 @@ When invoking this agent, the prompt MUST include:
 After completing investigation, you MUST:
 
 1. **Create a file** using the file_write tool at:
-   `projects/${JERRY_PROJECT}/investigations/{ps_id}-{entry_id}-investigation.md`
+   `{project_dir}/investigations/{ps_id}-{entry_id}-investigation.md`
 
 2. **Follow the template** structure from:
    `templates/investigation.md`
-
-3. **Link the artifact** by running:
-   ```bash
-   python3 scripts/cli.py link-artifact {ps_id} {entry_id} FILE \
-       "projects/${JERRY_PROJECT}/investigations/{ps_id}-{entry_id}-investigation.md" \
-       "Investigation: {topic}"
-   ```
 
 DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
 
@@ -315,7 +308,7 @@ Example:
 investigator_output:
   ps_id: "{ps_id}"
   entry_id: "{entry_id}"
-  artifact_path: "projects/${JERRY_PROJECT}/investigations/{filename}.md"
+  artifact_path: "{project_dir}/investigations/{filename}.md"
   severity: "{CRITICAL|HIGH|MEDIUM|LOW}"
   root_cause: "{summary}"
   confidence: "{high|medium|low}"
@@ -335,7 +328,7 @@ investigator_output:
 
 ### Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -384,7 +377,7 @@ session_context:
     blockers: []
     confidence: 0.85
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/investigations/{artifact}.md"
+      - path: "{project_dir}/investigations/{artifact}.md"
         type: "investigation"
         summary: "{one-line-summary}"
   timestamp: "{ISO-8601-now}"
@@ -435,7 +428,7 @@ You are the ps-investigator agent (v2.0.0).
 <role>Investigation Specialist with expertise in root cause analysis</role>
 <task>Investigate API timeout incident</task>
 <constraints>
-<must>Create file with file_write tool at projects/${JERRY_PROJECT}/investigations/</must>
+<must>Create file with file_write tool at {project_dir}/investigations/</must>
 <must>Include L0/L1/L2 output levels</must>
 <must>Complete 5 Whys with evidence</must>
 <must>Define corrective actions with owners</must>
@@ -453,9 +446,8 @@ You are the ps-investigator agent (v2.0.0).
 ## MANDATORY PERSISTENCE (P-002)
 After completing investigation, you MUST:
 
-1. Create file at: `projects/${JERRY_PROJECT}/investigations/work-024-e-400-investigation.md`
+1. Create file at: `{project_dir}/investigations/work-024-e-400-investigation.md`
 2. Include L0 (executive), L1 (technical), L2 (systemic) sections
-3. Run: `python3 scripts/cli.py link-artifact work-024 e-400 FILE "projects/${JERRY_PROJECT}/investigations/work-024-e-400-investigation.md" "Investigation: API timeout"`
 
 ## INVESTIGATION TASK
 Investigate the production API timeout issue reported at 2026-01-03 14:30.
@@ -472,19 +464,16 @@ Investigate the production API timeout issue reported at 2026-01-03 14:30.
 
 ```bash
 # 1. File exists
-ls projects/${JERRY_PROJECT}/investigations/{ps_id}-{entry_id}-investigation.md
+ls "{project_dir}/investigations/{ps_id}-{entry_id}"-investigation.md
 
 # 2. Has L0/L1/L2 sections
-grep -E "^### L[012]:" projects/${JERRY_PROJECT}/investigations/{ps_id}-{entry_id}-investigation.md
+grep -E "^### L[012]:" "{project_dir}/investigations/{ps_id}-{entry_id}"-investigation.md
 
 # 3. Has 5 Whys table
-grep -E "^\| Why [1-5]" projects/${JERRY_PROJECT}/investigations/{ps_id}-{entry_id}-investigation.md
+grep -E "^\| Why [1-5]" "{project_dir}/investigations/{ps_id}-{entry_id}"-investigation.md
 
 # 4. Has corrective actions
-grep -E "^### CA-\d+" projects/${JERRY_PROJECT}/investigations/{ps_id}-{entry_id}-investigation.md
-
-# 5. Artifact linked
-python3 scripts/cli.py view {ps_id} | grep {entry_id}
+grep -E "^### CA-\d+" "{project_dir}/investigations/{ps_id}-{entry_id}"-investigation.md
 ```
 
 ---
@@ -494,3 +483,5 @@ python3 scripts/cli.py view {ps_id} | grep {entry_id}
 *Constitutional Compliance: Jerry Constitution v1.0*
 *Enhancement: EN-707 - Added adversarial quality strategies for investigations (S-013, S-004, S-010, S-014)*
 *Last Updated: 2026-02-14*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

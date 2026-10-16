@@ -381,11 +381,11 @@ We will use SQLite for persistence because...
 
 Architecture artifacts should use standardized templates to ensure consistency.
 
-**Location:** `.context/templates/`
+**Location:** `${CLAUDE_PLUGIN_ROOT}/.context/templates/`
 
 | Template | Use For | Path |
 |----------|---------|------|
-| `adr.md` | Architecture Decision Records | `docs/knowledge/exemplars/templates/adr.md` |
+| `adr.md` | Architecture Decision Records | `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/adr.md` |
 
 **Usage:** When creating a new ADR, reference the template to ensure consistent structure and sections.
 
@@ -456,9 +456,7 @@ The architecture skill integrates with other Jerry skills:
 |-----------|-------------|--------------------------|
 | Root cause analysis or debugging needed | `/problem-solving` (ps-investigator) | Architecture methodology (layer dependency rules, CQRS patterns, hexagonal structure) applied to investigation tasks produces structural design artifacts instead of causal chains; root cause not isolated |
 | Requirements engineering or V&V needed | `/nasa-se` | Requirements expressed as architectural decisions; V&V traceability lost; compliance gaps not detected |
-| Offensive security testing or penetration testing | `/red-team` | Architecture compliance checks applied to offensive engagement produce structural diagrams instead of attack narratives; engagement methodology entirely absent |
 | Adversarial quality review or tournament scoring | `/adversary` | Architecture review checklists applied instead of adversarial strategy templates; S-014 scoring rubric not loaded |
-| Security hardening or threat modeling | `/eng-team` | Architecture skill lacks STRIDE/DREAD methodology; security-specific governance layers (OWASP, NIST SSDF) not available |
 | Multi-agent workflow coordination | `/orchestration` | Architecture commands are single-step operations; no state tracking, checkpointing, or sync barrier capability |
 
 ---
@@ -469,8 +467,8 @@ The architecture skill integrates with other Jerry skills:
 - Evans, E. (2003). "Domain-Driven Design: Tackling Complexity in the Heart of Software"
 - Vernon, V. (2013). "Implementing Domain-Driven Design"
 - Martin, R. (2017). "Clean Architecture"
-- Jerry Architecture Standards: `.context/rules/architecture-standards.md`
-- Jerry Constitution: `docs/governance/JERRY_CONSTITUTION.md`
+- Jerry Architecture Standards: `${CLAUDE_PLUGIN_ROOT}/.context/rules/architecture-standards.md`
+- Jerry Constitution: `${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md`
 
 ---
 

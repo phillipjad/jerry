@@ -65,13 +65,13 @@ You DO NOT manage the loop yourself. Consequence: self-managed iteration violate
 
 1. **Reading artifact to critique:**
    ```
-   Read(file_path="projects/${JERRY_PROJECT}/decisions/work-024-e-399-auth-design-v2.md")
+   Read(file_path="{project_dir}/decisions/work-024-e-399-auth-design-v2.md")
    → Load the generator's output for evaluation
    ```
 
 2. **Finding related artifacts for context:**
    ```
-   Glob(pattern="projects/${JERRY_PROJECT}/decisions/work-024-*.md")
+   Glob(pattern="{project_dir}/decisions/work-024-*.md")
    → Locate all versions for trend analysis
    ```
 
@@ -84,7 +84,7 @@ You DO NOT manage the loop yourself. Consequence: self-managed iteration violate
 4. **Creating critique output (MANDATORY per P-002):**
    ```
    Write(
-       file_path="projects/${JERRY_PROJECT}/critiques/work-024-e-400-iter2-critique.md",
+       file_path="{project_dir}/critiques/work-024-e-400-iter2-critique.md",
        content="# Critique: Authentication Design v2\n\n## L0: Executive Summary..."
    )
    ```
@@ -97,21 +97,21 @@ S-014 scoring rubric.
 
 5. **Extracting entity context for scoring setup:**
    ```bash
-   uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast frontmatter {artifact_path}
+   uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast frontmatter "{artifact_path}"
    # Returns: {"Type": "story", "Status": "in_progress", "Parent": "FEAT-001", ...}
    # Use the "Type" field to select the appropriate schema for Completeness scoring
    ```
 
 6. **Checking nav table compliance for Completeness dimension (H-23/H-24):**
    ```bash
-   uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast validate {artifact_path} --nav
+   uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast validate "{artifact_path}" --nav
    # Returns: {"is_valid": true/false, "missing_entries": [...], "orphaned_entries": [...]}
    # Nav table violations = Completeness dimension deduction (missing sections)
    ```
 
 7. **Schema validation for entity deliverables:**
    ```bash
-   uv run --directory ${CLAUDE_PLUGIN_ROOT} jerry ast validate {artifact_path} --schema {entity_type}
+   uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry ast validate "{artifact_path}" --schema {entity_type}
    # Returns: {"schema_valid": true/false, "schema_violations": [...]}
    # Schema violations inform Completeness (0.20) and Methodological Rigor (0.20) scoring
    # Inspect schema_violations array for field_path and message details
@@ -155,7 +155,7 @@ If unable to complete evaluation:
 <adversarial_quality>
 ### Adversarial Quality Integration
 
-> **SSOT Reference:** `.context/rules/quality-enforcement.md` -- all thresholds, strategy IDs, and quality dimensions are defined there. NEVER hardcode values; always reference the SSOT.
+> **SSOT Reference:** `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` -- all thresholds, strategy IDs, and quality dimensions are defined there. NEVER hardcode values; always reference the SSOT.
 
 ### Primary Strategy: S-014 (LLM-as-Judge)
 
@@ -199,22 +199,22 @@ Per SSOT guidance, LLM-as-Judge scoring tends toward leniency. Counteract by:
 
 ### Strategy Execution Templates
 
-Detailed step-by-step execution protocols for each strategy are available in `.context/templates/adversarial/`:
+Detailed step-by-step execution protocols for each strategy are available in `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/`:
 
 | Strategy | Template Path |
 |----------|---------------|
-| S-014 (LLM-as-Judge) | `.context/templates/adversarial/s-014-llm-as-judge.md` |
-| S-003 (Steelman) | `.context/templates/adversarial/s-003-steelman.md` |
-| S-010 (Self-Refine) | `.context/templates/adversarial/s-010-self-refine.md` |
-| S-007 (Constitutional AI) | `.context/templates/adversarial/s-007-constitutional-ai.md` |
-| S-002 (Devil's Advocate) | `.context/templates/adversarial/s-002-devils-advocate.md` |
-| S-004 (Pre-Mortem) | `.context/templates/adversarial/s-004-pre-mortem.md` |
-| S-013 (Inversion) | `.context/templates/adversarial/s-013-inversion.md` |
-| S-001 (Red Team) | `.context/templates/adversarial/s-001-red-team.md` |
-| S-012 (FMEA) | `.context/templates/adversarial/s-012-fmea.md` |
-| S-011 (CoVe) | `.context/templates/adversarial/s-011-cove.md` |
+| S-014 (LLM-as-Judge) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-014-llm-as-judge.md` |
+| S-003 (Steelman) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-003-steelman.md` |
+| S-010 (Self-Refine) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-010-self-refine.md` |
+| S-007 (Constitutional AI) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-007-constitutional-ai.md` |
+| S-002 (Devil's Advocate) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-002-devils-advocate.md` |
+| S-004 (Pre-Mortem) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-004-pre-mortem.md` |
+| S-013 (Inversion) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-013-inversion.md` |
+| S-001 (Red Team) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-001-red-team.md` |
+| S-012 (FMEA) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-012-fmea.md` |
+| S-011 (CoVe) | `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/s-011-cove.md` |
 
-**Template Format Standard:** `.context/templates/adversarial/TEMPLATE-FORMAT.md`
+**Template Format Standard:** `${CLAUDE_PLUGIN_ROOT}/.context/templates/adversarial/TEMPLATE-FORMAT.md`
 
 For standalone adversarial reviews outside creator-critic loops, use the `/adversary` skill.
 </adversarial_quality>
@@ -222,7 +222,7 @@ For standalone adversarial reviews outside creator-critic loops, use the `/adver
 <evaluation_criteria_framework>
 ### Evaluation Criteria Framework
 
-> **SSOT Reference:** The authoritative quality dimensions and weights are defined in `.context/rules/quality-enforcement.md` (Quality Gate section). Use those for C2+ deliverables.
+> **SSOT Reference:** The authoritative quality dimensions and weights are defined in `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (Quality Gate section). Use those for C2+ deliverables.
 
 ### SSOT Quality Dimensions (C2+ Deliverables -- REQUIRED)
 
@@ -331,7 +331,7 @@ This agent adheres to the following principles:
 | Principle | Enforcement | Agent Behavior |
 |-----------|-------------|----------------|
 | P-001 (Truth/Accuracy) | Soft | Honest quality assessment based on criteria |
-| P-002 (File Persistence) | **Medium** | ALL critiques persisted to projects/${JERRY_PROJECT}/critiques/ |
+| P-002 (File Persistence) | **Medium** | ALL critiques persisted to {project_dir}/critiques/ |
 | P-003 (No Recursion) | **Hard** | Does NOT manage iteration loops |
 | P-004 (Provenance) | Soft | Criteria and evidence cited |
 | P-011 (Evidence-Based) | Soft | All feedback tied to criteria and evidence |
@@ -371,17 +371,10 @@ When invoking this agent, the prompt MUST include:
 After completing evaluation, you MUST:
 
 1. **Create a file** using the Write tool at:
-   `projects/${JERRY_PROJECT}/critiques/{ps_id}-{entry_id}-iter{iteration}-critique.md`
+   `{project_dir}/critiques/{ps_id}-{entry_id}-iter{iteration}-critique.md`
 
 2. **Follow the template** structure from:
    `templates/critique.md`
-
-3. **Link the artifact** by running:
-   ```bash
-   python3 scripts/cli.py link-artifact {ps_id} {entry_id} FILE \
-       "projects/${JERRY_PROJECT}/critiques/{ps_id}-{entry_id}-iter{iteration}-critique.md" \
-       "Critique: Iteration {iteration}"
-   ```
 
 DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
 </invocation_protocol>
@@ -445,7 +438,7 @@ critic_output:
   ps_id: "{ps_id}"
   entry_id: "{entry_id}"
   iteration: {number}
-  artifact_path: "projects/${JERRY_PROJECT}/critiques/{filename}.md"
+  artifact_path: "{project_dir}/critiques/{filename}.md"
   quality_score: {0.0-1.0}
   assessment: "EXCELLENT | GOOD | ACCEPTABLE | NEEDS_WORK | POOR"
   threshold_met: {true|false}
@@ -473,7 +466,7 @@ critic_output:
 <session_context_validation>
 ### Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -530,7 +523,7 @@ session_context:
     blockers: []
     confidence: 0.90
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/critiques/{artifact}.md"
+      - path: "{project_dir}/critiques/{artifact}.md"
         type: "critique"
         summary: "{one-line-summary}"
   timestamp: "{ISO-8601-now}"
@@ -551,7 +544,7 @@ This section documents the circuit breaker logic that the MAIN CONTEXT should ap
 
 ### Default Parameters
 
-> **SSOT Reference:** Threshold and minimum iterations defined in `.context/rules/quality-enforcement.md` (H-13, H-14).
+> **SSOT Reference:** Threshold and minimum iterations defined in `${CLAUDE_PLUGIN_ROOT}/.context/rules/quality-enforcement.md` (H-13, H-14).
 
 ```yaml
 circuit_breaker:
@@ -643,7 +636,7 @@ You are the ps-critic agent (v2.0.0).
 <role>Quality Evaluator specializing in iterative refinement</role>
 <task>Critique authentication design for iteration 2</task>
 <constraints>
-<must>Create file with Write tool at projects/${JERRY_PROJECT}/critiques/</must>
+<must>Create file with Write tool at {project_dir}/critiques/</must>
 <must>Include L0/L1/L2 output levels</must>
 <must>Calculate quality score (0.0-1.0)</must>
 <must>Provide actionable improvement recommendations</must>
@@ -684,19 +677,16 @@ Provide quality score, specific improvement recommendations, and threshold asses
 <post_completion_verification>
 ```bash
 # 1. File exists
-ls projects/${JERRY_PROJECT}/critiques/{ps_id}-{entry_id}-iter{iteration}-critique.md
+ls "{project_dir}/critiques/{ps_id}-{entry_id}-iter{iteration}"-critique.md
 
 # 2. Has L0/L1/L2 sections
-grep -E "^### L[012]:" projects/${JERRY_PROJECT}/critiques/{ps_id}-{entry_id}-iter{iteration}-critique.md
+grep -E "^### L[012]:" "{project_dir}/critiques/{ps_id}-{entry_id}-iter{iteration}"-critique.md
 
 # 3. Has quality score
-grep -E "Quality Score.*[0-9]\.[0-9]+" projects/${JERRY_PROJECT}/critiques/{ps_id}-{entry_id}-iter{iteration}-critique.md
+grep -E "Quality Score.*[0-9]\.[0-9]+" "{project_dir}/critiques/{ps_id}-{entry_id}-iter{iteration}"-critique.md
 
 # 4. Has recommendation
-grep -E "Recommendation.*(ACCEPT|REVISE|ESCALATE)" projects/${JERRY_PROJECT}/critiques/{ps_id}-{entry_id}-iter{iteration}-critique.md
-
-# 5. Artifact linked
-python3 scripts/cli.py view {ps_id} | grep {entry_id}
+grep -E "Recommendation.*(ACCEPT|REVISE|ESCALATE)" "{project_dir}/critiques/{ps_id}-{entry_id}-iter{iteration}"-critique.md
 ```
 
 ---
@@ -710,3 +700,5 @@ python3 scripts/cli.py view {ps_id} | grep {entry_id}
 </post_completion_verification>
 
 </agent>
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

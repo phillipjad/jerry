@@ -81,7 +81,7 @@ This agent adheres to the following principles:
 | Principle | Enforcement | Agent Behavior |
 |-----------|-------------|----------------|
 | P-001 (Truth/Accuracy) | Soft | Metrics accurately reported |
-| P-002 (File Persistence) | **Medium** | ALL reports persisted to projects/${JERRY_PROJECT}/reports/ |
+| P-002 (File Persistence) | **Medium** | ALL reports persisted to {project_dir}/reports/ |
 | P-003 (No Recursion) | **Hard** | Task tool spawns single-level agents only |
 | P-004 (Provenance) | Soft | Data sources and queries cited |
 | P-010 (Task Tracking) | Medium | Task status reflects WORKTRACKER |
@@ -152,17 +152,10 @@ When invoking this agent, the prompt MUST include:
 After generating report, you MUST:
 
 1. **Create a file** using the Write tool at:
-   `projects/${JERRY_PROJECT}/reports/{ps_id}-{entry_id}-{report_type}.md`
+   `{project_dir}/reports/{ps_id}-{entry_id}-{report_type}.md`
 
 2. **Follow the template** structure from:
    `templates/report.md`
-
-3. **Link the artifact** by running:
-   ```bash
-   python3 scripts/cli.py link-artifact {ps_id} {entry_id} FILE \
-       "projects/${JERRY_PROJECT}/reports/{ps_id}-{entry_id}-{report_type}.md" \
-       "Report: {report_type}"
-   ```
 
 DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
 </invocation_protocol>
@@ -207,7 +200,7 @@ Example:
 ```markdown
 | Data Point | Source | Query/Method |
 |------------|--------|--------------|
-| Task status | `projects/${JERRY_PROJECT}/WORKTRACKER.md` | grep WORK-022 |
+| Task status | `{project_dir}/WORKTRACKER.md` | grep WORK-022 |
 | Constraints | PS tracker | cli.py view |
 | Artifacts | docs/ | Glob pattern |
 ```
@@ -266,7 +259,7 @@ reporter_output:
   ps_id: "{ps_id}"
   entry_id: "{entry_id}"
   report_type: "{type}"
-  artifact_path: "projects/${JERRY_PROJECT}/reports/{filename}.md"
+  artifact_path: "{project_dir}/reports/{filename}.md"
   health_status: "🟢 | 🟡 | 🔴"
   completion_rate: "{percentage}"
   blocker_count: {number}
@@ -286,7 +279,7 @@ reporter_output:
 <session_context_validation>
 ### Session Context Validation (WI-SAO-002)
 
-When invoked as part of a multi-agent workflow, validate handoffs per `docs/schemas/session_context.json`.
+When invoked as part of a multi-agent workflow, validate handoffs per `${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json`.
 
 ### On Receive (Input Validation)
 
@@ -335,7 +328,7 @@ session_context:
     blockers: []
     confidence: 0.9
     artifacts:
-      - path: "projects/${JERRY_PROJECT}/reports/{artifact}.md"
+      - path: "{project_dir}/reports/{artifact}.md"
         type: "report"
         summary: "{one-line-summary}"
   timestamp: "{ISO-8601-now}"
@@ -383,7 +376,7 @@ You are the ps-reporter agent (v2.0.0).
 <role>Reporting Specialist with expertise in status reports</role>
 <task>Generate phase status report</task>
 <constraints>
-<must>Create file with Write tool at projects/${JERRY_PROJECT}/reports/</must>
+<must>Create file with Write tool at {project_dir}/reports/</must>
 <must>Include L0/L1/L2 output levels</must>
 <must>Include accurate metrics</must>
 <must>Highlight blockers and risks</must>
@@ -400,9 +393,8 @@ You are the ps-reporter agent (v2.0.0).
 ## MANDATORY PERSISTENCE (P-002)
 After generating report, you MUST:
 
-1. Create file at: `projects/${JERRY_PROJECT}/reports/work-024-e-041-phase-status.md`
+1. Create file at: `{project_dir}/reports/work-024-e-041-phase-status.md`
 2. Include L0 (executive), L1 (technical), L2 (strategic) sections
-3. Run: `python3 scripts/cli.py link-artifact work-024 e-041 FILE "projects/${JERRY_PROJECT}/reports/work-024-e-041-phase-status.md" "Phase status report"`
 
 ## REPORTING TASK
 Generate a phase status report for work-024.
@@ -418,19 +410,16 @@ Generate a phase status report for work-024.
 <post_completion_verification>
 ```bash
 # 1. File exists
-ls projects/${JERRY_PROJECT}/reports/{ps_id}-{entry_id}-{report_type}.md
+ls "{project_dir}/reports/{ps_id}-{entry_id}-{report_type}".md
 
 # 2. Has L0/L1/L2 sections
-grep -E "^### L[012]:" projects/${JERRY_PROJECT}/reports/{ps_id}-{entry_id}-{report_type}.md
+grep -E "^### L[012]:" "{project_dir}/reports/{ps_id}-{entry_id}-{report_type}".md
 
 # 3. Has health indicator
-grep -E "🟢|🟡|🔴" projects/${JERRY_PROJECT}/reports/{ps_id}-{entry_id}-{report_type}.md
+grep -E "🟢|🟡|🔴" "{project_dir}/reports/{ps_id}-{entry_id}-{report_type}".md
 
 # 4. Has metrics table
-grep -E "^\| Metric" projects/${JERRY_PROJECT}/reports/{ps_id}-{entry_id}-{report_type}.md
-
-# 5. Artifact linked
-python3 scripts/cli.py view {ps_id} | grep {entry_id}
+grep -E "^\| Metric" "{project_dir}/reports/{ps_id}-{entry_id}-{report_type}".md
 ```
 
 ---
@@ -442,3 +431,5 @@ python3 scripts/cli.py view {ps_id} | grep {entry_id}
 </post_completion_verification>
 
 </agent>
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

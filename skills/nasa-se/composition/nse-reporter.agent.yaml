@@ -1,5 +1,5 @@
 # Canonical Agent Definition
-# Schema: docs/schemas/agent-canonical-v1.schema.json
+# Schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/agent-canonical-v1.schema.json
 
 name: nse-reporter
 version: 2.1.0
@@ -60,14 +60,14 @@ guardrails:
   fallback_behavior: warn_and_retry
 output:
   required: true
-  location: projects/${JERRY_PROJECT}/reports/{ps_id}-{entry_id}-{report_type}.md
+  location: "{project_dir}/reports/{ps_id}-{entry_id}-{report_type}.md"
   template: templates/status-report.md
   levels:
   - L0
   - L1
   - L2
 constitution:
-  reference: docs/governance/JERRY_CONSTITUTION.md
+  reference: ${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md
   principles_applied:
   - 'P-002: File Persistence (Medium)'
   - 'P-003: No Recursive Subagents (Hard)'
@@ -107,7 +107,7 @@ enforcement:
   tier: medium
   escalation_path: Alert user if report data is stale or incomplete
 session_context:
-  schema: docs/schemas/session_context.json
+  schema: ${CLAUDE_PLUGIN_ROOT}/docs/schemas/session_context.json
   schema_version: 1.0.0
   input_validation: true
   output_validation: true
@@ -121,3 +121,5 @@ session_context:
   - calculate_confidence
   - list_artifacts
   - set_timestamp
+
+# Modified from geekatron/jerry v0.31.9; see NOTICE.
