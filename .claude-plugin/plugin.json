@@ -1,21 +1,21 @@
 {
   "name": "jerry",
-  "version": "0.31.9",
-  "description": "Framework for behavior and workflow guardrails with knowledge accrual",
+  "version": "1.0.0",
+  "description": "Project-based work for Claude Code: work tracking, orchestration, problem-solving, systems engineering and adversarial quality review",
   "author": {
-    "name": "Jerry Framework Contributors",
-    "url": "https://github.com/geekatron/jerry"
+    "name": "Phillip Miavelstuck"
   },
   "license": "Apache-2.0",
-  "repository": "https://github.com/geekatron/jerry",
+  "repository": "https://github.com/phillipjad/jerry",
   "keywords": [
     "jerry",
-    "workflow",
-    "guardrails",
-    "knowledge-management",
-    "problem-solving",
+    "projects",
     "work-tracker",
-    "hexagonal-architecture"
+    "orchestration",
+    "problem-solving",
+    "architecture",
+    "systems-engineering",
+    "adversarial-review"
   ],
   "skills": "./skills/",
   "agents": [

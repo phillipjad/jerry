@@ -1,9 +1,71 @@
 # Changelog
 
-All notable changes to the Jerry Framework will be documented in this file.
+All notable changes to this derivative of the Jerry Framework are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.0] - 2026-10-17
+
+First release of this derivative. Changes are relative to geekatron/jerry v0.31.9.
+
+### Added
+
+- Project discovery across several roots, nearest first: the enclosing projects folder,
+  `./projects`, `../projects`, then the `roots` listed in `~/.jerry/config.toml`. An ID that a
+  nearer root already defines is ignored, with a warning.
+- A `project.toml` per project with `title`, `status`, `summary` and typed links (`related`,
+  `depends_on`, `supersedes`, `uses`) whose inverses are computed.
+- Sub-projects: `PROJ-NNN.N-slug` folders nested inside their parent.
+- A `RESUME.md` per project that opens with a `## Pick up here` section of at most 3,000
+  characters.
+- A generated registry table between marker lines in each root's `README.md`.
+- `jerry projects list`, `show`, `new`, `index` and `check`.
+- A per-session focus of one or more projects, the first being `{project_dir}`, with
+  `jerry focus show`, `set`, `add` and `none`.
+- A SessionStart hook that injects the CLI command, the focus with each focused project's
+  Pick up here section, warnings and a project index, and asks for a project when tracked work
+  starts without one. Resume and compact keep the focus; after `/clear` or a fork it names the
+  last focus used from the same directory.
+- A SubagentStart hook that gives each subagent the session's focus.
+- Windows support: the hooks run through `uv` in exec form on the standard library alone, read
+  their input as UTF-8 and print ASCII JSON. CI runs on Windows, macOS and Linux with Python
+  3.11 and 3.14.
+
+### Changed
+
+- The kept skills, agents, rules and the `/architect` command write into `{project_dir}` and read
+  plugin files through `${CLAUDE_PLUGIN_ROOT}`. Orchestration and problem-solving name
+  `{project_dir}` in Task prompts when more than one project is focused.
+- H-04 is rewritten for the focus: tracked work runs in a focused project or in an explicit none.
+- H-22, proactive skill invocation, is kept: each skill's description lists the requests it
+  handles, and the SessionStart context states the rule.
+- H-25, H-26, H-32, H-34 and H-36 are retired, because the rule files that defined them no
+  longer ship.
+- `jerry ast` keeps `parse`, `frontmatter`, `validate` and `modify`, resolves relative paths
+  against the caller's working directory and accepts files outside the project tree.
+- The runtime is a small `jerry` package with two dependencies, markdown-it-py and mdformat.
+
+### Removed
+
+- The bootstrap, contract-design, diataxis, eng-team, pm-pmm, prompt-engineering, red-team,
+  saucer-boy, saucer-boy-framework-voice, test-spec, transcript, use-case and user-experience
+  skills, the ten `ux-*` sub-skills, and the `/release` command.
+- The UserPromptSubmit, PreToolUse, PreCompact, Stop and SubagentStop hooks, and with them the
+  PreToolUse security checks, context monitoring and checkpoints.
+- The `JERRY_PROJECT` environment variable.
+- Upstream's runtime under `src/` and its test suite, except the markdown AST code behind
+  `jerry ast`; `scripts/`; the `Makefile`; the documentation site and the docs no kept skill
+  reads; upstream's GitHub workflows and `.claude/` settings.
+- The rule files no kept skill reads. `.context/rules/` keeps `quality-enforcement.md`,
+  `architecture-standards.md` and `markdown-navigation-standards.md`.
+- The agent governance (`*.governance.yaml`) and composition (`composition/*.agent.yaml`) files,
+  and the CONTRIBUTING, SECURITY, CODE_OF_CONDUCT and GOVERNANCE documents.
+- The marketplace file: this repository is a plugin only.
+
+# Upstream history
+
+The entries below are upstream's (geekatron/jerry, up to v0.31.9), unchanged.
 
 ## [Unreleased]
 
@@ -163,8 +225,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Product Management and Product Marketing (`/pm-pmm`) skill with 5 specialized agents
 - User Experience (`/user-experience`) skill with 10 framework specialist agents
 
----
-
-> **Enforced**: The `changelog-check` CI job fails any PR that does not modify this file.
-> Exempt: Dependabot PRs, version-bump bot commits, and PRs with `[skip-changelog]` in the title.
-> The version-bump workflow promotes `[Unreleased]` entries to a versioned section when a new release tag is created.
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

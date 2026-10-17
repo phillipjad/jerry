@@ -8,7 +8,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MARK = "Modified from geekatron/jerry v0.31.9; see NOTICE."
 UPSTREAM_NOTICE = "Jerry Framework\nCopyright 2026 Adam Nowak\n"
+DERIVATIVE_NOTICE = (
+    "This product includes modifications by Phillip Miavelstuck (2026).\nhttps://github.com/phillipjad/jerry\n"
+)
 COMMENTLESS = {".json", ".lock"}
+PLAIN_TEXT = {"NOTICE"}
 LISTED = re.compile(r"^- `([^`]+)`$", re.MULTILINE)
 MOVED = re.compile(r"^- `([^`]+)` -> `([^`]+)`$", re.MULTILINE)
 
@@ -45,7 +49,7 @@ def moved() -> dict[str, str]:
 
 
 def is_marked(path: str) -> bool:
-    if Path(path).suffix in COMMENTLESS:
+    if Path(path).suffix in COMMENTLESS or path in PLAIN_TEXT:
         return path in listed_as_modified()
     return MARK in (ROOT / path).read_text(encoding="utf-8")
 
@@ -56,6 +60,10 @@ def test_should_keep_license_verbatim() -> None:
 
 def test_should_keep_upstream_attribution_in_notice() -> None:
     assert UPSTREAM_NOTICE in (ROOT / "NOTICE").read_text(encoding="utf-8")
+
+
+def test_should_add_this_derivative_to_notice() -> None:
+    assert DERIVATIVE_NOTICE in (ROOT / "NOTICE").read_text(encoding="utf-8")
 
 
 def test_should_mark_every_modified_upstream_file() -> None:
