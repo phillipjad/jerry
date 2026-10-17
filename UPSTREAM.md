@@ -38,3 +38,4 @@ These upstream files now live at a new path. Each one that changed carries the i
 - `tests/unit/domain/markdown_ast/test_schema.py` -> `tests/markdown_ast/test_schema.py`
 - `tests/unit/domain/markdown_ast/test_schema_registry.py` -> `tests/markdown_ast/test_schema_registry.py`
 - `tests/unit/interface/cli/test_ast_commands.py` -> `tests/test_ast_cli.py`
+- `CLAUDE.md` -> `.claude/CLAUDE.md`

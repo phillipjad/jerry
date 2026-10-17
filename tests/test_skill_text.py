@@ -82,7 +82,7 @@ Check = Callable[[str, str, str], bool]
 
 def shipped() -> list[Path]:
     return sorted(
-        [ROOT / "CLAUDE.md"]
+        [ROOT / ".claude" / "CLAUDE.md"]
         + [p for top in SHIPPED for p in (ROOT / top).rglob("*") if p.is_file() and not SKIPPED_DIRS & set(p.parts)]
     )
 
@@ -272,7 +272,7 @@ def test_should_scan_the_shipped_text() -> None:
     assert "skills/problem-solving/SKILL.md" in files
     assert ".context/rules/quality-enforcement.md" in files
     assert any(rel.startswith(("commands/", "docs/")) for rel in files)
-    assert "CLAUDE.md" in files
+    assert ".claude/CLAUDE.md" in files
 
 
 def test_should_not_use_the_uv_directory_flag() -> None:

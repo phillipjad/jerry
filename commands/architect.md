@@ -1,3 +1,8 @@
+---
+description: Write a PLAN.md into the focused project before implementing a task
+argument-hint: <task description>
+---
+
 # /architect Command
 
 Forces creation of a PLAN.md file before implementation begins.
