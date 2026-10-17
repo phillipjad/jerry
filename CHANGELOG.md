@@ -30,7 +30,8 @@ First release of this derivative. Changes are relative to geekatron/jerry v0.31.
 - A SubagentStart hook that gives each subagent the session's focus.
 - Windows support: the hooks run through `uv` in exec form on the standard library alone, read
   their input as UTF-8 and print ASCII JSON. CI runs on Windows, macOS and Linux with Python
-  3.11 and 3.14.
+  3.11 and 3.14, plus a smoke job that runs the hooks exactly as `hooks.json` declares them from a
+  plugin path with a space.
 
 ### Changed
 
