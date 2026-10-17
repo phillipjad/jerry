@@ -64,6 +64,17 @@ def test_should_find_every_command_listed_in_manifest() -> None:
     assert missing == []
 
 
+def test_should_give_every_command_a_single_line_description() -> None:
+    bad = [c for c in MANIFEST["commands"] if not is_single_line(frontmatter(ROOT / c).get("description", ""))]
+
+    assert bad == []
+
+
+def test_should_keep_developer_context_out_of_the_plugin_root() -> None:
+    assert not (ROOT / "CLAUDE.md").exists(), "Claude Code does not load CLAUDE.md from a plugin root"
+    assert (ROOT / ".claude" / "CLAUDE.md").is_file()
+
+
 def test_should_give_every_skill_a_single_line_name_and_description() -> None:
     bad = [
         f"{p.relative_to(ROOT).as_posix()}: {key}"
