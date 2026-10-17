@@ -16,6 +16,7 @@ These files cannot carry an in-file notice, so this list is their notice: each h
 modified from geekatron/jerry v0.31.9.
 
 - `.claude-plugin/plugin.json`
+- `NOTICE`
 - `hooks/hooks.json`
 - `uv.lock`
 
