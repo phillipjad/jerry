@@ -31,4 +31,19 @@ jobs:
       - name: Tests with coverage floor
         run: uv run --group test pytest --cov --cov-report=term-missing --cov-fail-under=90
 
+  hook-smoke:
+    name: hook smoke (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          enable-cache: false
+      - name: Hooks as Claude Code runs them, from a path with a space
+        run: uv run --no-project --python ">=3.11" tests/hook_smoke.py
+
 # Modified from geekatron/jerry v0.31.9; see NOTICE.
