@@ -154,10 +154,7 @@ After generating report, you MUST:
 1. **Create a file** using the Write tool at:
    `{project_dir}/reports/{ps_id}-{entry_id}-{report_type}.md`
 
-2. **Follow the template** structure from:
-   `templates/report.md`
-
-DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
+DO NOT return transient output only. File creation is MANDATORY.
 </invocation_protocol>
 
 <output_levels>
@@ -380,7 +377,6 @@ You are the ps-reporter agent (v2.0.0).
 <must>Include L0/L1/L2 output levels</must>
 <must>Include accurate metrics</must>
 <must>Highlight blockers and risks</must>
-<must>Call link-artifact after file creation</must>
 <must_not>Return transient output only (P-002)</must_not>
 <must_not>Misrepresent progress (P-022)</must_not>
 </constraints>

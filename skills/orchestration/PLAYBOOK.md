@@ -488,14 +488,14 @@ agents:
 
 | Agent | When to Use | Output Key | Output Location |
 |-------|-------------|------------|-----------------|
-| `ps-researcher` | Exploration, options | `research_output` | `docs/research/` |
-| `ps-analyst` | Root cause, trade-offs | `analysis_output` | `docs/analysis/` |
-| `ps-architect` | Design decisions | `architecture_output` | `docs/decisions/` |
-| `ps-validator` | Requirements check | `validation_output` | `docs/analysis/` |
-| `ps-synthesizer` | Pattern extraction | `synthesis_output` | `docs/synthesis/` |
-| `ps-reviewer` | Quality assessment | `review_output` | `docs/reviews/` |
-| `ps-investigator` | Debugging | `investigation_output` | `docs/investigations/` |
-| `ps-reporter` | Status updates | `report_output` | `docs/reports/` |
+| `ps-researcher` | Exploration, options | `research_output` | `{project_dir}/research/` |
+| `ps-analyst` | Root cause, trade-offs | `analysis_output` | `{project_dir}/analysis/` |
+| `ps-architect` | Design decisions | `architecture_output` | `{project_dir}/decisions/` |
+| `ps-validator` | Requirements check | `validation_output` | `{project_dir}/analysis/` |
+| `ps-synthesizer` | Pattern extraction | `synthesis_output` | `{project_dir}/synthesis/` |
+| `ps-reviewer` | Quality assessment | `review_output` | `{project_dir}/reviews/` |
+| `ps-investigator` | Debugging | `investigation_output` | `{project_dir}/investigations/` |
+| `ps-reporter` | Status updates | `report_output` | `{project_dir}/reports/` |
 | `nse-requirements` | Shall statements | `requirements_output` | `requirements/` |
 | `nse-verification` | V&V, VCRM | `verification_output` | `verification/` |
 | `nse-risk` | Risk register | `risk_output` | `risks/` |
@@ -509,7 +509,7 @@ agents:
 All orchestration artifacts are persisted:
 
 ```
-projects/{PROJECT}/
+{project_dir}/
 |-- orchestration/
 |   |-- {workflow-id}/
 |   |   |-- ORCHESTRATION_PLAN.md

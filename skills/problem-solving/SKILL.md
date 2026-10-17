@@ -1,6 +1,6 @@
 ---
 name: problem-solving
-description: Structured problem-solving framework with specialized agents for research, analysis, architecture decisions, validation, synthesis, reviews, investigations, and reporting. Use when tackling complex problems that need systematic exploration, evidence-based decisions, and persistent artifacts.
+description: Structured research, analysis and investigation through nine specialist agents (researcher, analyst, architect, critic, validator, synthesizer, reviewer, investigator, reporter) that each write a persistent L0/L1/L2 report. Use when the user asks to research, analyze, investigate, explore, compare or evaluate something, to find a root cause, debug, troubleshoot or diagnose a failure, to figure out why something happens or what went wrong, to synthesize findings, review code or a design, validate constraints, or improve a deliverable through creator-critic-revision cycles. Not for requirements, V&V, risk registers or formal technical reviews (use nasa-se), a one-shot adversarial critique or quality score (use adversary), multi-agent pipelines with state across sessions (use orchestration), or work items (use worktracker).
 version: "2.2.0"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, WebSearch, WebFetch, mcp__context7__resolve-library-id, mcp__context7__query-docs, mcp__memory-keeper__context_save, mcp__memory-keeper__context_get, mcp__memory-keeper__context_search
 activation-keywords:
@@ -77,15 +77,15 @@ Activate when:
 
 | Agent | Role | Output Location |
 |-------|------|-----------------|
-| `ps-researcher` | Research Specialist - Gathers information with citations | `docs/research/` |
-| `ps-analyst` | Analysis Specialist - Deep analysis (5 Whys, FMEA, trade-offs) | `docs/analysis/` |
-| `ps-architect` | Architecture Specialist - Creates ADRs with Nygard format | `docs/decisions/` |
-| `ps-critic` | **Quality Evaluator - Iterative refinement with quality scores** | `docs/critiques/` |
-| `ps-validator` | Validation Specialist - Verifies constraints with evidence | `docs/analysis/` |
-| `ps-synthesizer` | Synthesis Specialist - Pattern extraction across documents | `docs/synthesis/` |
-| `ps-reviewer` | Review Specialist - Code/design/security quality reviews | `docs/reviews/` |
-| `ps-investigator` | Investigation Specialist - Root cause of failures | `docs/investigations/` |
-| `ps-reporter` | Reporting Specialist - Status and progress reports | `docs/reports/` |
+| `ps-researcher` | Research Specialist - Gathers information with citations | `{project_dir}/research/` |
+| `ps-analyst` | Analysis Specialist - Deep analysis (5 Whys, FMEA, trade-offs) | `{project_dir}/analysis/` |
+| `ps-architect` | Architecture Specialist - Creates ADRs with Nygard format | `{project_dir}/decisions/` |
+| `ps-critic` | **Quality Evaluator - Iterative refinement with quality scores** | `{project_dir}/critiques/` |
+| `ps-validator` | Validation Specialist - Verifies constraints with evidence | `{project_dir}/analysis/` |
+| `ps-synthesizer` | Synthesis Specialist - Pattern extraction across documents | `{project_dir}/synthesis/` |
+| `ps-reviewer` | Review Specialist - Code/design/security quality reviews | `{project_dir}/reviews/` |
+| `ps-investigator` | Investigation Specialist - Root cause of failures | `{project_dir}/investigations/` |
+| `ps-reporter` | Reporting Specialist - Status and progress reports | `{project_dir}/reports/` |
 
 All agents produce output at three levels:
 - **L0 (ELI5):** Executive summary for non-technical stakeholders
@@ -137,7 +137,7 @@ You are the ps-researcher agent (v2.0.0).
 - **Topic:** Graph Database Options
 
 ## MANDATORY PERSISTENCE (P-002)
-Create file at: docs/research/work-024-e-101-graph-databases.md
+Create file at: {project_dir}/research/work-024-e-101-graph-databases.md
 
 ## RESEARCH TASK
 Research graph database options for the Jerry framework.
@@ -145,6 +145,8 @@ Focus on: Gremlin compatibility, Python support, embedded options.
 """,
 )
 ```
+
+**Project directory:** When more than one project is focused, every Task or Agent prompt names the target `{project_dir}` explicitly; with one project, `{project_dir}` is the focused one.
 
 ---
 
@@ -158,16 +160,16 @@ For complex problems requiring multiple perspectives:
 User Request: "I need to understand why our tests are slow and fix it"
 
 1. ps-researcher → Gather data on test execution patterns
-   Output: docs/research/work-024-e-001-test-performance.md
+   Output: {project_dir}/research/work-024-e-001-test-performance.md
 
 2. ps-analyst → Apply 5 Whys to identify root cause
-   Output: docs/analysis/work-024-e-002-root-cause.md
+   Output: {project_dir}/analysis/work-024-e-002-root-cause.md
 
 3. ps-architect → Create ADR for proposed solution
-   Output: docs/decisions/work-024-e-003-adr-test-optimization.md
+   Output: {project_dir}/decisions/work-024-e-003-adr-test-optimization.md
 
 4. ps-validator → Verify solution meets constraints
-   Output: docs/analysis/work-024-e-004-validation.md
+   Output: {project_dir}/analysis/work-024-e-004-validation.md
 ```
 
 ### State Passing Between Agents
@@ -195,7 +197,7 @@ Each agent uses the allowed tools differently. Here are concrete examples:
 
 ```
 1. Find existing research documents:
-   Glob(pattern="docs/research/**/*.md")
+   Glob(pattern="{project_dir}/research/**/*.md")
    → Returns list of prior research to reference
 
 2. Search for industry sources:
@@ -204,7 +206,7 @@ Each agent uses the allowed tools differently. Here are concrete examples:
 
 3. Create research output (MANDATORY per P-002):
    Write(
-       file_path="docs/research/work-024-e-001-event-sourcing.md",
+       file_path="{project_dir}/research/work-024-e-001-event-sourcing.md",
        content="# Research: Event Sourcing in Python\n\n## L0: Executive Summary\n..."
    )
    → Persist findings - transient output VIOLATES P-002
@@ -214,19 +216,19 @@ Each agent uses the allowed tools differently. Here are concrete examples:
 
 ```
 1. Find prior analyses to reference:
-   Glob(pattern="docs/analysis/**/*.md")
+   Glob(pattern="{project_dir}/analysis/**/*.md")
 
 2. Search for specific patterns in codebase:
    Grep(pattern="try|except|raise", path="src/", output_mode="content", -C=2)
    → Find error handling patterns for root cause analysis
 
 3. Read existing documentation:
-   Read(file_path="docs/research/work-024-e-001-event-sourcing.md")
+   Read(file_path="{project_dir}/research/work-024-e-001-event-sourcing.md")
    → Load prior research to inform analysis
 
 4. Create analysis output (MANDATORY per P-002):
    Write(
-       file_path="docs/analysis/work-024-e-002-root-cause.md",
+       file_path="{project_dir}/analysis/work-024-e-002-root-cause.md",
        content="# Root Cause Analysis: Build Failures\n\n## L0: Executive Summary\n..."
    )
 ```
@@ -235,7 +237,7 @@ Each agent uses the allowed tools differently. Here are concrete examples:
 
 ```
 1. Find existing ADRs for consistency:
-   Glob(pattern="docs/decisions/**/*.md")
+   Glob(pattern="{project_dir}/decisions/**/*.md")
    → Reference prior decisions
 
 2. Research architectural patterns:
@@ -244,7 +246,7 @@ Each agent uses the allowed tools differently. Here are concrete examples:
 
 3. Create ADR output (MANDATORY per P-002):
    Write(
-       file_path="docs/decisions/work-024-e-003-adr-persistence.md",
+       file_path="{project_dir}/decisions/work-024-e-003-adr-persistence.md",
        content="# ADR-042: Use Event Sourcing for Task History\n\n## Status\nPROPOSED\n..."
    )
 ```
@@ -263,7 +265,7 @@ All agents MUST persist their output to files. This ensures:
 ### Output Structure
 
 ```
-docs/
+{project_dir}/
 ├── research/           # ps-researcher outputs
 │   └── {ps-id}-{entry-id}-{topic}.md
 ├── analysis/           # ps-analyst and ps-validator outputs

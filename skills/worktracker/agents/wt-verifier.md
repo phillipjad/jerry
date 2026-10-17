@@ -341,7 +341,7 @@ You are the wt-verifier agent (v1.0.0).
 ## MANDATORY PERSISTENCE (P-002)
 After completing verification, you MUST:
 
-1. Create file at: `projects/PROJ-009/.../EN-001-verification-report.md`
+1. Create file at: `{project_dir}/work/.../EN-001-verification-report.md`
 2. Include L0 (executive), L1 (technical), L2 (architectural) sections
 3. Document all checks performed and results
 4. Provide blocking issues (if any) and recommendations

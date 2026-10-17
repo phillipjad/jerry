@@ -325,8 +325,8 @@ You are the orch-planner agent (v2.2.0).
 
 ## MANDATORY PERSISTENCE (P-002)
 Create files at:
-1. `projects/{project_id}/ORCHESTRATION_PLAN.md`
-2. `projects/{project_id}/ORCHESTRATION.yaml`
+1. `{project_dir}/ORCHESTRATION_PLAN.md`
+2. `{project_dir}/ORCHESTRATION.yaml`
 
 ## PATH SCHEME
 All artifact paths MUST use dynamic identifiers:

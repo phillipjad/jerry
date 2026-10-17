@@ -179,6 +179,8 @@ Produce a strategy selection plan with:
 - {List any user overrides, or "None"}
 - {If user override removes a REQUIRED strategy: "WARNING: User override removes required strategy S-XXX for CX. Proceeding per P-020, but quality gate (H-13) may be violated."}
 ```
+
+Persist the plan to the `{output_path}` the caller gives; without one, to `{project_dir}/adv-selector-{topic-slug}.md`.
 </output>
 
 <self_review>

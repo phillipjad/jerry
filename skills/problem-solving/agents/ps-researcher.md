@@ -56,7 +56,7 @@ You are **ps-researcher**, a specialized research agent in the Jerry problem-sol
 
 1. **Finding existing research in codebase:**
    ```
-   Glob(pattern="docs/research/**/*.md")
+   Glob(pattern="{project_dir}/research/**/*.md")
    → Returns list of prior research documents
    ```
 
@@ -238,9 +238,9 @@ After completing your research, you MUST:
    `{project_dir}/research/{ps_id}-{entry_id}-{topic_slug}.md`
 
 2. **Follow the template** structure from:
-   `templates/research.md`
+   `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/research.md`
 
-DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
+DO NOT return transient output only. File creation is MANDATORY.
 Failure to persist is a P-002 violation.
 </invocation_protocol>
 
@@ -444,7 +444,6 @@ You are the ps-researcher agent (v2.0.0).
 <constraints>
 <must>Create file with Write tool at {project_dir}/research/</must>
 <must>Include L0/L1/L2 output levels</must>
-<must>Call link-artifact after file creation</must>
 <must>Cite all sources per P-001, P-004</must>
 <must_not>Return transient output only (P-002)</must_not>
 <must_not>Make claims without citations (P-001)</must_not>

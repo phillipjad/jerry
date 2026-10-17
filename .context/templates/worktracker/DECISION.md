@@ -318,7 +318,6 @@ Required (REQ-DEC-018, REQ-C-005): Traceability to parent and related items.
 | Supersedes | {{SUPERSEDED_ID}} | Decision this replaces (if applicable) |
 | Superseded By | {{SUPERSEDING_ID}} | Decision that replaces this (if applicable) |
 | Related | {{RELATED_PATH}} | {{RELATED_DESCRIPTION}} |
-| Convention | [docs/conventions/worktracker.md](../../../conventions/worktracker.md) | Worktracker conventions |
 
 ---
 
@@ -409,3 +408,5 @@ TRACE:
 - nse-architecture-001-template-architecture.md: Section 1.2, 5.2
 - ps-analyst-001-pattern-analysis.md: Section 3.2 DECISION Blueprint
 -->
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

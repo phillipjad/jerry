@@ -354,7 +354,6 @@ Source materials, references, documentation
 |------|------|-------------|
 | Parent | [{{PARENT_LINK}}] | Parent work item |
 | Reference | {{REFERENCE_PATH}} | {{REFERENCE_DESCRIPTION}} |
-| Convention | [docs/conventions/worktracker.md](../../docs/conventions/worktracker.md) | Worktracker conventions |
 
 ---
 
@@ -559,3 +558,5 @@ TRACE:
 - EN-001: Hierarchical Worktracker Conventions (parent enabler)
 - en-001-v1-template-validation: Phase 2A template creation
 -->
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

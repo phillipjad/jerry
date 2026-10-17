@@ -75,7 +75,6 @@ Completed: 2026-02-02T14:30:00Z
 **Enforcement:**
 - wt-verifier agent validates before closure
 - Manual closures require verification checklist
-- CI checks enforce evidence links on DONE transitions
 
 **Verification Checklist:**
 ```markdown
@@ -222,7 +221,7 @@ Status: DONE
 1. **Git Commits:** `[Commit abc123](https://github.com/.../commit/abc123)`
 2. **Pull Requests:** `[PR #45](https://github.com/.../pull/45)`
 3. **Test Results:** `[Test output](./test-results.txt)`
-4. **Documentation:** `[ADR-005](../decisions/ADR-005-example.md)`
+4. **Documentation:** `[ADR-005]({project_dir}/decisions/ADR-005-example.md)` (example project path)
 5. **Screenshots:** `[Screenshot](./screenshot.png)` (for UI work)
 6. **CI Logs:** `[CI Build](https://ci-system/build/123)`
 

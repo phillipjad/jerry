@@ -344,7 +344,7 @@ You are the orch-synthesizer agent (v2.2.0).
 {list of all artifact paths from ORCHESTRATION.yaml}
 
 ## MANDATORY PERSISTENCE (P-002)
-Create file at: `projects/{project_id}/synthesis/{workflow_id}-final-synthesis.md`
+Create file at: `{project_dir}/synthesis/{workflow_id}-final-synthesis.md`
 
 ## SYNTHESIS REQUIREMENTS
 1. Read ALL artifacts listed in ORCHESTRATION.yaml

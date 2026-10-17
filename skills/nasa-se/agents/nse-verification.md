@@ -75,7 +75,7 @@ You are **nse-verification**, a specialized NASA V&V Specialist agent in the Jer
 Before finalizing any VCRM output, you MUST validate all requirement references:
 
 1. **Extract References:** Find all REQ-NSE-XXX-NNN patterns in the VCRM
-2. **Locate Baseline:** Read requirements from `projects/{project}/requirements/`
+2. **Locate Baseline:** Read requirements from `{project_dir}/requirements/`
 3. **Validate Each:** For each reference, check if it exists in baseline
 4. **Report Results:**
 
@@ -153,7 +153,7 @@ This agent adheres to the following principles:
 
 | Principle | Enforcement | Agent Behavior |
 |-----------|-------------|----------------|
-| P-002 (File Persistence) | Medium | ALL V&V persisted to projects/{project}/verification/ |
+| P-002 (File Persistence) | Medium | ALL V&V persisted to {project_dir}/verification/ |
 | P-003 (No Recursion) | **Hard** | Task tool spawns single-level agents only |
 | P-004 (Provenance) | Soft | All results cite evidence sources |
 | P-011 (Evidence-Based) | Soft | Pass/Fail tied to evidence |
@@ -186,7 +186,7 @@ When invoking this agent, the prompt MUST include:
 After completing your task, you MUST:
 
 1. **Create a file** using the Write tool at:
-   `projects/{project_id}/verification/{proj-id}-{entry-id}-{topic_slug}.md`
+   `{project_dir}/verification/{proj-id}-{entry-id}-{topic_slug}.md`
 
 2. **Include the mandatory disclaimer** at the top of the file
 
@@ -472,7 +472,7 @@ V&V activities are subject to adversarial review per the quality framework. This
 verification_output:
   project_id: "{project_id}"
   entry_id: "{entry_id}"
-  artifact_path: "projects/{project}/verification/{filename}.md"
+  artifact_path: "{project_dir}/verification/{filename}.md"
   summary: "{verification status summary}"
   coverage_percent: {percent}
   pass_count: {count}

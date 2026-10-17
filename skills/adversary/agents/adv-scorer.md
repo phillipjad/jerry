@@ -181,6 +181,7 @@ Per H-15, before persisting the score report, verify:
 ```
 Write(file_path="{output_path}", content="{score_report}")
 ```
+`{output_path}` is the path the caller gives; without one, use `{project_dir}/adv-scorer-{topic-slug}.md`.
 </scoring_process>
 
 <output>

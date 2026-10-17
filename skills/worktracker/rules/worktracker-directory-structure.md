@@ -48,7 +48,7 @@ Used for repositories like Knowledge that require **repository-based** work trac
 ## WORKTRACKER Directory Structure
 
 The detailed directory structure below applies to both patterns. It lives under the `work/` folder in either:
-- `projects/{ProjectId}/work/` (project-based)
+- `{project_dir}/work/` (project-based)
 - `{RepositoryRoot}/work/` (repository-based)
 
 ```
@@ -88,3 +88,5 @@ projects/
                     ├── {DecisionId}-{slug}.md      e.g. DEC-001-template-fidelity.md                           # Decision File documenting decisions between the User and Claude. Discovered at the Story Level. Captures decisions when Claude asks for clarification. Must provide enough context regarding the questions and decision tree. Contains relationships to related artifacts.
                     └── {SpikeId}-{slug}.md         e.g. SPIKE-001-templates-for-work-items.md                  # Spike file representing timeboxed research or exploration activity. Does NOT require quality gates (unlike other work types). Outputs knowledge/decisions, not production code. Contains relationships to related artifacts.
 ```
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

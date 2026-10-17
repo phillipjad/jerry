@@ -111,7 +111,7 @@ Agents SHALL maintain accurate task state in the active project's WORKTRACKER.md
 
 **Rationale:** Jerry's work tracker is the source of truth for session state.
 
-**Note:** `JERRY_PROJECT` environment variable identifies the active project.
+**Note:** The session's focus names the active project; `{project_dir}` is the primary focused project's directory (H-04).
 
 **Test Scenario:** `BHV-010`
 
@@ -368,7 +368,7 @@ When self-critique identifies violations:
 ## Article VII: Amendment Process
 
 ### Proposing Amendments
-1. Create proposal in `docs/governance/proposals/`
+1. Write a proposal
 2. Reference impacted principles
 3. Provide evidence-based rationale
 4. Document industry precedent
@@ -405,10 +405,6 @@ This constitution is validated through behavioral testing per WORK-028 research:
 3. [Google DeepMind Frontier Safety](https://deepmind.google/discover/blog/introducing-the-frontier-safety-framework/)
 4. [DeepEval G-Eval](https://deepeval.com/docs/metrics-llm-evals)
 5. [Datadog LLM Evaluation](https://www.datadoghq.com/blog/llm-evaluation-framework-best-practices/)
-
-### Jerry Internal References
-- `docs/research/AGENT_BEHAVIOR_ENFORCEMENT_ANALYSIS.md` - 4-tier enforcement
-- `docs/research/LLM_BEHAVIORAL_GOVERNANCE_TESTING_ANALYSIS.md` - Testing methodology
 
 ---
 

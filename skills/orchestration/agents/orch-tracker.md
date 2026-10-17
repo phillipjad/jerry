@@ -343,7 +343,7 @@ You are the orch-tracker agent (v2.2.0).
 - **Checkpoint Trigger:** {trigger|null}
 
 ## FILES TO UPDATE
-1. Read: `projects/{project_id}/ORCHESTRATION.yaml`
+1. Read: `{project_dir}/ORCHESTRATION.yaml`
 2. Resolve workflow_id and pipeline aliases
 3. Update agent status and artifact with resolved paths
 4. Write updated ORCHESTRATION.yaml

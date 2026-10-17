@@ -8,16 +8,16 @@
 
 | Section | Purpose |
 |---------|---------|
-| [HARD Rule Index](#hard-rule-index) | H-01 through H-36 (post-EN-001/EN-002 consolidation) |
+| [HARD Rule Index](#hard-rule-index) | H-01 through H-33 |
 | [Retired Rule IDs](#retired-rule-ids) | Tombstoned IDs from EN-002 consolidation |
 | [Quality Gate](#quality-gate) | Threshold, dimensions, weights, consequences |
 | [Criticality Levels](#criticality-levels) | C1-C4 decision classification with strategy sets |
 | [Tier Vocabulary](#tier-vocabulary) | HARD/MEDIUM/SOFT enforcement language |
-| [Two-Tier Enforcement Model](#two-tier-enforcement-model) | Tier A (L2-protected) vs Tier B (compensating controls) |
+| [Two-Tier Enforcement Model](#two-tier-enforcement-model) | Tier A (highest priority) vs Tier B (compensating controls) |
 | [HARD Rule Ceiling Derivation](#hard-rule-ceiling-derivation) | Principled upper boundary (25 rules) |
 | [HARD Rule Ceiling Exception Mechanism](#hard-rule-ceiling-exception-mechanism) | Controlled temporary expansion |
 | [Auto-Escalation Rules](#auto-escalation-rules) | AE-001 through AE-006e (graduated context fill sub-rules) |
-| [Enforcement Architecture](#enforcement-architecture) | L1-L5 layer definitions |
+| [Enforcement Architecture](#enforcement-architecture) | What enforces these rules in this plugin |
 | [Strategy Catalog](#strategy-catalog) | S-001 through S-015 (selected and excluded) |
 | [Implementation](#implementation) | Operational implementation via /adversary skill, skill routing decision table |
 | [References](#references) | Source document traceability |
@@ -33,11 +33,11 @@
 | H-01 | No recursive subagents (max 1 level) | P-003 |
 | H-02 | User authority -- never override | P-020 |
 | H-03 | No deception about actions/capabilities | P-022 |
-| H-04 | Active project REQUIRED | CLAUDE.md |
-| H-05 | UV-only Python environment (execution via `uv run`, dependencies via `uv add`) | python-environment |
+| H-04 | Tracked work runs in a focused project, or in an explicit none | SessionStart context |
+| H-05 | UV-only Python environment (execution via `uv run`, dependencies via `uv add`) | quality-enforcement |
 | H-07 | Architecture layer isolation (domain imports, application imports, composition root) | architecture-standards |
 | H-10 | One class per file | architecture-standards |
-| H-11 | Public function signatures (type hints + docstrings REQUIRED) | coding-standards |
+| H-11 | Public function signatures (type hints + docstrings REQUIRED) | quality-enforcement |
 | H-13 | Quality threshold >= 0.92 for C2+ | quality-enforcement |
 | H-14 | Creator-critic-revision cycle (3 min) | quality-enforcement |
 | H-15 | Self-review before presenting (S-010) | quality-enforcement |
@@ -45,22 +45,21 @@
 | H-17 | Quality scoring REQUIRED for deliverables | quality-enforcement |
 | H-18 | Constitutional compliance check (S-007) | quality-enforcement |
 | H-19 | Governance escalation per AE rules | quality-enforcement |
-| H-20 | Testing standards (BDD test-first Red phase, 90% line coverage REQUIRED) | testing-standards |
-| H-22 | Proactive skill invocation | mandatory-skill-usage |
-| H-23 | Markdown navigation (navigation table NAV-001, anchor links NAV-006) | markdown-navigation |
-| H-25 | Skill naming and structure (SKILL.md case, kebab-case folder, no README.md) | skill-standards |
-| H-26 | Skill description, paths, and registration (WHAT+WHEN+triggers, repo-relative paths, CLAUDE.md+AGENTS.md) | skill-standards |
+| H-20 | Testing standards (BDD test-first Red phase, 90% line coverage REQUIRED) | quality-enforcement |
+| H-22 | Proactive skill invocation | skill descriptions, SessionStart context |
+| H-23 | Markdown navigation (navigation table NAV-001, anchor links NAV-006) | markdown-navigation-standards |
 | H-31 | Clarify before acting when ambiguous (ask, don't assume) | quality-enforcement |
-| H-32 | GitHub Issue parity for jerry repo work items | project-workflow |
-| H-33 | AST-based parsing REQUIRED for worktracker entity ops | ast-enforcement |
-| H-34 | Agent definition standards (YAML schema validation, constitutional compliance triplet) | agent-development-standards |
-| H-36 | Agent routing standards (circuit breaker max 3 hops, keyword-first routing) | agent-routing-standards |
+| H-33 | AST-based parsing REQUIRED for worktracker entity ops | ast skill |
+
+**H-04 (project focus):** Tracked work (multi-step, or changing files or external systems) runs in a focused project, or in an explicit none. When the user has not named a project, ask them to pick one, create one (`projects new <slug>`), or work without one (`focus none`). Quick questions skip this. Subagents inherit the session's focus and never ask. The SessionStart context carries the runtime instruction and the exact command with its session id; the CLI is `uv run --project "${CLAUDE_PLUGIN_ROOT}" jerry focus show|set|add|none`.
+
+**H-22 (proactive skill invocation):** When a request matches a Jerry skill's description, invoke that skill proactively and early, without waiting for the user to name it, and combine skills when the work spans several (for example orchestration with problem-solving and nasa-se). The skills are adversary, architecture, ast, nasa-se, orchestration, problem-solving and worktracker. Each SKILL.md `description` says what the skill does, when to use it and which skill to use instead, and Claude Code lists these descriptions to the model; the SessionStart context carries the runtime instruction.
 
 ---
 
 ## Retired Rule IDs
 
-> Rule IDs below were retired during EN-002 consolidation (2026-02-21). These IDs MUST NOT be reassigned. Consequence: reassignment breaks historical cross-references in ADRs, worktracker entries, and commit messages that cite the original rule ID; traceability chains become ambiguous. Instead: when consolidating rules, retire the old ID into the Retired Rule IDs table and document the mapping to its replacement.
+> Rule IDs below were retired during EN-002 consolidation (2026-02-21), or dropped from this plugin because it does not ship the rule files that defined them. These IDs MUST NOT be reassigned. Consequence: reassignment breaks historical cross-references in ADRs, worktracker entries, and commit messages that cite the original rule ID; traceability chains become ambiguous. Instead: when consolidating rules, retire the old ID into the Retired Rule IDs table and document the mapping to its replacement.
 
 | Retired ID | Consolidated Into | Original Rule | Date |
 |------------|-------------------|---------------|------|
@@ -76,6 +75,11 @@
 | H-21 | H-20 (sub-item b) | 90% line coverage REQUIRED | 2026-02-21 |
 | H-35 | H-34 (sub-item b) | Constitutional compliance in agent definitions | 2026-02-21 |
 | H-37 | H-36 (sub-item b) | Keyword-first routing below 20 skills | 2026-02-21 |
+| H-25 | — (dropped) | Skill naming and structure | — |
+| H-26 | — (dropped) | Skill description, paths, and registration | — |
+| H-32 | — (dropped) | GitHub Issue parity for jerry repo work items | — |
+| H-34 | — (dropped) | Agent definition standards | — |
+| H-36 | — (dropped) | Agent routing standards | — |
 
 ---
 
@@ -85,7 +89,7 @@
 
 **Below threshold:** Deliverable REJECTED; revision required per H-13.
 
-**Scoring mechanism:** S-014 (LLM-as-Judge) with dimension-level rubrics (ADR-EPIC002-001; `projects/PROJ-001-oss-release/decisions/ADR-EPIC002-001-strategy-selection.md`)
+**Scoring mechanism:** S-014 (LLM-as-Judge) with dimension-level rubrics (ADR-EPIC002-001)
 
 | Dimension | Weight |
 |-----------|--------|
@@ -146,54 +150,50 @@ Below-threshold deliverables are subdivided into operational bands for workflow 
 
 ### Two-Tier Enforcement Model
 
-Rules are classified by their enforcement reliability:
+Rules are classified by priority:
 
-**Tier A** — L2 engine-protected (per-prompt re-injection + compensating L3/L5 controls):
+**Tier A** — highest-priority HARD rules:
 
-| Rules | L2 Source | Count |
-|-------|-----------|-------|
-| H-01, H-02, H-03 | quality-enforcement.md rank 1 | 3 |
-| H-04 | project-workflow.md rank 8 | 1 |
-| H-05 | python-environment.md rank 3 | 1 |
-| H-07, H-10 | architecture-standards.md rank 4 | 2 |
-| H-11 | coding-standards.md rank 7 | 1 |
-| H-13, H-14, H-31 | quality-enforcement.md rank 2 | 3 |
-| H-15 | quality-enforcement.md rank 5 | 1 |
-| H-19 | quality-enforcement.md rank 8 | 1 |
-| H-20 | testing-standards.md rank 5 | 1 |
-| H-22 | mandatory-skill-usage.md rank 6 | 1 |
-| H-23 | markdown-navigation.md rank 7 | 1 |
-| H-25, H-26 | skill-standards.md rank 7 | 2 |
-| H-32 | project-workflow.md rank 9 | 1 |
-| H-33 | quality-enforcement.md rank 10 | 1 |
-| H-34 | agent-development-standards.md rank 5 | 1 |
-| H-36 | agent-routing-standards.md rank 6 | 1 |
-| **Tier A Total** | | **22** |
+| Rules | Count |
+|-------|-------|
+| H-01, H-02, H-03 | 3 |
+| H-05 | 1 |
+| H-07, H-10 | 2 |
+| H-11 | 1 |
+| H-13, H-14, H-31 | 3 |
+| H-15 | 1 |
+| H-19 | 1 |
+| H-20 | 1 |
+| H-22 | 1 |
+| H-23 | 1 |
+| H-33 | 1 |
+| **Tier A Total** | **16** |
 
-**Tier B** — Structural L2 (L1 awareness only, compensating controls prevent bypass):
+**Tier B** — enforced by compensating controls:
 
 | Rule | Compensating Controls | Count |
 |------|----------------------|-------|
-| H-16 (steelman before critique) | /adversary skill enforcement, L1 rule awareness | 1 |
+| H-16 (steelman before critique) | /adversary skill enforcement | 1 |
 | H-17 (quality scoring) | /adversary + /problem-solving skill enforcement | 1 |
 | H-18 (constitutional compliance) | S-007 strategy enforcement in /adversary skill | 1 |
-| **Tier B Total** | | **3** |
+| H-04 (project focus) | SessionStart context, `focus` CLI | 1 |
+| **Tier B Total** | | **4** |
 
-**Total:** 25 HARD rules (22 Tier A + 3 Tier B)
+**Total:** 20 HARD rules (16 Tier A + 4 Tier B)
 
-> **Note:** Tier B rules are candidates for L2 marker addition pending effectiveness measurement (DEC-005). Current compensating controls provide adequate enforcement through deterministic mechanisms (hooks, skills, CI gates). H-04 and H-32 were promoted from Tier B to Tier A via PROJ-014 ADR-004 (compaction resilience).
+> **Note:** The compensating controls are the skills, agents and SessionStart hook named in the table.
 
 ### HARD Rule Ceiling Derivation
 
 The ceiling of 25 HARD rules is derived from three independent constraint families (EN-002, C4 derivation scored 0.95 PASS, 2 iterations):
 
 1. **Cognitive Load** — LLM instruction-following reliability degrades when rule sets exceed ~20-25 items, consistent with chunking limits observed in structured prompt compliance benchmarks. At 25 rules, the framework operates at the practical upper bound; beyond this, enforcement reliability drops measurably.
-2. **Enforcement Coverage** — L2 per-prompt re-injection operates within an 850-token budget. Current 25 rules consume ~619/850 tokens (72.8%) via 18 L2-REINJECT markers. Each additional rule requires ~30-50 tokens of reinforcement capacity, leaving room for ~4-5 additional markers before budget exhaustion.
-3. **Governance Burden** — Each HARD rule requires: (a) constitutional justification, (b) at least one enforcement mechanism (L2 marker, L3 AST gate, L5 CI check, or skill enforcement), and (c) ongoing maintenance. At 25 rules, governance overhead is manageable; beyond 28, the review burden for ceiling exceptions approaches the cost of the rules themselves.
+2. **Enforcement Coverage** — The rules were sized to fit an 850-token reminder budget: 25 rules take ~619 tokens (72.8%) at ~30-50 tokens each, leaving room for ~4-5 more.
+3. **Governance Burden** — Each HARD rule requires: (a) constitutional justification, (b) at least one enforcement mechanism (a skill, an agent, a hook or a `jerry ast` check), and (c) ongoing maintenance. At 25 rules, governance overhead is manageable; beyond 28, the review burden for ceiling exceptions approaches the cost of the rules themselves.
 
-**Convergence:** All three families independently converge on 25 as the practical upper bound. The absolute maximum (28) is enforced by an independent constant in the L5 gate script, preventing self-referential ceiling manipulation.
+**Convergence:** All three families independently converge on 25 as the practical upper bound. The absolute maximum is 28.
 
-**Current count:** 25 HARD rules (post-EN-001/EN-002 consolidation). Zero headroom. H-34 (agent definition standards) and H-36 (agent routing standards) added via EN-001 with H-20/H-21 consolidation to stay at ceiling.
+**Current count:** 20 HARD rules. H-25, H-26, H-32, H-34 and H-36 are retired because this plugin does not ship the rule files that defined them (see Retired Rule IDs).
 
 ### HARD Rule Ceiling Exception Mechanism
 
@@ -205,15 +205,14 @@ Temporary ceiling expansion is permitted under controlled conditions:
 | Scope | Maximum N=3 additional slots (ceiling+3 = 28 absolute max) |
 | Concurrency | Maximum 1 active exception at any time (M-09: no stacking) |
 | Duration | 3 months maximum; consolidation plan required |
-| Enforcement | L5 CI gate must be updated to reflect temporary ceiling |
 | Reversion | Consolidation or demotion must restore count to <= 25 within 3 months |
 | Tracking | Exception MUST be tracked as a worktracker entity with reversion deadline |
 
-**Process:** File an ADR per AE-003/AE-004. If approved after C4 review, update the L5 CI gate ceiling parameter in quality-enforcement.md (the `_ABSOLUTE_MAX_CEILING` constant in `check_hard_rule_ceiling.py` enforces the absolute maximum independently). Track the temporary expansion in the worktracker with a reversion deadline. The L5 CI gate will automatically enforce the updated ceiling on every commit and in GitHub Actions CI.
+**Process:** File an ADR per AE-003/AE-004. If approved after C4 review, record the temporary ceiling in quality-enforcement.md and track the expansion in the worktracker with a reversion deadline.
 
-**Reversion enforcement (C-03):** The L5 CI gate provides automated enforcement — when the exception expires, the ceiling value is reverted to 25 and any excess rules will cause CI failure. The worktracker reversion deadline provides human-visible tracking.
+**Reversion enforcement (C-03):** The worktracker reversion deadline tracks the exception; when it expires, the ceiling reverts to 25.
 
-**EN-001 phasing note (C-02):** H-32 and H-33 were added by PROJ-005 via merge. EN-001 added H-34 (agent definition standards, compound: schema validation + constitutional compliance) and H-36 (agent routing standards, compound: circuit breaker + keyword-first routing) with H-20/H-21 testing consolidation. Current count: 25/25. H-35, H-37, H-21 retired into compound parents.
+**EN-001 phasing note (C-02):** H-32 and H-33 were added by PROJ-005 via merge. EN-001 added H-34 (agent definition standards, compound: schema validation + constitutional compliance) and H-36 (agent routing standards, compound: circuit breaker + keyword-first routing) with H-20/H-21 testing consolidation. H-35, H-37, H-21 retired into compound parents.
 
 ---
 
@@ -236,23 +235,19 @@ Temporary ceiling expansion is permitted under controlled conditions:
 
 ## Enforcement Architecture
 
-| Layer | Timing | Function | Context Rot | Tokens |
-|-------|--------|----------|-------------|--------|
-| L1 | Session start | Behavioral foundation via rules | Vulnerable | ~12,500 |
-| L2 | Every prompt | Re-inject critical rules | Immune | ~850/prompt |
-| L3 | Before tool calls | Deterministic gating (AST) | Immune | 0 |
-| L4 | After tool calls | Output inspection, self-correction | Mixed | 0-1,350 |
-| L5 | Commit/CI | Post-hoc verification | Immune | 0 |
+| Layer | Timing | Function | Context Rot |
+|-------|--------|----------|-------------|
+| L1 | Session and subagent start | SessionStart and SubagentStart hooks inject the project focus; SessionStart also states H-22 | Vulnerable |
+| L3 | On demand | `jerry ast validate` checks entity files deterministically (H-33) | Immune |
+| L4 | During work | Skills and agents read these rules and self-review their output (H-15) | Mixed |
 
-**Context Rot:** Vulnerable = degrades with context fill. Immune = unaffected. Mixed = deterministic gating immune, self-correction vulnerable.
-
-**Total enforcement budget:** ~15,350 tokens (7.7% of 200K context)
+**Context Rot:** Vulnerable = degrades with context fill. Immune = unaffected. Mixed = deterministic checks immune, self-correction vulnerable.
 
 ---
 
 ## Strategy Catalog
 
-**Selected** (10 active strategies, ranked by composite score from ADR-EPIC002-001; `projects/PROJ-001-oss-release/decisions/ADR-EPIC002-001-strategy-selection.md`):
+**Selected** (10 active strategies, ranked by composite score from ADR-EPIC002-001):
 
 | ID | Strategy | Score | Family |
 |----|----------|-------|--------|
@@ -267,7 +262,7 @@ Temporary ceiling expansion is permitted under controlled conditions:
 | S-011 | Chain-of-Verification | 3.75 | Structured Decomposition |
 | S-001 | Red Team Analysis | 3.35 | Role-Based Adversarialism |
 
-**Excluded** (reconsideration conditions in ADR-EPIC002-001; `projects/PROJ-001-oss-release/decisions/ADR-EPIC002-001-strategy-selection.md`):
+**Excluded** (reconsideration conditions in ADR-EPIC002-001):
 
 | ID | Strategy | Exclusion Reason |
 |----|----------|------------------|
@@ -319,7 +314,7 @@ Use this table to determine which skill or agent handles a given quality request
 | "Check if this ADR meets constitutional constraints" | /adversary (adv-executor) | S-007 Constitutional AI Critique |
 | "Help me research why this approach failed" | /problem-solving | Research and root-cause analysis |
 
-> **Disambiguation rule:** If the request involves iterative improvement with revision cycles, use `/problem-solving` (ps-critic). If the request involves a one-shot adversarial assessment, strategy execution, or tournament scoring, use `/adversary`. See `mandatory-skill-usage.md` trigger map for keyword-level routing.
+> **Disambiguation rule:** If the request involves iterative improvement with revision cycles, use `/problem-solving` (ps-critic). If the request involves a one-shot adversarial assessment, strategy execution, or tournament scoring, use `/adversary`.
 
 ---
 
@@ -327,8 +322,8 @@ Use this table to determine which skill or agent handles a given quality request
 
 | Source | Content | Location |
 |--------|---------|----------|
-| ADR-EPIC002-001 | Strategy selection, composite scores, exclusion rationale | `projects/PROJ-001-oss-release/decisions/ADR-EPIC002-001-strategy-selection.md` |
-| ADR-EPIC002-002 | 5-layer enforcement architecture, token budgets | `projects/PROJ-001-oss-release/decisions/ADR-EPIC002-002-enforcement-architecture.md` |
+| ADR-EPIC002-001 | Strategy selection, composite scores, exclusion rationale | — |
+| ADR-EPIC002-002 | 5-layer enforcement architecture, token budgets | — |
 | EPIC-002 Final Synthesis | Consolidated design, auto-escalation rules, per-criticality sets | — |
 
 <!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

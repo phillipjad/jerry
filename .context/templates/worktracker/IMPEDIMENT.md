@@ -357,7 +357,6 @@ Required (REQ-C-005): Links to blocked work items and resolution items.
 | Resolution Task | [{{RESOLUTION_TASK}}]({{RESOLUTION_TASK_PATH}}) | Task created to resolve (if applicable) |
 | Related Bug | [{{RELATED_BUG}}]({{RELATED_BUG_PATH}}) | Related bug (if applicable) |
 | External | {{EXTERNAL_LINK}} | External dependency reference |
-| Convention | [docs/conventions/worktracker.md](../../../conventions/worktracker.md) | Worktracker conventions |
 
 ---
 
@@ -465,3 +464,5 @@ TRACE:
 - EN-001: Hierarchical Worktracker Conventions (parent enabler)
 - ps-analyst-001-pattern-analysis.md: Section 3.3 IMPEDIMENT Blueprint
 -->
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

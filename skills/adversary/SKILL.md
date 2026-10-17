@@ -1,6 +1,6 @@
 ---
 name: adversary
-description: On-demand adversarial quality reviews using strategy templates. Selects strategies by criticality level, executes adversarial templates against deliverables, and scores quality using LLM-as-Judge rubric. Integrates with quality-enforcement.md SSOT.
+description: Standalone adversarial review of a finished deliverable (plan, design, code, document or decision) with the quality framework's strategy templates, chosen by criticality C1-C4, and S-014 LLM-as-Judge scoring against the 0.92 quality gate. Use when the user asks for an adversarial review or critique, a rigorous or formal critique, to red team an idea, play devil's advocate against it, steelman it, run a pre-mortem, FMEA or inversion on it, score a deliverable or check it against the quality gate, or run a tournament review. Not for iterative improvement with revision cycles, research or root cause analysis (use problem-solving), routine bug-hunting code review, or penetration testing.
 version: "1.0.0"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch, mcp__context7__resolve-library-id, mcp__context7__query-docs
 activation-keywords:
@@ -174,7 +174,7 @@ You are the adv-selector agent (v1.0.0).
 ## ADV CONTEXT (REQUIRED)
 - **Criticality Level:** C3
 - **Deliverable Type:** Architecture Decision Record
-- **Deliverable Path:** docs/decisions/adr-042-persistence.md
+- **Deliverable Path:** {project_dir}/decisions/adr-042-persistence.md
 
 ## MANDATORY PERSISTENCE (P-002)
 Create file at: {output_path}

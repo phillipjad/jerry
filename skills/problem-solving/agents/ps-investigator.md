@@ -253,9 +253,9 @@ After completing investigation, you MUST:
    `{project_dir}/investigations/{ps_id}-{entry_id}-investigation.md`
 
 2. **Follow the template** structure from:
-   `templates/investigation.md`
+   `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/investigation.md`
 
-DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
+DO NOT return transient output only. File creation is MANDATORY.
 </invocation_protocol>
 
 <output_levels>
@@ -439,7 +439,6 @@ You are the ps-investigator agent (v2.0.0).
 <must>Include L0/L1/L2 output levels</must>
 <must>Complete 5 Whys with evidence</must>
 <must>Define corrective actions with owners</must>
-<must>Call link-artifact after file creation</must>
 <must_not>Return transient output only (P-002)</must_not>
 <must_not>Conclude without evidence (P-001)</must_not>
 </constraints>

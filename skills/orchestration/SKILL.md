@@ -1,6 +1,6 @@
 ---
 name: orchestration
-description: Multi-agent workflow orchestration with state tracking, checkpointing, and cross-pollinated pipelines. Use when coordinating parallel agent pipelines, managing sync barriers, or tracking complex workflow execution state across sessions.
+description: Plans and tracks multi-agent workflows with parallel pipelines, sync barriers, quality gates and checkpoints, keeping the state in ORCHESTRATION.yaml so the work resumes across sessions. Use when the user asks for a multi-phase or multi-agent workflow or a pipeline, to coordinate several agents or skills, to run work in parallel, to split a large effort into phases with gates, or to resume or report on such a workflow. Not for single-agent tasks or simple sequential steps (invoke the agent or skill directly), research or root cause analysis (use problem-solving), or requirements and V&V (use nasa-se).
 version: "2.2.0"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, WebSearch, WebFetch, mcp__memory-keeper__context_save, mcp__memory-keeper__context_get, mcp__memory-keeper__context_search
 activation-keywords:
@@ -86,7 +86,9 @@ Every orchestrated workflow creates three artifacts:
 | `ORCHESTRATION_WORKTRACKER.md` | Markdown | Tactical execution documentation | Humans |
 | `ORCHESTRATION.yaml` | YAML | Machine-readable state (SSOT) | Claude/Automation |
 
-**Location:** `projects/{project_id}/`
+**Location:** `{project_dir}/`
+
+**Project directory:** When more than one project is focused, every Task or Agent prompt names the target `{project_dir}` explicitly; with one project, `{project_dir}` is the focused one.
 
 ---
 
@@ -96,7 +98,7 @@ Every orchestrated workflow creates three artifacts:
 |-------|------|--------|
 | `orch-planner` | Creates orchestration plan with workflow diagram | `ORCHESTRATION_PLAN.md` |
 | `orch-tracker` | Updates execution state after agent completion | `ORCHESTRATION.yaml`, `ORCHESTRATION_WORKTRACKER.md` |
-| `orch-synthesizer` | Creates final workflow synthesis | `synthesis/workflow-synthesis.md` |
+| `orch-synthesizer` | Creates final workflow synthesis | `{project_dir}/synthesis/{workflow_id}-final-synthesis.md` |
 
 ### Important: P-003 Compliance
 
@@ -185,14 +187,14 @@ Parallel execution with synthesis.
 
 ```
 # Copy templates to your project
-cp skills/orchestration/templates/ORCHESTRATION_PLAN.template.md \
-   projects/{PROJECT}/ORCHESTRATION_PLAN.md
+cp "${CLAUDE_PLUGIN_ROOT}"/skills/orchestration/templates/ORCHESTRATION_PLAN.template.md \
+   "{project_dir}"/ORCHESTRATION_PLAN.md
 
-cp skills/orchestration/templates/ORCHESTRATION_WORKTRACKER.template.md \
-   projects/{PROJECT}/ORCHESTRATION_WORKTRACKER.md
+cp "${CLAUDE_PLUGIN_ROOT}"/skills/orchestration/templates/ORCHESTRATION_WORKTRACKER.template.md \
+   "{project_dir}"/ORCHESTRATION_WORKTRACKER.md
 
-cp skills/orchestration/templates/ORCHESTRATION.template.yaml \
-   projects/{PROJECT}/ORCHESTRATION.yaml
+cp "${CLAUDE_PLUGIN_ROOT}"/skills/orchestration/templates/ORCHESTRATION.template.yaml \
+   "{project_dir}"/ORCHESTRATION.yaml
 ```
 
 Or use the `orch-planner` agent:

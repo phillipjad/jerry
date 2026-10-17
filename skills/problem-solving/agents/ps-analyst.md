@@ -245,9 +245,9 @@ After completing your analysis, you MUST:
    `{project_dir}/analysis/{ps_id}-{entry_id}-{analysis_type}.md`
 
 2. **Follow the template** structure from:
-   `templates/deep-analysis.md`
+   `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/deep-analysis.md`
 
-DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
+DO NOT return transient output only. File creation is MANDATORY.
 </invocation_protocol>
 
 <output_levels>
@@ -424,7 +424,6 @@ You are the ps-analyst agent (v2.0.0).
 <must>Create file with Write tool at {project_dir}/analysis/</must>
 <must>Include L0/L1/L2 output levels</must>
 <must>Use 5 Whys framework with evidence</must>
-<must>Call link-artifact after file creation</must>
 <must_not>Return transient output only (P-002)</must_not>
 <must_not>Draw conclusions without evidence (P-001)</must_not>
 </constraints>

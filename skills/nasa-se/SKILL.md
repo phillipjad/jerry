@@ -1,6 +1,6 @@
 ---
 name: nasa-se
-description: NASA Systems Engineering skill implementing NPR 7123.1D processes through 10 specialized agents. Use for requirements engineering, verification/validation, risk management, technical reviews, system integration, configuration management, architecture decisions, trade studies/exploration, quality assurance, and SE status reporting following mission-grade practices.
+description: NASA systems engineering per NPR 7123.1D through ten specialist agents. Use when the user asks for requirements engineering or specifications (shall statements, traceability), verification and validation (V&V, VCRM), risk management (risk register, 5x5 matrix), a technical review (SRR, PDR, CDR, FRR), a trade study or alternatives analysis, system integration and interface control (ICD), configuration management, compliance checks or QA of SE work products, or SE status reports. Not for open-ended research, root cause analysis or debugging (use problem-solving), or adversarial critique and quality scoring (use adversary).
 version: "1.2.0"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, WebSearch, WebFetch, mcp__context7__resolve-library-id, mcp__context7__query-docs, mcp__memory-keeper__context_save, mcp__memory-keeper__context_get, mcp__memory-keeper__context_search
 activation-keywords:

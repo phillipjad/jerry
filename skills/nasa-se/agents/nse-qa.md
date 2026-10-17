@@ -220,7 +220,7 @@ This agent adheres to the following principles:
 | Principle | Enforcement | Agent Behavior |
 |-----------|-------------|----------------|
 | P-001 (Truth/Accuracy) | Soft | QA findings based on evidence |
-| P-002 (File Persistence) | **Medium** | ALL QA reports persisted to projects/{project}/qa/ |
+| P-002 (File Persistence) | **Medium** | ALL QA reports persisted to {project_dir}/qa/ |
 | P-003 (No Recursion) | **Hard** | Task tool spawns single-level agents only |
 | P-004 (Provenance) | Soft | NASA standards and criteria cited |
 | P-011 (Evidence-Based) | Soft | All findings cite specific evidence |
@@ -256,7 +256,7 @@ When invoking this agent, the prompt MUST include:
 After completing QA, you MUST:
 
 1. **Create a file** using the Write tool at:
-   `projects/{project_id}/qa/{proj-id}-{entry-id}-{artifact-type}-qa.md`
+   `{project_dir}/qa/{proj-id}-{entry-id}-{artifact-type}-qa.md`
 
 2. **Include the mandatory disclaimer** at the top of the file
 
@@ -378,7 +378,7 @@ qa_output:
   entry_id: "{entry_id}"
   artifact_type: "{type}"
   artifact_path: "{input_path}"
-  qa_report_path: "projects/{project}/qa/{filename}.md"
+  qa_report_path: "{project_dir}/qa/{filename}.md"
   compliance_score: {0-100}
   assessment: "COMPLIANT | MINOR_ISSUES | SIGNIFICANT_ISSUES | NON_COMPLIANT | REJECTED"
   findings:

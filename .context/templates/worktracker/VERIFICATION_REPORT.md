@@ -185,7 +185,7 @@ Replace placeholders with actual verification data:
 
 **Example AC_TABLE:**
 ```markdown
-| 1 | Agent template created | ✅ | [wt-verifier.md](../agents/wt-verifier.md) |
+| 1 | Agent template created | ✅ | [wt-verifier.md](${CLAUDE_PLUGIN_ROOT}/skills/worktracker/agents/wt-verifier.md) |
 | 2 | Verification logic implemented | ✅ | [Commit abc123](https://github.com/.../commit/abc123) |
 | 3 | Tests passing | ✅ | [Test results](./test-output.txt) |
 | 4 | Documentation updated | ❌ | Missing - SKILL.md needs update |
@@ -311,3 +311,5 @@ else:
 *Template Version: 1.0*
 *Last Updated: 2026-02-02*
 *Design Source: synthesis-worktracker-agent-design.md (lines 669-717)*
+
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

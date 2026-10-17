@@ -7,7 +7,7 @@
 >
 > **IMPORTANT:** This is the CORE template containing ~73% shared content.
 > Domain-specific content is provided via extension files (PS_EXTENSION.md, NSE_EXTENSION.md).
-> Use the composition script to generate complete templates.
+> Compose complete templates by hand: see Composition Notes.
 
 ---
 
@@ -297,7 +297,7 @@ When chained with other agents, use explicit state passing:
 {agent-type}_output:
   id: "{id}"
   entry_id: "{entry_id}"
-  artifact_path: "projects/{project}/{output-type}/{filename}.md"
+  artifact_path: "{project_dir}/{output-type}/{filename}.md"
   summary: "{key-findings-summary}"
   next_agent_hint: "{suggested-next-agent}"
 ```
@@ -315,10 +315,9 @@ If invoked after another agent, check session.state for relevant output keys.
 
 ## Usage Instructions
 
-### 1. Use Composition Script
-```bash
-python3 scripts/compose_agent_template.py --domain {ps|nse} --output "{output-path}"
-```
+### 1. Compose the Template
+Fill each `{%DOMAIN_*%}` extension point of `AGENT_TEMPLATE_CORE.md` from the domain extension file (see
+Composition Notes).
 
 ### 2. Copy Composed Template
 ```bash
@@ -369,8 +368,8 @@ This core template is designed to be composed with domain extensions:
 
 | Domain | Extension File | Composed Output |
 |--------|----------------|-----------------|
-| PS (Problem-Solving) | `skills/problem-solving/agents/PS_EXTENSION.md` | `PS_AGENT_TEMPLATE.md` |
-| NSE (NASA SE) | `skills/nasa-se/agents/NSE_EXTENSION.md` | `NSE_AGENT_TEMPLATE.md` |
+| PS (Problem-Solving) | `skills/problem-solving/templates/PS_EXTENSION.md` | `PS_AGENT_TEMPLATE.md` |
+| NSE (NASA SE) | `skills/nasa-se/templates/NSE_EXTENSION.md` | `NSE_AGENT_TEMPLATE.md` |
 
 **Composition Process:**
 1. Load core template

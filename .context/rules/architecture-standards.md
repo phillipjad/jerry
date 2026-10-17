@@ -56,7 +56,7 @@ src/
   bootstrap.py      # Composition root (H-07c)
 ```
 
-**Project workspace:** `projects/PROJ-{NNN}-{slug}/` with `PLAN.md`, `WORKTRACKER.md`, `.jerry/data/items/`, `work/`, `research/`, `synthesis/`, `decisions/`.
+**Project workspace:** `{project_dir}`, a `PROJ-{NNN}-{slug}/` folder in a projects root, with `project.toml`, `RESUME.md`, `PLAN.md`, `WORKTRACKER.md`, `work/`, `research/`, `synthesis/`, `decisions/`.
 
 ---
 
@@ -101,7 +101,7 @@ Override requires documented justification.
 - Value objects SHOULD use `@dataclass(frozen=True, slots=True)` with validation in `__post_init__`.
 - Domain events SHOULD use past tense naming and include `EVENT_TYPE` class variable.
 - Aggregates SHOULD implement `apply_event()` and `collect_events()`.
-- Repositories SHOULD implement `IRepository` protocol. See `.context/patterns/` for reference.
+- Repositories SHOULD implement `IRepository` protocol.
 - Bounded contexts SHOULD communicate via domain events or shared kernel only.
 - `__init__.py` SHOULD explicitly export public API via `__all__`.
 

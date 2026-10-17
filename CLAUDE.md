@@ -1,101 +1,40 @@
-# CLAUDE.md - Jerry Framework Root Context
+# CLAUDE.md
 
-> Procedural memory for Claude Code. Loaded once at session start.
+Developer context for working in this repository. Claude Code does not load this file for people who
+install the plugin.
 
-<!-- L2-REINJECT: rank=1, content="P-003: No recursive subagents (max 1 level). P-020: User authority -- NEVER override. P-022: NEVER deceive about actions/capabilities/confidence. Violations blocked." -->
+## What this is
 
-## Document Sections
+Jerry is a Claude Code plugin for project-based work. It discovers projects (`PROJ-NNN-slug` folders
+holding a `project.toml` and a `RESUME.md`), keeps a per-session focus of one or more of them, and
+ships skills and agents that write their output into the focused project.
 
-| Section | Purpose |
-|---------|---------|
-| [Identity](#identity) | Framework purpose and core problem |
-| [Critical Constraints](#critical-constraints-hard) | Constitutional HARD rules H-01 to H-05 |
-| [Navigation](#navigation) | Where to find information |
-| [Quick Reference](#quick-reference) | CLI and skill invocation |
+## Layout
 
----
+| Path | Holds |
+|------|-------|
+| `src/jerry` | The `jerry` CLI (`projects`, `focus`, `ast`), project discovery, the session focus and the hook output |
+| `hooks` | `hooks.json` and `run.py`, which runs the SessionStart and SubagentStart hooks |
+| `skills`, `commands` | The skills with their agents, and the `/architect` command |
+| `.context` | Rules and templates the skills read |
+| `docs` | Governance, exemplar templates and schemas the skills read |
+| `tests` | The pytest suite |
 
-## Identity
+## Working here
 
-**Jerry** -- Framework for behavior/workflow guardrails. Accrues knowledge, wisdom, experience.
+- Test-first: write the test, watch it fail, then write the code.
+- Run the tests with `uv run --group test pytest`.
+- CI runs 6 cells (ubuntu, windows and macos on Python 3.11 and 3.14) with a 90% coverage floor.
+- `hooks/run.py`, `src/jerry/hooks.py`, `projects.py` and `session.py` use the standard library only:
+  the hooks run without the project environment.
+- Test fixtures are generic or Dragon Ball Z; no third-party names.
 
-**Core Problem**: Context Rot -- LLM performance degrades as context fills.
-**Core Solution**: Filesystem as infinite memory. Persist state to files; load selectively.
+## Licence
 
----
+This repository derives from geekatron/jerry v0.31.9 under the Apache License 2.0; `UPSTREAM.md`
+records the source and `upstream-manifest.txt` the imported files. An upstream file you modify
+carries the notice `Modified from geekatron/jerry v0.31.9; see NOTICE.` as a comment (an HTML
+comment in markdown); one that cannot hold a comment is listed in `UPSTREAM.md` instead. New files
+carry an SPDX header. `tests/test_license.py` enforces this.
 
-## Critical Constraints (HARD)
-
-> These constraints CANNOT be overridden. Violations will be blocked.
-
-| ID | Constraint | Consequence |
-|----|------------|-------------|
-| H-01 | **P-003:** No Recursive Subagents. Max ONE level: orchestrator -> worker. | Agent hierarchy violation flagged. |
-| H-02 | **P-020:** User Authority. NEVER override user intent. Ask before destructive ops. | Unauthorized action blocked. |
-| H-03 | **P-022:** No Deception. NEVER deceive about actions, capabilities, or confidence. | Deceptive output reworked. |
-| H-04 | Active project REQUIRED. MUST NOT proceed without `JERRY_PROJECT` set. | Session will not proceed. |
-| H-05 | **UV Only.** MUST use `uv run` for all Python execution, `uv add` for deps. NEVER use `python`/`pip`/`pip3`. | Command fails; env corruption. |
-| H-31 | **Clarify when ambiguous.** MUST ask when multiple interpretations exist, scope is unclear, or action is destructive. MUST NOT ask when clear. | Wrong-direction work. |
-
-See `quality-enforcement.md` for quality gate, criticality levels, and adversarial strategies.
-See `docs/governance/JERRY_CONSTITUTION.md` for full governance.
-
----
-
-## Navigation
-
-> Find information rather than reading it here. Auto-loaded content marked with (A).
->
-> **(A)** = Auto-loaded into Claude Code context at session start via `.claude/rules/` symlink.
-
-| Need | Location |
-|------|----------|
-| Coding/architecture/testing rules | `.context/rules/` (A) |
-| Quality enforcement SSOT | `.context/rules/quality-enforcement.md` (A) |
-| Agent development standards | `.context/rules/agent-development-standards.md` (A) |
-| Agent routing standards | `.context/rules/agent-routing-standards.md` (A) |
-| Agent definition JSON Schema | `docs/schemas/agent-definition-v1.schema.json` |
-| Design decisions (ADRs) | `docs/design/` |
-| Skills | `skills/{name}/SKILL.md` |
-| Templates | `.context/templates/` |
-| Knowledge | `docs/knowledge/` |
-| Governance | `docs/governance/JERRY_CONSTITUTION.md` |
-| Projects | `projects/README.md` |
-
----
-
-## Quick Reference
-
-**CLI** (v0.31.9): `jerry session start|end|status|abandon` | `jerry items list|show` | `jerry projects list|context|validate`
-
-**Skills** (invoke proactively per H-22):
-
-| Skill | Purpose |
-|-------|---------|
-| `/worktracker` | Task/issue management |
-| `/problem-solving` | Research, analysis, root cause |
-| `/nasa-se` | Requirements, V&V, reviews |
-| `/orchestration` | Multi-phase workflows |
-| `/architecture` | Design decisions |
-| `/adversary` | Adversarial quality reviews, strategy templates, tournament execution, multi-strategy orchestration |
-| `/saucer-boy` | Session conversational voice, McConkey personality |
-| `/saucer-boy-framework-voice` | Internal: framework output voice quality gate, persona compliance |
-| `/transcript` | Transcription parsing |
-| `/ast` | Markdown AST: parse, query, validate, modify frontmatter |
-| `/eng-team` | Secure software engineering methodology (10 agents: architecture, implementation, quality, incident response) |
-| `/red-team` | Offensive security testing methodology (11 agents: recon, exploitation, post-exploitation, reporting) |
-| `/pm-pmm` | Product management and product marketing (5 agents: strategy, customer insight, market, business analysis, competitive) |
-| `/prompt-engineering` | Structured prompt construction, NPT constraint generation, prompt quality scoring (3 agents: builder, constraint-gen, scorer) |
-| `/diataxis` | Four-quadrant documentation methodology (6 agents: 4 writers, classifier, auditor) |
-| `/user-experience` | AI-augmented UX methodology for tiny teams (11 agents: orchestrator + 10 framework specialists across 5 criteria-gated waves) |
-| `/use-case` | Guided use case authoring and decomposition (2 agents: Cockburn 12-step author, Jacobson UC 2.0 slicer) |
-| `/test-spec` | BDD test specification from use cases (2 agents: Clark transformation generator, 7 Cs coverage analyst) |
-| `/contract-design` | API contract generation from use cases (2 agents: UC-to-OpenAPI generator, 9-step validator) |
-
-**SessionStart Hook Tags:**
-
-| Tag | Action |
-|-----|--------|
-| `<project-context>` | Proceed with work |
-| `<project-required>` | Use AskUserQuestion to select/create project |
-| `<project-error>` | Help user fix or select valid project |
+<!-- Modified from geekatron/jerry v0.31.9; see NOTICE. -->

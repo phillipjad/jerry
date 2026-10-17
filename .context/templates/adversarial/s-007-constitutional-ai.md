@@ -120,12 +120,12 @@ Load: `JERRY_CONSTITUTION.md` (P-001–P-043), `${CLAUDE_PLUGIN_ROOT}/.context/r
 1. Read `${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md` in full
 2. Identify deliverable type (code, document, design, template, rule)
 3. Based on type, load applicable rules from `${CLAUDE_PLUGIN_ROOT}/.context/rules/`:
-   - Code deliverables: `architecture-standards.md`, `coding-standards.md`, `python-environment.md`, `testing-standards.md`
+   - Code deliverables: `architecture-standards.md`, plus H-05, H-11 and H-20 in `quality-enforcement.md`
    - Document deliverables: `markdown-navigation-standards.md`, `quality-enforcement.md`
    - Template/rule deliverables: ALL rules (AE-002 triggers auto-C3)
-   - Architecture/design: `architecture-standards.md`, `file-organization.md`
+   - Architecture/design: `architecture-standards.md`
 4. Read `quality-enforcement.md` for HARD rule index (H-01 through H-33), tier vocabulary, auto-escalation rules
-   - **H-Rule Quick Reference:** 33 HARD rules exist (H-01 through H-33). See quality-enforcement.md HARD Rule Index for the complete H-rule index with rule text and source files. Review this index before Step 2 to ensure no HARD rules are missed during principle enumeration.
+   - **H-Rule Quick Reference:** See quality-enforcement.md HARD Rule Index for the complete H-rule index with rule text and source files. Review this index before Step 2 to ensure no HARD rules are missed during principle enumeration.
 5. Create index of all loaded principles with tier classification
 
 **Decision Point:** AE-001 (constitution→C4), AE-002 (rules/templates→C3)
@@ -396,7 +396,7 @@ class CreateProjectCommandHandler(ICommandHandler):
 
 **Strategy Execution:**
 
-**Step 1:** Loaded `JERRY_CONSTITUTION.md`, `architecture-standards.md`, `coding-standards.md`, `quality-enforcement.md`.
+**Step 1:** Loaded `JERRY_CONSTITUTION.md`, `architecture-standards.md`, `quality-enforcement.md`.
 
 **Step 2:** Identified applicable principles:
 - H-07: Application layer MUST NOT import from infrastructure (HARD)
@@ -477,7 +477,7 @@ Check in Step 1: AE-001 (constitution→C4), AE-002 (rules/templates→C3), AE-0
 
 ### Cross-References
 
-**Sources:** `quality-enforcement.md` (SSOT H-01–H-33), `JERRY_CONSTITUTION.md` (P-001–P-043), `architecture-standards.md` (H-07, H-10), `coding-standards.md` (H-11), `testing-standards.md` (H-20), `markdown-navigation-standards.md` (H-23)
+**Sources:** `quality-enforcement.md` (SSOT H-01–H-33), `JERRY_CONSTITUTION.md` (P-001–P-043), `architecture-standards.md` (H-07, H-10), `markdown-navigation-standards.md` (H-23)
 
 **Templates:** s-003-steelman (before), s-002-devils-advocate (after), s-014-llm-as-judge (scoring), s-010-self-refine (H-15)
 

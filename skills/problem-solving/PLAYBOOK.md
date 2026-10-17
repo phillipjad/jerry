@@ -256,7 +256,7 @@ User: "Research the best approach for implementing event sourcing in Python"
 
 Claude: [Activates ps-researcher agent]
         [Researches topic with citations]
-        [Creates docs/research/work-XXX-event-sourcing.md]
+        [Creates {project_dir}/research/work-XXX-event-sourcing.md]
         [Returns L0/L1/L2 summary]
 ```
 
@@ -322,15 +322,15 @@ This will:
 
 | Agent | When to Use | Keywords | Output Location | Output Format |
 |-------|-------------|----------|-----------------|---------------|
-| `ps-researcher` | Exploring options | research, explore, compare | `docs/research/` | Research report |
-| `ps-analyst` | Root cause analysis | analyze, why, root cause, 5 whys | `docs/analysis/` | Analysis report |
-| `ps-architect` | Design decisions | decide, ADR, architecture, design | `docs/decisions/` | ADR |
-| `ps-validator` | Requirements check | validate, check, verify, compliance | `docs/analysis/` | Validation report |
-| `ps-synthesizer` | Pattern extraction | synthesize, patterns, lessons | `docs/synthesis/` | Pattern catalog |
-| `ps-reviewer` | Quality assessment | review, quality, feedback, audit | `docs/reviews/` | Review findings |
+| `ps-researcher` | Exploring options | research, explore, compare | `{project_dir}/research/` | Research report |
+| `ps-analyst` | Root cause analysis | analyze, why, root cause, 5 whys | `{project_dir}/analysis/` | Analysis report |
+| `ps-architect` | Design decisions | decide, ADR, architecture, design | `{project_dir}/decisions/` | ADR |
+| `ps-validator` | Requirements check | validate, check, verify, compliance | `{project_dir}/analysis/` | Validation report |
+| `ps-synthesizer` | Pattern extraction | synthesize, patterns, lessons | `{project_dir}/synthesis/` | Pattern catalog |
+| `ps-reviewer` | Quality assessment | review, quality, feedback, audit | `{project_dir}/reviews/` | Review findings |
 | `ps-critic` | Iterative refinement | critique, improve, iterate, polish | `{project_dir}/critiques/` | Critique report |
-| `ps-investigator` | Debugging failures | investigate, debug, incident, failure | `docs/investigations/` | Investigation report |
-| `ps-reporter` | Status updates | status, report, progress, dashboard | `docs/reports/` | Status report |
+| `ps-investigator` | Debugging failures | investigate, debug, incident, failure | `{project_dir}/investigations/` | Investigation report |
+| `ps-reporter` | Status updates | status, report, progress, dashboard | `{project_dir}/reports/` | Status report |
 
 ---
 
@@ -349,7 +349,7 @@ TOPOLOGY:
 User: "Research graph databases for our use case"
 
   +------------------+
-  |  ps-researcher   | --> docs/research/graph-databases.md
+  |  ps-researcher   | --> {project_dir}/research/graph-databases.md
   +------------------+
 ```
 
@@ -368,8 +368,10 @@ User: "Investigate the API timeout, propose a fix, validate the solution"
   +------------------+    +---------------+    +---------------+
          |                       |                     |
          v                       v                     v
-  docs/investigations/    docs/decisions/      docs/analysis/
+  investigations/         decisions/           analysis/
   api-timeout.md          adr-fix.md           validation.md
+
+  (paths under {project_dir}/)
 ```
 
 ### Pattern 3: Fan-Out (Parallel Research)
@@ -383,13 +385,13 @@ TOPOLOGY:
 User: "Research caching, message queues, and databases"
 
   +------------------+
-  |  ps-researcher   | --> docs/research/caching-options.md
+  |  ps-researcher   | --> {project_dir}/research/caching-options.md
   +------------------+
   +------------------+
-  |  ps-researcher   | --> docs/research/message-queue-options.md
+  |  ps-researcher   | --> {project_dir}/research/message-queue-options.md
   +------------------+
   +------------------+
-  |  ps-researcher   | --> docs/research/database-options.md
+  |  ps-researcher   | --> {project_dir}/research/database-options.md
   +------------------+
 ```
 
@@ -401,14 +403,16 @@ After parallel work, synthesize findings.
 TOPOLOGY:
 ---------
 
-  docs/research/caching.md ------+
-  docs/research/queues.md  ------+--> +------------------+
-  docs/research/databases.md ----+    |  ps-synthesizer  |
+  research/caching.md -----------+
+  research/queues.md  -----------+--> +------------------+
+  research/databases.md ---------+    |  ps-synthesizer  |
                                       +------------------+
                                              |
                                              v
-                                      docs/synthesis/
+                                      synthesis/
                                       patterns.md
+
+  (paths under {project_dir}/)
 ```
 
 ### Pattern 5: Research -> Decision -> Validation
@@ -560,12 +564,12 @@ The MAIN CONTEXT (Claude session) orchestrates the loop. ps-critic only evaluate
 Step 1: "Research SQLite vs PostgreSQL for embedded vs server use cases"
 
 [ps-researcher activates]
-Output: docs/research/work-024-e-001-sqlite-vs-postgres.md
+Output: {project_dir}/research/work-024-e-001-sqlite-vs-postgres.md
 
 Step 2: "Based on the research, create an ADR recommending the best choice"
 
 [ps-architect activates]
-Output: docs/decisions/work-024-e-002-adr-database-selection.md
+Output: {project_dir}/decisions/work-024-e-002-adr-database-selection.md
 ```
 
 ### Example 2: Root Cause Analysis
@@ -576,7 +580,7 @@ Output: docs/decisions/work-024-e-002-adr-database-selection.md
 "Analyze why our CI tests are flaky - do a 5 Whys"
 
 [ps-analyst activates]
-Output: docs/analysis/work-024-e-003-root-cause.md
+Output: {project_dir}/analysis/work-024-e-003-root-cause.md
 
 Content includes:
 - 5 Whys table with evidence
@@ -592,7 +596,7 @@ Content includes:
 "Investigate the API outage on January 5th at 2:30 PM"
 
 [ps-investigator activates]
-Output: docs/investigations/work-024-e-004-investigation.md
+Output: {project_dir}/investigations/work-024-e-004-investigation.md
 
 Content includes:
 - Timeline of events
@@ -610,7 +614,7 @@ Content includes:
 "Review the authentication module for security issues"
 
 [ps-reviewer activates]
-Output: docs/reviews/work-024-e-005-security.md
+Output: {project_dir}/reviews/work-024-e-005-security.md
 
 Content includes:
 - OWASP Top 10 assessment
@@ -627,7 +631,7 @@ Content includes:
 "Synthesize the 4 research documents from last week into patterns"
 
 [ps-synthesizer activates]
-Output: docs/synthesis/work-024-e-006-synthesis.md
+Output: {project_dir}/synthesis/work-024-e-006-synthesis.md
 
 Content includes:
 - Cross-reference matrix
@@ -658,7 +662,7 @@ Content includes:
 Invocation: "Analyze why database queries are timing out using 5 Whys"
 
 Agent: ps-analyst
-Output: docs/analysis/work-XXX-db-timeout-rca.md
+Output: {project_dir}/analysis/work-XXX-db-timeout-rca.md
 ```
 
 **Agent Sequence:** `ps-investigator` (timeline) → `ps-analyst` (root cause) → `ps-architect` (fix decision)
@@ -688,11 +692,11 @@ Output: docs/analysis/work-XXX-db-timeout-rca.md
 
 ```
 Step 1: "Research PostgreSQL vs MongoDB for our event-driven microservice"
-Agent: ps-researcher → docs/research/db-selection-research.md
+Agent: ps-researcher → {project_dir}/research/db-selection-research.md
 
-Step 2: "Based on docs/research/db-selection-research.md, create ADR
+Step 2: "Based on {project_dir}/research/db-selection-research.md, create ADR
         recommending a database choice"
-Agent: ps-architect → docs/decisions/adr-003-database-selection.md
+Agent: ps-architect → {project_dir}/decisions/adr-003-database-selection.md
 
 Step 3: "Critique the ADR until it scores 0.92 or higher (C2+ deliverable)"
 Agent: ps-critic → [iterate until acceptance threshold]
@@ -728,7 +732,7 @@ Invocation: "Review the authentication module PR against OWASP Top 10
            and our security guidelines"
 
 Agent: ps-reviewer
-Output: docs/reviews/work-XXX-auth-security-review.md
+Output: {project_dir}/reviews/work-XXX-auth-security-review.md
 
 Content includes:
 - OWASP assessment checklist
@@ -763,13 +767,13 @@ Content includes:
 ```
 Step 1: "Research technical debt in payment-service/ focusing on
         code complexity, test coverage, and dependency health"
-Agent: ps-researcher → docs/research/payment-svc-tech-debt.md
+Agent: ps-researcher → {project_dir}/research/payment-svc-tech-debt.md
 
 Step 2: "Analyze the research to prioritize debt by risk and effort"
-Agent: ps-analyst → docs/analysis/payment-svc-debt-priority.md
+Agent: ps-analyst → {project_dir}/analysis/payment-svc-debt-priority.md
 
 Step 3: "Synthesize findings into actionable remediation roadmap"
-Agent: ps-synthesizer → docs/synthesis/payment-svc-roadmap.md
+Agent: ps-synthesizer → {project_dir}/synthesis/payment-svc-roadmap.md
 ```
 
 ##### L2 (Architect) - Constraints
@@ -800,7 +804,7 @@ Invocation: "Review the inventory API design against REST best practices,
            naming conventions, and our API style guide"
 
 Agent: ps-reviewer
-Output: docs/reviews/work-XXX-inventory-api-design.md
+Output: {project_dir}/reviews/work-XXX-inventory-api-design.md
 
 Content includes:
 - REST maturity assessment (Richardson Level)
@@ -838,11 +842,11 @@ Content includes:
 ```
 Step 1: "Research effort estimates and market impact for SSO,
         mobile app, and API v2"
-Agent: ps-researcher → docs/research/feature-comparison.md
+Agent: ps-researcher → {project_dir}/research/feature-comparison.md
 
 Step 2: "Analyze trade-offs using weighted scoring: customer impact (40%),
         revenue potential (30%), implementation risk (30%)"
-Agent: ps-analyst → docs/analysis/feature-prioritization.md
+Agent: ps-analyst → {project_dir}/analysis/feature-prioritization.md
 ```
 
 **Output Structure:**
@@ -878,11 +882,11 @@ Agent: ps-analyst → docs/analysis/feature-prioritization.md
 ```
 Step 1: "Research stakeholder interview notes to extract
         explicit and implicit requirements"
-Agent: ps-researcher → docs/research/dashboard-stakeholder-analysis.md
+Agent: ps-researcher → {project_dir}/research/dashboard-stakeholder-analysis.md
 
 Step 2: "Synthesize requirements across stakeholders,
         identifying agreements, conflicts, and gaps"
-Agent: ps-synthesizer → docs/synthesis/dashboard-requirements.md
+Agent: ps-synthesizer → {project_dir}/synthesis/dashboard-requirements.md
 
 Content includes:
 - Requirements matrix by stakeholder
@@ -919,7 +923,7 @@ Invocation: "Research competitor X's new feature focusing on:
            functionality, pricing, user reviews, market positioning"
 
 Agent: ps-researcher
-Output: docs/research/competitor-x-analysis.md
+Output: {project_dir}/research/competitor-x-analysis.md
 
 Content includes:
 - Feature capability matrix (Us vs. Them)
@@ -957,7 +961,7 @@ Invocation: "Analyze sprint risks including: technical uncertainties,
            dependency risks, capacity concerns, external blockers"
 
 Agent: ps-analyst
-Output: docs/analysis/sprint-24-risk-assessment.md
+Output: {project_dir}/analysis/sprint-24-risk-assessment.md
 
 Content includes:
 - Risk registry with probability × impact scoring
@@ -994,7 +998,7 @@ Invocation: "Validate Q3 roadmap against: strategic objectives,
            team capacity, technical dependencies, customer commitments"
 
 Agent: ps-validator
-Output: docs/analysis/q3-roadmap-validation.md
+Output: {project_dir}/analysis/q3-roadmap-validation.md
 
 Content includes:
 - Strategic alignment assessment
@@ -1034,7 +1038,7 @@ Invocation: "Review checkout flow against Nielsen's 10 usability heuristics,
            focusing on error prevention and user control"
 
 Agent: ps-reviewer
-Output: docs/reviews/work-XXX-checkout-ux-review.md
+Output: {project_dir}/reviews/work-XXX-checkout-ux-review.md
 
 Content includes:
 - Heuristic evaluation matrix (10 heuristics × pass/fail)
@@ -1109,7 +1113,7 @@ Circuit breaker: max 5 iterations, threshold 0.92 (C2+) or 0.85 (C1)
 Invocation: "Validate checkout flow against WCAG 2.1 AA success criteria"
 
 Agent: ps-validator
-Output: docs/analysis/work-XXX-wcag-audit.md
+Output: {project_dir}/analysis/work-XXX-wcag-audit.md
 
 Content includes:
 - WCAG 2.1 AA checklist (pass/fail per criterion)
@@ -1145,10 +1149,10 @@ Content includes:
 ```
 Step 1: "Research user journey for onboarding flow based on:
         support tickets, session recordings, NPS comments"
-Agent: ps-researcher → docs/research/onboarding-journey.md
+Agent: ps-researcher → {project_dir}/research/onboarding-journey.md
 
 Step 2: "Analyze friction points and categorize by severity and frequency"
-Agent: ps-analyst → docs/analysis/onboarding-friction.md
+Agent: ps-analyst → {project_dir}/analysis/onboarding-friction.md
 
 Content includes:
 - Journey phases (Discover → Try → Buy → Use)
@@ -1186,7 +1190,7 @@ Invocation: "Synthesize A/B test results for button placement,
            color contrast, and copy length into actionable patterns"
 
 Agent: ps-synthesizer
-Output: docs/synthesis/ab-test-patterns.md
+Output: {project_dir}/synthesis/ab-test-patterns.md
 
 Content includes:
 - Test summary matrix
@@ -1214,23 +1218,22 @@ Content includes:
 All artifacts are persisted to your project directory:
 
 ```
-projects/{PROJECT}/
-|-- docs/
-|   |-- research/           # ps-researcher output
-|   |   |-- work-XXX-topic.md
-|   |-- analysis/           # ps-analyst, ps-validator output
-|   |   |-- work-XXX-root-cause.md
-|   |   |-- work-XXX-validation.md
-|   |-- decisions/          # ps-architect output
-|   |   |-- work-XXX-adr-topic.md
-|   |-- synthesis/          # ps-synthesizer output
-|   |   |-- work-XXX-synthesis.md
-|   |-- reviews/            # ps-reviewer output
-|   |   |-- work-XXX-review.md
-|   |-- investigations/     # ps-investigator output
-|   |   |-- work-XXX-investigation.md
-|   |-- reports/            # ps-reporter output
-|   |   |-- work-XXX-status.md
+{project_dir}/
+|-- research/           # ps-researcher output
+|   |-- work-XXX-topic.md
+|-- analysis/           # ps-analyst, ps-validator output
+|   |-- work-XXX-root-cause.md
+|   |-- work-XXX-validation.md
+|-- decisions/          # ps-architect output
+|   |-- work-XXX-adr-topic.md
+|-- synthesis/          # ps-synthesizer output
+|   |-- work-XXX-synthesis.md
+|-- reviews/            # ps-reviewer output
+|   |-- work-XXX-review.md
+|-- investigations/     # ps-investigator output
+|   |-- work-XXX-investigation.md
+|-- reports/            # ps-reporter output
+|   |-- work-XXX-status.md
 ```
 
 ---
@@ -1268,7 +1271,7 @@ For complex problems, break into steps:
 ### 4. Reference Previous Work
 
 ```
-"Based on the research in docs/research/caching-options.md,
+"Based on the research in {project_dir}/research/caching-options.md,
  create an ADR for our caching decision."
 ```
 
@@ -1297,7 +1300,7 @@ Be more explicit:
 This shouldn't happen (P-002 requires persistence), but if it does:
 
 ```
-"Save the analysis to docs/analysis/my-analysis.md"
+"Save the analysis to {project_dir}/analysis/my-analysis.md"
 ```
 
 ### "I need more detail at L1 level"
@@ -1321,7 +1324,7 @@ Ask for summary:
 Reference the file:
 
 ```
-"Continue the investigation from docs/investigations/api-timeout.md
+"Continue the investigation from {project_dir}/investigations/api-timeout.md
  with the new log data I found"
 ```
 
@@ -1392,7 +1395,8 @@ Reference the file:
 |             - No traceability between artifacts                   |
 |                                                                   |
 | FIX:        Always reference prior outputs:                       |
-|             "Based on docs/research/caching.md, create ADR"       |
+|             "Based on {project_dir}/research/caching.md,          |
+|             create ADR"                                           |
 |                                                                   |
 +===================================================================+
 ```
@@ -1406,7 +1410,7 @@ Step 2: "Create an ADR for caching"  # No reference to step 1!
 **Example (Good):**
 ```
 Step 1: "Research caching options"
-Step 2: "Based on docs/research/caching-options.md, create an ADR"
+Step 2: "Based on {project_dir}/research/caching-options.md, create an ADR"
 ```
 
 ---
@@ -1472,7 +1476,7 @@ Step 2: "Based on docs/research/caching-options.md, create an ADR"
 |                                                                   |
 | FIX:        Always persist outputs to files (P-002).              |
 |             Reference files explicitly when continuing.           |
-|             "Continue from docs/research/caching.md"              |
+|             "Continue from {project_dir}/research/caching.md"     |
 |                                                                   |
 +===================================================================+
 ```
@@ -1668,7 +1672,7 @@ session_context:
   payload:
     findings: [ ... ]
     prior_artifacts:
-      - "docs/research/caching-options.md"
+      - "{project_dir}/research/caching-options.md"
 ```
 
 ### Cross-Skill Handoffs

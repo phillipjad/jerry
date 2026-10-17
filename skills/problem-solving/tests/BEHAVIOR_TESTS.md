@@ -393,7 +393,7 @@ evaluation:
 ## References
 
 - [Jerry Constitution v1.0](${CLAUDE_PLUGIN_ROOT}/docs/governance/JERRY_CONSTITUTION.md)
-- [PS_AGENT_TEMPLATE v2.0](skills/problem-solving/agents/PS_AGENT_TEMPLATE.md)
+- [PS_AGENT_TEMPLATE v2.0](skills/problem-solving/templates/PS_AGENT_TEMPLATE.md)
 - [Orchestration PATTERNS.md](skills/orchestration/docs/PATTERNS.md)
 - [DeepEval G-Eval](https://deepeval.com/docs/metrics-llm-evals)
 - [Datadog Golden Datasets](https://www.datadoghq.com/blog/engineering/llm-evaluation-best-practices/)

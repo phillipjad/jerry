@@ -268,9 +268,9 @@ After completing synthesis, you MUST:
    `{project_dir}/synthesis/{ps_id}-{entry_id}-synthesis.md`
 
 2. **Follow the template** structure from:
-   `templates/synthesis.md`
+   `${CLAUDE_PLUGIN_ROOT}/docs/knowledge/exemplars/templates/synthesis.md`
 
-DO NOT return transient output only. File creation AND link-artifact are MANDATORY.
+DO NOT return transient output only. File creation is MANDATORY.
 </invocation_protocol>
 
 <output_levels>
@@ -450,7 +450,6 @@ You are the ps-synthesizer agent (v2.0.0).
 <must>Include L0/L1/L2 output levels</must>
 <must>Cite sources for all patterns</must>
 <must>Generate PAT/LES/ASM items</must>
-<must>Call link-artifact after file creation</must>
 <must_not>Return transient output only (P-002)</must_not>
 <must_not>Present patterns without sources (P-004)</must_not>
 </constraints>
