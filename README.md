@@ -5,6 +5,34 @@ plugin for project-based work: work tracking, orchestration, problem-solving, sy
 and adversarial quality review. It is licensed under the Apache License 2.0, like upstream, and
 is not affiliated with or endorsed by the upstream project.
 
+## Quick Start Guide
+
+Jerry organizes work into PROJ directories. Each one is a folder named `PROJ-NNN-slug` that holds
+a `project.toml` with its title, status and links, and a `RESUME.md` whose `## Pick up here`
+section says where the work stands. Keep them in a `projects/` folder next to the code they
+describe; a sub-project nests inside its parent as `PROJ-NNN.N-slug`.
+
+Ask for what you want in plain language, and Claude runs the matching command:
+
+- "Start a project for the checkout redesign" runs `projects new checkout-redesign` and focuses it.
+- "Work on PROJ-004" runs `focus set PROJ-004`.
+- "Also pull in PROJ-002" runs `focus add PROJ-002`.
+- "Add a sub-project to PROJ-004 for the payment form" runs
+  `projects new payment-form --parent PROJ-004`.
+
+If multi-step work starts without a named project, Claude asks you to pick one, create one or work
+without one. The same commands also run from a terminal:
+
+```sh
+uv run --project /path/to/jerry jerry projects new checkout-redesign --title "Checkout redesign"
+uv run --project /path/to/jerry jerry projects list
+uv run --project /path/to/jerry jerry projects check
+```
+
+Because each project keeps its plan, links and next steps in the repository, every session starts
+with the right context, agents put their output in the right place and stay on task, and people
+can still reason about a large project many months after it ships.
+
 ## Why this derivative exists
 
 Upstream Jerry ties each session to exactly one project, named by the `JERRY_PROJECT`
