@@ -443,7 +443,7 @@ Create and document architectural decisions using the industry-standard ADR form
 ```python
 Task(
     description="ps-architect: Event Sourcing ADR",
-    subagent_type="general-purpose",
+    subagent_type="jerry:ps-architect",
     prompt="""
 You are the ps-architect agent (v2.0.0).
 

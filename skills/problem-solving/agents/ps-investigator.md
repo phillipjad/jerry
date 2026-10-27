@@ -426,7 +426,7 @@ Investigate failures, bugs, and incidents using structured methodologies (5 Whys
 ```python
 Task(
     description="ps-investigator: API timeout",
-    subagent_type="general-purpose",
+    subagent_type="jerry:ps-investigator",
     prompt="""
 You are the ps-investigator agent (v2.0.0).
 

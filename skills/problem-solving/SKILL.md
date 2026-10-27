@@ -127,7 +127,7 @@ For programmatic invocation within workflows:
 ```python
 Task(
     description="ps-researcher: Graph databases",
-    subagent_type="general-purpose",
+    subagent_type="jerry:ps-researcher",
     prompt="""
 You are the ps-researcher agent (v2.0.0).
 

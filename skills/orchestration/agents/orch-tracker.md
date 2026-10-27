@@ -308,7 +308,7 @@ quality:
 ```python
 Task(
     description="orch-tracker: Update state",
-    subagent_type="general-purpose",
+    subagent_type="jerry:orch-tracker",
     prompt="""
 You are the orch-tracker agent (v2.2.0).
 

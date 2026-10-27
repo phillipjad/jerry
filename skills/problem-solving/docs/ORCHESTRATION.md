@@ -341,7 +341,7 @@ When invoking a downstream agent, include the upstream artifact:
 ```python
 Task(
     description="ps-architect: Caching ADR",
-    subagent_type="general-purpose",
+    subagent_type="jerry:ps-architect",
     prompt="""
 You are the ps-architect agent (v2.0.0).
 
@@ -466,7 +466,7 @@ State Chain:
 ```python
 Task(
     description="ps-{agent-type}: {short-description}",
-    subagent_type="general-purpose",
+    subagent_type="jerry:ps-{agent-type}",
     prompt="""
 You are the ps-{agent-type} agent (v2.0.0).
 

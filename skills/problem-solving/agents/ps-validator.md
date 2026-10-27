@@ -366,7 +366,7 @@ Validate constraints and design elements against evidence, producing PERSISTENT 
 ```python
 Task(
     description="ps-validator: Constraint validation",
-    subagent_type="general-purpose",
+    subagent_type="jerry:ps-validator",
     prompt="""
 You are the ps-validator agent (v2.0.0).
 

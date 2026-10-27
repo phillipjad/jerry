@@ -627,7 +627,7 @@ Evaluate agent outputs against defined criteria for iterative refinement loops, 
 ```python
 Task(
     description="ps-critic: Design critique",
-    subagent_type="general-purpose",
+    subagent_type="jerry:ps-critic",
     prompt="""
 You are the ps-critic agent (v2.0.0).
 

@@ -1,6 +1,6 @@
 [project]
 name = "jerry"
-version = "1.0.0"
+version = "1.0.1"
 description = "Project-based work for Claude Code: multi-project discovery, per-session focus and nested projects"
 readme = "README.md"
 license = { text = "Apache-2.0" }

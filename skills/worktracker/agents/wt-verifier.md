@@ -315,7 +315,7 @@ User: "Verify EN-001 is ready for closure"
 ```python
 Task(
     description="wt-verifier: Verify EN-001 acceptance criteria",
-    subagent_type="general-purpose",
+    subagent_type="jerry:wt-verifier",
     prompt="""
 You are the wt-verifier agent (v1.0.0).
 
@@ -648,7 +648,7 @@ Validate that work items meet acceptance criteria and quality gates before statu
 ```python
 Task(
     description="wt-verifier: Verify EN-001 acceptance criteria",
-    subagent_type="general-purpose",
+    subagent_type="jerry:wt-verifier",
     prompt="""
 You are the wt-verifier agent (v1.0.0).
 

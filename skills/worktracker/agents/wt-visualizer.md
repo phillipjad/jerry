@@ -464,7 +464,7 @@ gantt
 ```python
 Task(
     description="wt-visualizer: Generate hierarchy diagram for FEAT-002",
-    subagent_type="general-purpose",
+    subagent_type="jerry:wt-visualizer",
     prompt="""
 You are the wt-visualizer agent (v1.0.0).
 

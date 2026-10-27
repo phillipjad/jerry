@@ -167,7 +167,7 @@ For programmatic invocation within workflows:
 ```python
 Task(
     description="adv-selector: Strategy selection for C3",
-    subagent_type="general-purpose",
+    subagent_type="jerry:adv-selector",
     prompt="""
 You are the adv-selector agent (v1.0.0).
 

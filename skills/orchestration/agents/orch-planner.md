@@ -286,7 +286,7 @@ metrics:
 ```python
 Task(
     description="orch-planner: Create workflow plan",
-    subagent_type="general-purpose",
+    subagent_type="jerry:orch-planner",
     prompt="""
 You are the orch-planner agent (v2.2.0).
 

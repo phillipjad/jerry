@@ -462,7 +462,7 @@ The audit report MUST follow the template at `${CLAUDE_PLUGIN_ROOT}/.context/tem
 ```python
 Task(
     description="wt-auditor: Audit EPIC-001 worktracker integrity",
-    subagent_type="general-purpose",
+    subagent_type="jerry:wt-auditor",
     prompt="""
 You are the wt-auditor agent (v1.0.0).
 
