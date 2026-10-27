@@ -502,7 +502,7 @@ Validate NASA SE artifacts against NPR 7123.1D processes, NASA-HDBK-1009A work p
 ```python
 Task(
     description="nse-qa: Requirements QA",
-    subagent_type="general-purpose",
+    subagent_type="jerry:nse-qa",
     prompt="""
 You are the nse-qa agent (v1.0.0).
 

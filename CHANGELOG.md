@@ -5,6 +5,14 @@ All notable changes to this derivative of the Jerry Framework are documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-10-27
+
+### Fixed
+
+- The skills and agents now start each Jerry agent by its registered type (`jerry:ps-researcher`
+  and so on) instead of `general-purpose`. The `general-purpose` form ran on the caller's model
+  and without the agent's own definition, so the model each agent declares was never used.
+
 ## [1.0.0] - 2026-10-17
 
 First release of this derivative. Changes are relative to geekatron/jerry v0.31.9.

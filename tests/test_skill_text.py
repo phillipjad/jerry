@@ -3,6 +3,7 @@
 
 """Bans on the text the plugin ships to the model (skills, commands, .context, docs) and on CLAUDE.md."""
 
+import json
 import posixpath
 import re
 from collections.abc import Callable
@@ -58,6 +59,11 @@ UNSHIPPED = re.compile(
 FILE_REF = re.compile(r"`([^`\s]+)`|\]\(([^)\s]+)\)")
 FILE_PATH = re.compile(r"[\w.-]+(?:/[\w.-]+)+\.(?:md|ya?ml|json)")
 USER_PATHS = ("docs/design/",)
+SUBAGENT_TYPE = re.compile(r'subagent_type="([^"]*)"')
+REGISTERED_AGENTS = {
+    re.search(r"^name:\s*(\S+)", (ROOT / rel).read_text(encoding="utf-8"), re.MULTILINE).group(1)
+    for rel in json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))["agents"]
+}
 WILDCARD = re.compile(r"[{}*?<>]|\.\.\.")
 TRAILING = re.compile(r"[,:;]+$|(?<![./])\.+$")
 
@@ -266,6 +272,13 @@ def names_dropped_skill(_rel: str, _ctx: str, line: str) -> bool:
     return bool(DROPPED_REF.search(line))
 
 
+def starts_unregistered_agent(_rel: str, _ctx: str, line: str) -> bool:
+    return any(
+        not t.startswith("jerry:") or ("{" not in t and t.removeprefix("jerry:") not in REGISTERED_AGENTS)
+        for t in SUBAGENT_TYPE.findall(line)
+    )
+
+
 def test_should_scan_the_shipped_text() -> None:
     files = {rel for rel, *_ in SCAN}
 
@@ -425,3 +438,7 @@ def test_should_track_frontmatter_and_fences() -> None:
         "delimiter", "frontmatter", "delimiter", "prose", "delimiter", "fence:markdown", "fence:markdown",
         "delimiter", "prose",
     ]
+
+
+def test_should_start_agents_by_their_registered_type() -> None:
+    assert offenders(starts_unregistered_agent) == []

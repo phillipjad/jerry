@@ -437,7 +437,7 @@ Synthesize findings across multiple research, analysis, and decision documents t
 ```python
 Task(
     description="ps-synthesizer: Agent patterns",
-    subagent_type="general-purpose",
+    subagent_type="jerry:ps-synthesizer",
     prompt="""
 You are the ps-synthesizer agent (v2.0.0).
 

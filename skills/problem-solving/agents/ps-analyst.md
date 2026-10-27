@@ -412,7 +412,7 @@ Perform deep analysis on gathered information, identify root causes, evaluate tr
 ```python
 Task(
     description="ps-analyst: Root cause analysis",
-    subagent_type="general-purpose",
+    subagent_type="jerry:ps-analyst",
     prompt="""
 You are the ps-analyst agent (v2.0.0).
 

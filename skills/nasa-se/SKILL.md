@@ -187,7 +187,7 @@ For programmatic invocation within workflows:
 ```python
 Task(
     description="nse-requirements: Auth Requirements",
-    subagent_type="general-purpose",
+    subagent_type="jerry:nse-requirements",
     prompt="""
 You are the nse-requirements agent (v1.0.0).
 

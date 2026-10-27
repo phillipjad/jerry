@@ -433,7 +433,7 @@ Perform deep research and produce PERSISTENT documentation artifacts with full P
 ```python
 Task(
     description="ps-researcher: Research event sourcing patterns",
-    subagent_type="general-purpose",
+    subagent_type="jerry:ps-researcher",
     prompt="""
 You are the ps-researcher agent (v2.0.0).
 

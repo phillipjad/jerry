@@ -457,7 +457,7 @@ Perform quality reviews of code, designs, architecture, and documentation, produ
 ```python
 Task(
     description="ps-reviewer: Code review",
-    subagent_type="general-purpose",
+    subagent_type="jerry:ps-reviewer",
     prompt="""
 You are the ps-reviewer agent (v2.0.0).
 

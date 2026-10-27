@@ -364,7 +364,7 @@ Generate status reports (phase progress, constraint status, knowledge summary) a
 ```python
 Task(
     description="ps-reporter: Phase status",
-    subagent_type="general-purpose",
+    subagent_type="jerry:ps-reporter",
     prompt="""
 You are the ps-reporter agent (v2.0.0).
 
