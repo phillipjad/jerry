@@ -746,10 +746,51 @@ def test_should_print_the_registry_sorted_numerically_with_links_and_escaped_cel
         HEADER
         + "| PROJ-004 | Goku \\| Vegeta | active | line one line two "
         + "| related PROJ-010, PROJ-004.2; depends_on PROJ-010; uses PROJ-004.1 |\n"
-        + "| PROJ-004.1 | One | done | S1 |  |\n"
         + "| PROJ-004.2 | Two | active | S2 |  |\n"
         + "| PROJ-004.10 | Tenth | active | S10 |  |\n"
         + "| PROJ-010 | Ten | active |  |  |\n"
+        + f"\n<details>\n<summary>Done (1)</summary>\n\n{HEADER}"
+        + "| PROJ-004.1 | One | done | S1 |  |\n\n</details>\n"
+    )
+
+
+def test_should_keep_open_projects_in_the_main_table_and_collapse_each_closed_status(
+    tmp_path: Path, home: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    root = tmp_path / "projects"
+    make_project(root, "PROJ-001-goku", title="Goku", summary="", status="abandoned")
+    make_project(root, "PROJ-002-vegeta", title="Vegeta", summary="", status="done")
+    make_project(root, "PROJ-003-gohan", title="Gohan", summary="", status="paused")
+    make_project(root, "PROJ-004-piccolo", title="Piccolo", summary="", status="done")
+
+    code = cli.main(["projects", "index", "--root", str(root)])
+
+    assert code == 0
+    assert capsys.readouterr().out == (
+        f"{HEADER}| PROJ-003 | Gohan | paused |  |  |\n\n"
+        f"<details>\n<summary>Done (2)</summary>\n\n{HEADER}"
+        "| PROJ-002 | Vegeta | done |  |  |\n| PROJ-004 | Piccolo | done |  |  |\n\n</details>\n\n"
+        f"<details>\n<summary>Abandoned (1)</summary>\n\n{HEADER}"
+        "| PROJ-001 | Goku | abandoned |  |  |\n\n</details>\n"
+    )
+
+
+def test_should_write_the_collapsed_tables_between_the_markers_idempotently(
+    tmp_path: Path, home: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    root = tmp_path / "projects"
+    make_project(root, "PROJ-001-goku", title="Goku", summary="", status="done")
+    readme = root / "README.md"
+    readme.write_text(f"{START}\n{END}\n", encoding="utf-8")
+
+    first = cli.main(["projects", "index", "--write", "--root", str(root)])
+    second = cli.main(["projects", "index", "--write", "--root", str(root)])
+
+    assert (first, second) == (0, 0)
+    assert capsys.readouterr().out.splitlines()[-1].endswith("README.md: up to date")
+    assert readme.read_text(encoding="utf-8") == (
+        f"{START}\n{HEADER}\n<details>\n<summary>Done (1)</summary>\n\n{HEADER}"
+        f"| PROJ-001 | Goku | done |  |  |\n\n</details>\n{END}\n"
     )
 
 
