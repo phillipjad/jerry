@@ -23,7 +23,7 @@ DROPPED_REF = re.compile(
 )
 CLI = {
     "ast": {"parse", "frontmatter", "validate", "modify"},
-    "projects": {"list", "show", "new", "index", "check"},
+    "projects": {"list", "show", "new", "index", "check", "save"},
     "focus": {"show", "set", "add", "none"},
 }
 JERRY_CALL = re.compile(r"(?<![\w/.-])jerry\s+([a-z][\w-]*)(?:\s+([a-z][\w-]*))?")

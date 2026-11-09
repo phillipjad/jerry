@@ -31,6 +31,7 @@ from pathlib import Path
 
 PROJECT_FILE = "project.toml"
 STATUSES = ("active", "paused", "done", "abandoned")
+CLOSED = ("done", "abandoned")
 LINK_TYPES = ("related", "depends_on", "supersedes", "uses")
 INVERSES = {"related": "related", "depends_on": "blocks", "supersedes": "superseded_by", "uses": "used_by"}
 SHOWN_LINKS = ("related", "depends_on", "blocks", "supersedes", "superseded_by", "uses", "used_by")
@@ -427,15 +428,29 @@ def new_project(found: Discovery, slug: str, parent_id: str | None = None, title
     return path
 
 
-def render_index(found: Discovery, root: Path) -> str:
-    """Render the registry table of every project in ``root``, in number order."""
+def _table(found: list[Project]) -> str:
     rows = ["| ID | Title | Status | Summary | Links |", "|---|---|---|---|---|"]
-    for p in found.all_projects:
-        if p.root == root:
-            links = "; ".join(f"{link_type} {', '.join(ids)}" for link_type, ids in p.links.items())
-            cells = (" ".join(c.splitlines()).replace("|", "\\|") for c in (p.id, p.title, p.status, p.summary, links))
-            rows.append("| " + " | ".join(cells) + " |")
+    for p in found:
+        links = "; ".join(f"{link_type} {', '.join(ids)}" for link_type, ids in p.links.items())
+        cells = (" ".join(c.splitlines()).replace("|", "\\|") for c in (p.id, p.title, p.status, p.summary, links))
+        rows.append("| " + " | ".join(cells) + " |")
     return "\n".join(rows) + "\n"
+
+
+def render_index(found: Discovery, root: Path) -> str:
+    """Render the registry of every project in ``root``, in number order.
+
+    Open projects fill the main table; each closed status that has projects
+    follows in its own collapsed ``<details>`` table.
+    """
+    in_root = [p for p in found.all_projects if p.root == root]
+    sections = [_table([p for p in in_root if p.status not in CLOSED])]
+    for status in CLOSED:
+        closed = [p for p in in_root if p.status == status]
+        if closed:
+            summary = f"<summary>{status.capitalize()} ({len(closed)})</summary>"
+            sections.append(f"<details>\n{summary}\n\n{_table(closed)}\n</details>\n")
+    return "\n".join(sections)
 
 
 def _splice(text: str, table: str) -> str | None:

@@ -5,6 +5,25 @@ All notable changes to this derivative of the Jerry Framework are documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-11-09
+
+### Added
+
+- `jerry projects save -m <message> [<id>...] [--push]` commits each project's top-level folder
+  and its root's `README.md`, refreshing the registry first; with no IDs it saves the session
+  focus. It refuses when `jerry projects check` reports an error, or when a file headed into the
+  commit holds the user's home path, a Claude Code scratchpad path or a well-known token or
+  private key shape. `--push` pulls with rebase, then pushes; a conflict aborts the rebase and
+  keeps the commit local.
+- The `project-state` skill: what belongs in `RESUME.md` and the work history, what to scrub, and
+  how to save and push a projects root kept in git.
+
+### Changed
+
+- The registry keeps only open projects (`active`, `paused`) in its main table. `done` and
+  `abandoned` projects move to their own collapsed `<details>` tables below it. Run
+  `jerry projects index --write` once to regenerate an existing registry.
+
 ## [1.0.1] - 2026-10-27
 
 ### Fixed

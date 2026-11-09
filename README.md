@@ -139,15 +139,17 @@ each focused project at session start. A parent's `RESUME.md` links to each chil
 
 ### Registry
 
-A root's `README.md` can hold a generated table of its projects between two marker lines:
+A root's `README.md` can hold a generated registry of its projects between two marker lines:
 
 ```markdown
 <!-- jerry:index:start -->
 <!-- jerry:index:end -->
 ```
 
-`projects index --write` rewrites the table and `projects new` refreshes it. `projects check`
-and session start report a table that no longer matches the projects.
+Open projects (`active` and `paused`) fill the main table. Below it, `done` and `abandoned`
+projects each get a table inside a collapsed `<details>` block, shown only when there are any.
+`projects index --write` rewrites the registry, and `projects new` and `projects save` refresh
+it. `projects check` and session start report a registry that no longer matches the projects.
 
 ## Discovery
 
@@ -216,6 +218,7 @@ gives it the exact command with `--session <id>`. From a terminal, use the path 
 | `projects new <slug> [--parent <id>] [--title <text>]` | Create the next-numbered project with `project.toml` and a `RESUME.md` stub; in a session, add it to the focus |
 | `projects index [--write]` | Print each root's registry table, or rewrite it in `README.md` |
 | `projects check` | Validate every project; exit 1 on any error |
+| `projects save -m <message> [<id>...] [--push]` | Commit each project's top-level folder and its root's `README.md` (default: the focused projects); with `--push`, pull with rebase and push. Refuses on a `check` error or a home path, scratchpad path or secret in the files |
 | `focus show` / `set <id>...` / `add <id>...` / `none` | Show or change the session focus |
 | `ast parse <file>` | Print a markdown file's tokens and AST as JSON |
 | `ast frontmatter <file>` | Print a file's blockquote frontmatter as JSON |
@@ -265,6 +268,7 @@ can also run one directly as `/jerry:<name>`.
 | `nasa-se` | Systems engineering per NASA NPR 7123.1D: requirements, V&V, risk, reviews, trade studies |
 | `orchestration` | Multi-agent workflows with parallel pipelines, gates and checkpoints that resume across sessions |
 | `problem-solving` | Research, analysis, root-cause investigation and reviews by specialist agents that write reports |
+| `project-state` | What goes in `RESUME.md` and the work history, scrubbing, and committing and pushing a root kept in git |
 | `worktracker` | Work items in `WORKTRACKER.md`: epics, features, stories, tasks and bugs, with verify and audit agents |
 | `/architect` | Command: write a `PLAN.md` into `{project_dir}` before implementation starts |
 
@@ -277,7 +281,7 @@ can also run one directly as `/jerry:<name>`.
 | Project structure | Flat `PROJ-NNN-slug` folders | Nested sub-projects, `project.toml` metadata, typed links, a generated registry |
 | Hooks | SessionStart, UserPromptSubmit, PreToolUse, PreCompact, Stop, SubagentStop | SessionStart and SubagentStart only, standard library only, no shell |
 | Context monitoring | Context-fill tiers, checkpoints, resumption | Removed; Claude Code compaction plus each project's `RESUME.md` |
-| Skills | 30 skills, 89 agents | The 7 skills above, 28 agents, and `/architect`; `/release` removed |
+| Skills | 30 skills, 89 agents | The 8 skills above, 28 agents, and `/architect`; `/release` removed |
 | Platforms | macOS first, Windows in progress | macOS, Linux and Windows, all tested in CI |
 
 [CHANGELOG.md](CHANGELOG.md) lists every change.

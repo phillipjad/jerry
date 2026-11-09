@@ -9,7 +9,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from jerry import ast_cli, projects, session
+from jerry import ast_cli, projects, save, session
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -58,6 +58,14 @@ def build_parser() -> argparse.ArgumentParser:
 
     check = project_commands.add_parser("check", help="Validate projects, RESUME.md files and registries.")
     _add_scope(check)
+
+    save_parser = project_commands.add_parser(
+        "save", help="Commit projects' folders and the registry; with --push, also pull, rebase and push."
+    )
+    save_parser.add_argument("project_ids", nargs="*", metavar="id", help="Projects to save (default: the focus).")
+    save_parser.add_argument("-m", "--message", required=True, help="Commit message.")
+    save_parser.add_argument("--push", action="store_true", help="Pull with rebase, then push the branch.")
+    _add_scope(save_parser)
 
     focus_parser = namespaces.add_parser("focus", help="Show or change the projects this session works on.")
     focus_commands = focus_parser.add_subparsers(dest="command", required=True)
@@ -146,6 +154,14 @@ def _projects(args: argparse.Namespace) -> int:
         return _new(found, args, sid, state)
     if args.command == "index":
         return _index(found, args.write)
+    if args.command == "save":
+        ids = args.project_ids or ([entry["id"] for entry in state.focus] if state else [])
+        try:
+            print("\n".join(save.save_projects(found, ids, args.message, push=args.push)))
+        except save.SaveError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 1
+        return 0
     if args.command == "list":
         print(projects.render_list(found), end="")
         return 0
