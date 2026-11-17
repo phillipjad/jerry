@@ -348,4 +348,5 @@ class TestGetEntitySchemaBackwardCompat:
         with pytest.raises(ValueError, match="Unknown entity type"):
             get_entity_schema("nonexistent_type")
 
+
 # Modified from geekatron/jerry v0.31.9; see NOTICE.

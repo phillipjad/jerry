@@ -283,4 +283,5 @@ def validate_nav_table(doc: JerryDocument) -> NavValidationResult:
         entries=entries,
     )
 
+
 # Modified from geekatron/jerry v0.31.9; see NOTICE.

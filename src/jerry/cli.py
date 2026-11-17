@@ -123,7 +123,7 @@ def _index(found: projects.Discovery, write: bool) -> int:
     if not write:
         tables = [projects.render_index(found, root) for root in found.roots]
         if len(tables) > 1:
-            tables = [f"{root.as_posix()}\n\n{table}" for root, table in zip(found.roots, tables)]
+            tables = [f"{root.as_posix()}\n\n{table}" for root, table in zip(found.roots, tables, strict=True)]
         print("\n".join(tables), end="")
         return 0
     code = 0

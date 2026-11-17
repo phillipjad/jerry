@@ -65,12 +65,7 @@ class TestJerryDocumentParse:
     def test_parse_complex_document(self) -> None:
         """parse() correctly parses a multi-section document."""
         source = (
-            "# Title\n\n"
-            "Some paragraph text.\n\n"
-            "## Section One\n\n"
-            "More content.\n\n"
-            "## Section Two\n\n"
-            "Final content.\n"
+            "# Title\n\nSome paragraph text.\n\n## Section One\n\nMore content.\n\n## Section Two\n\nFinal content.\n"
         )
         doc = JerryDocument.parse(source)
         assert doc.tree is not None
@@ -393,5 +388,6 @@ class TestJerryDocumentRoundtrip:
         assert "story" in rendered
         assert "Status:" in rendered
         assert "pending" in rendered
+
 
 # Modified from geekatron/jerry v0.31.9; see NOTICE.

@@ -267,10 +267,7 @@ def validate_document(doc: JerryDocument, schema: EntitySchema) -> ValidationRep
                     expected=f"one of: {allowed_str}",
                     actual=value,
                     severity="error",
-                    message=(
-                        f"Field '{rule.key}' value '{value}' is not in allowed values: "
-                        f"{allowed_str}."
-                    ),
+                    message=(f"Field '{rule.key}' value '{value}' is not in allowed values: {allowed_str}."),
                     line_number=field_line,
                 )
             )
@@ -284,8 +281,7 @@ def validate_document(doc: JerryDocument, schema: EntitySchema) -> ValidationRep
                     actual=value,
                     severity="error",
                     message=(
-                        f"Field '{rule.key}' value '{value}' does not match "
-                        f"required pattern '{rule.value_pattern}'."
+                        f"Field '{rule.key}' value '{value}' does not match required pattern '{rule.value_pattern}'."
                     ),
                     line_number=field_line,
                 )
@@ -344,9 +340,7 @@ def validate_document(doc: JerryDocument, schema: EntitySchema) -> ValidationRep
                             expected="all ## headings covered in nav table",
                             actual=f"missing entries: {missing_str}",
                             severity="error",
-                            message=(
-                                f"Navigation table is missing entries for headings: {missing_str}."
-                            ),
+                            message=(f"Navigation table is missing entries for headings: {missing_str}."),
                         )
                     )
                 if nav_result.orphaned_entries:
@@ -358,8 +352,7 @@ def validate_document(doc: JerryDocument, schema: EntitySchema) -> ValidationRep
                             actual=f"orphaned entries: {orphaned_str}",
                             severity="error",
                             message=(
-                                f"Navigation table has orphaned entries with no matching "
-                                f"headings: {orphaned_str}."
+                                f"Navigation table has orphaned entries with no matching headings: {orphaned_str}."
                             ),
                         )
                     )
@@ -560,5 +553,6 @@ def get_entity_schema(entity_type: str) -> EntitySchema:
     from jerry.markdown_ast.schema_definitions import DEFAULT_REGISTRY
 
     return DEFAULT_REGISTRY.get(entity_type)
+
 
 # Modified from geekatron/jerry v0.31.9; see NOTICE.

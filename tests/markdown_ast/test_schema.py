@@ -501,9 +501,7 @@ class TestEntitySchemaConstruction:
 
     def test_validation_violation_is_frozen(self) -> None:
         """ValidationViolation is immutable (frozen dataclass)."""
-        v = ValidationViolation(
-            field_path="f", expected="e", actual="a", severity="error", message="m"
-        )
+        v = ValidationViolation(field_path="f", expected="e", actual="a", severity="error", message="m")
         with pytest.raises((AttributeError, TypeError)):
             v.message = "changed"  # type: ignore[misc]
 
@@ -689,10 +687,7 @@ class TestValidateDocumentMissingField:
         doc = JerryDocument.parse(MISSING_TYPE_FIELD_EPIC_SOURCE)
         report = validate_document(doc, EPIC_SCHEMA)
         type_violations = [v for v in report.violations if v.field_path == "frontmatter.Type"]
-        assert (
-            "present" in type_violations[0].expected.lower()
-            or "required" in type_violations[0].expected.lower()
-        )
+        assert "present" in type_violations[0].expected.lower() or "required" in type_violations[0].expected.lower()
 
     def test_missing_field_violation_actual_indicates_missing(self) -> None:
         """Missing field violation has an 'actual' that indicates absence."""
@@ -748,9 +743,7 @@ class TestValidateDocumentInvalidValue:
 
     def test_invalid_priority_value_epic_produces_violation(self) -> None:
         """Invalid Priority value for Epic produces a violation."""
-        source = VALID_EPIC_SOURCE.replace(
-            "> **Priority:** medium", "> **Priority:** ultra_critical"
-        )
+        source = VALID_EPIC_SOURCE.replace("> **Priority:** medium", "> **Priority:** ultra_critical")
         doc = JerryDocument.parse(source)
         report = validate_document(doc, EPIC_SCHEMA)
         assert report.is_valid is False
@@ -795,9 +788,7 @@ class TestValidateDocumentMissingSection:
         """Missing section violation has severity='error'."""
         doc = JerryDocument.parse(MISSING_SECTION_STORY_SOURCE)
         report = validate_document(doc, STORY_SCHEMA)
-        section_violations = [
-            v for v in report.violations if v.field_path == "sections.Acceptance Criteria"
-        ]
+        section_violations = [v for v in report.violations if v.field_path == "sections.Acceptance Criteria"]
         assert len(section_violations) == 1
         assert section_violations[0].severity == "error"
 
@@ -805,9 +796,7 @@ class TestValidateDocumentMissingSection:
         """Missing section violation 'actual' indicates section is absent."""
         doc = JerryDocument.parse(MISSING_SECTION_STORY_SOURCE)
         report = validate_document(doc, STORY_SCHEMA)
-        section_violations = [
-            v for v in report.violations if v.field_path == "sections.Acceptance Criteria"
-        ]
+        section_violations = [v for v in report.violations if v.field_path == "sections.Acceptance Criteria"]
         assert (
             "missing" in section_violations[0].actual.lower()
             or "not found" in section_violations[0].actual.lower()
@@ -1239,9 +1228,7 @@ None.
         assert len(nav_violations) >= 1
         # At least one violation should mention missing entries
         missing_violations = [
-            v
-            for v in nav_violations
-            if "missing" in v.expected.lower() or "missing" in v.actual.lower()
+            v for v in nav_violations if "missing" in v.expected.lower() or "missing" in v.actual.lower()
         ]
         assert len(missing_violations) >= 1
 
@@ -1288,5 +1275,6 @@ None.
         assert report.is_valid is False
         nav_violations = [v for v in report.violations if v.field_path == "nav_table"]
         assert len(nav_violations) >= 1
+
 
 # Modified from geekatron/jerry v0.31.9; see NOTICE.

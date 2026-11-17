@@ -23,6 +23,7 @@ Exit codes:
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import sys
@@ -340,15 +341,11 @@ def ast_modify(file_path: str, key: str, value: str) -> int:
         return 2
     finally:
         if temp_fd is not None:
-            try:
+            with contextlib.suppress(OSError):
                 os.close(temp_fd)
-            except OSError:
-                pass
         if temp_path_str is not None:
-            try:
+            with contextlib.suppress(OSError):
                 os.unlink(temp_path_str)
-            except OSError:
-                pass
 
     output = {
         "file": file_path,
