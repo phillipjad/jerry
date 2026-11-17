@@ -157,7 +157,10 @@ def _projects(args: argparse.Namespace) -> int:
     if args.command == "index":
         return _index(found, args.write)
     if args.command == "save":
-        ids = args.project_ids or ([entry["path"] for entry in state.focus] if state else [])
+        ids = args.project_ids
+        if not ids and state:
+            session.refresh(state, found)
+            ids = [entry["path"] for entry in state.focus]
         try:
             print("\n".join(save.save_projects(found, ids, args.message, push=args.push)))
         except save.SaveError as exc:
@@ -187,8 +190,12 @@ def _focus(args: argparse.Namespace) -> int:
         if args.command == "set":
             state.focus = entries
         else:
-            focused = {entry["path"] for entry in state.focus}
-            state.focus += [entry for entry in entries if entry["path"] not in focused]
+            focused = {entry["path"]: entry for entry in state.focus}
+            for entry in entries:
+                if entry["path"] in focused:
+                    focused[entry["path"]].update(entry)
+                else:
+                    state.focus.append(entry)
         state.none = False
     elif args.command == "none":
         state.focus, state.none = [], True

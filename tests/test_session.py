@@ -360,6 +360,17 @@ def test_should_follow_an_id_focused_project_moved_to_another_root(
     assert read_session(home)["focus"] == [{"id": "PROJ-007", "path": moved.as_posix()}]
 
 
+def test_should_record_the_root_when_a_path_is_added_for_a_project_focused_by_id(start: Path, home: Path) -> None:
+    folder = project_path(start, "PROJ-001-kame-house")
+    focus("set", "PROJ-001")
+    assert "root" not in read_session(home)["focus"][0]
+
+    code = focus("add", folder)
+
+    assert code == 0
+    assert read_session(home)["focus"] == [{"id": "PROJ-001", "path": folder, "root": folder.rsplit("/", 1)[0]}]
+
+
 def test_should_retry_the_replace_when_the_session_file_is_briefly_locked(
     home: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
