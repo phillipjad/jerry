@@ -170,7 +170,7 @@ def focus_entries(found: projects.Discovery, targets: list[str]) -> list[dict[st
                 + "\nPass one of these paths to focus set to choose."
             )
         else:
-            entries[found_at[0]] = {"id": target, "path": found_at[0]}
+            entries.setdefault(found_at[0], {"id": target, "path": found_at[0]})
     if problems:
         raise SessionError("\n".join(problems))
     return list(entries.values())

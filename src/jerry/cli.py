@@ -159,7 +159,8 @@ def _projects(args: argparse.Namespace) -> int:
     if args.command == "save":
         ids = args.project_ids
         if not ids and state:
-            session.refresh(state, found)
+            if session.refresh(state, found):
+                session.save(sid, state)
             ids = [entry["path"] for entry in state.focus]
         try:
             print("\n".join(save.save_projects(found, ids, args.message, push=args.push)))

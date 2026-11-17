@@ -205,6 +205,15 @@ def test_should_focus_the_project_at_a_path_when_its_id_is_in_two_roots(
     assert f"{{project_dir}} = {far.as_posix()}" in capsys.readouterr().out.splitlines()
 
 
+def test_should_keep_the_root_when_a_path_and_an_id_name_the_same_project(start: Path, home: Path) -> None:
+    folder = project_path(start, "PROJ-001-kame-house")
+
+    assert focus("set", folder, "PROJ-001") == 0
+    assert read_session(home)["focus"] == [{"id": "PROJ-001", "path": folder, "root": folder.rsplit("/", 1)[0]}]
+    assert focus("set", "PROJ-001", folder) == 0
+    assert read_session(home)["focus"] == [{"id": "PROJ-001", "path": folder, "root": folder.rsplit("/", 1)[0]}]
+
+
 def test_should_keep_both_projects_that_share_an_id_when_focused_by_path(twins: tuple[Path, Path], home: Path) -> None:
     near, far = twins
 
