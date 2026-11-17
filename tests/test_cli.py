@@ -176,7 +176,7 @@ def test_should_give_empty_content_for_a_compound_node_without_inline_text() -> 
 
 
 def test_should_not_import_the_upstream_src_package() -> None:
-    import jerry.ast_cli  # noqa: F401
+    import jerry.ast_cli
     import jerry.markdown_ast  # noqa: F401
 
     assert not [name for name in sys.modules if name == "src" or name.startswith("src.")]

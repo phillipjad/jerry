@@ -173,9 +173,7 @@ def test_should_deduplicate_a_symlinked_alias_of_a_root(tmp_path: Path, home: Pa
     assert found.warnings == []
 
 
-def test_should_keep_the_nearest_project_for_a_duplicate_id_and_warn_once_per_root(
-    tmp_path: Path, home: Path
-) -> None:
+def test_should_keep_the_nearest_project_for_a_duplicate_id_and_warn_once_per_root(tmp_path: Path, home: Path) -> None:
     make_project(tmp_path / "projects", "PROJ-001-near", title="Near")
     make_project(tmp_path / "projects", "PROJ-002-near")
     far = tmp_path / "far"

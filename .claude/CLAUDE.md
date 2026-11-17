@@ -24,6 +24,8 @@ ships skills and agents that write their output into the focused project.
 
 - Test-first: write the test, watch it fail, then write the code.
 - Run the tests with `uv run --group test pytest`.
+- Lint and format with `uv run --group lint ruff check src tests` and `uv run --group lint ruff format src tests`;
+  the settings are in `pyproject.toml`, and CI runs both as a check.
 - CI runs 6 cells (ubuntu, windows and macos on Python 3.11 and 3.14) with a 90% coverage floor, and a
   hook smoke job per OS (`tests/hook_smoke.py`) that runs the hooks as Claude Code starts them.
 - `hooks/run.py`, `src/jerry/hooks.py`, `projects.py` and `session.py` use the standard library only:

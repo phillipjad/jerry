@@ -22,6 +22,9 @@ test = [
     "pytest>=9.1.1",
     "pytest-cov>=7.1.0",
 ]
+lint = [
+    "ruff>=0.17.5",
+]
 
 [build-system]
 requires = ["hatchling"]
@@ -49,5 +52,21 @@ branch = true
 [tool.coverage.report]
 fail_under = 90
 show_missing = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+# __all__ lists are grouped by topic, not alphabetically.
+ignore = ["RUF022"]
+
+[tool.ruff.lint.isort]
+known-third-party = ["conftest"]
+
+[tool.ruff.lint.per-file-ignores]
+# Doctest examples in the docstrings hold long markdown sources.
+"src/jerry/markdown_ast/nav_table.py" = ["E501"]
 
 # Modified from geekatron/jerry v0.31.9; see NOTICE.

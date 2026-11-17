@@ -31,7 +31,6 @@ def tmp_md_file(tmp_path: Path) -> Path:
     return md_file
 
 
-
 @pytest.fixture()
 def tmp_heading_file(tmp_path: Path) -> Path:
     """Create a markdown file with multiple headings."""
@@ -41,12 +40,10 @@ def tmp_heading_file(tmp_path: Path) -> Path:
     return md_file
 
 
-
 @pytest.fixture()
 def nonexistent_file(tmp_path: Path) -> Path:
     """Return a path to a file that does not exist."""
     return tmp_path / "nonexistent.md"
-
 
 
 class TestTokenToDict:
@@ -86,7 +83,6 @@ class TestTokenToDict:
         for token in tokens:
             result = token_to_dict(token)
             assert isinstance(result["content"], str)
-
 
 
 class TestNodeToDict:
@@ -131,7 +127,6 @@ class TestNodeToDict:
         assert "Hello World" in result["content"]
 
 
-
 class TestAstParse:
     """Tests for ast_parse function."""
 
@@ -141,9 +136,7 @@ class TestAstParse:
             result = ast_parse(str(tmp_md_file))
         assert result == 0
 
-    def test_parse_outputs_json_with_file_key(
-        self, tmp_md_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_parse_outputs_json_with_file_key(self, tmp_md_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_parse outputs JSON containing file key."""
         ast_parse(str(tmp_md_file))
         captured = capsys.readouterr()
@@ -151,9 +144,7 @@ class TestAstParse:
         assert "file" in data
         assert str(tmp_md_file) in data["file"]
 
-    def test_parse_outputs_json_with_tokens_key(
-        self, tmp_md_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_parse_outputs_json_with_tokens_key(self, tmp_md_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_parse outputs JSON containing tokens list."""
         ast_parse(str(tmp_md_file))
         captured = capsys.readouterr()
@@ -162,9 +153,7 @@ class TestAstParse:
         assert isinstance(data["tokens"], list)
         assert len(data["tokens"]) > 0
 
-    def test_parse_outputs_json_with_tree_key(
-        self, tmp_md_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_parse_outputs_json_with_tree_key(self, tmp_md_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_parse outputs JSON containing tree with root type."""
         ast_parse(str(tmp_md_file))
         captured = capsys.readouterr()
@@ -172,9 +161,7 @@ class TestAstParse:
         assert "tree" in data
         assert data["tree"]["type"] == "root"
 
-    def test_parse_token_has_required_fields(
-        self, tmp_md_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_parse_token_has_required_fields(self, tmp_md_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_parse tokens contain type, tag, nesting, map, content fields."""
         ast_parse(str(tmp_md_file))
         captured = capsys.readouterr()
@@ -193,9 +180,7 @@ class TestAstParse:
         result = ast_parse(str(nonexistent_file))
         assert result == 2
 
-    def test_parse_file_not_found_prints_error(
-        self, nonexistent_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_parse_file_not_found_prints_error(self, nonexistent_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_parse prints an error message to stderr (not stdout) when
         the file does not exist (GH #371: stdout must stay clean for
         JSON-consuming pipelines)."""
@@ -204,9 +189,7 @@ class TestAstParse:
         assert captured.out == ""
         assert "not found" in captured.err.lower() or "error" in captured.err.lower()
 
-    def test_parse_output_is_valid_json(
-        self, tmp_md_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_parse_output_is_valid_json(self, tmp_md_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_parse output is parseable as JSON."""
         ast_parse(str(tmp_md_file))
         captured = capsys.readouterr()
@@ -214,9 +197,7 @@ class TestAstParse:
         data = json.loads(captured.out)
         assert data is not None
 
-    def test_parse_tree_has_children(
-        self, tmp_md_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_parse_tree_has_children(self, tmp_md_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_parse tree root contains children list."""
         ast_parse(str(tmp_md_file))
         captured = capsys.readouterr()
@@ -224,9 +205,7 @@ class TestAstParse:
         assert "children" in data["tree"]
         assert isinstance(data["tree"]["children"], list)
 
-    def test_parse_oserror_returns_exit_code_2(
-        self, tmp_md_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_parse_oserror_returns_exit_code_2(self, tmp_md_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_parse returns 2 when file read raises OSError."""
         from unittest.mock import patch as mock_patch
 
@@ -234,7 +213,6 @@ class TestAstParse:
         with mock_patch.object(Path, "read_text", side_effect=OSError("Permission denied")):
             result = ast_parse(str(tmp_md_file))
         assert result == 2
-
 
 
 class TestAstValidate:
@@ -246,9 +224,7 @@ class TestAstValidate:
             result = ast_validate(str(tmp_md_file))
         assert result == 0
 
-    def test_validate_no_schema_outputs_json(
-        self, tmp_md_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_validate_no_schema_outputs_json(self, tmp_md_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_validate without --schema outputs JSON with nav table results."""
         ast_validate(str(tmp_md_file))
         captured = capsys.readouterr()
@@ -268,18 +244,14 @@ class TestAstValidate:
             result = ast_validate(str(tmp_md_file), schema="entity")
         assert result == 2
 
-    def test_validate_with_task_schema_returns_exit_code_1_for_invalid_doc(
-        self, tmp_md_file: Path
-    ) -> None:
+    def test_validate_with_task_schema_returns_exit_code_1_for_invalid_doc(self, tmp_md_file: Path) -> None:
         """ast_validate with --schema task returns 1 when document has violations."""
         # tmp_md_file does not have required 'Type', 'Status', etc. fields
         with patch("sys.stdout", new_callable=StringIO):
             result = ast_validate(str(tmp_md_file), schema="task")
         assert result == 1
 
-    def test_validate_with_schema_outputs_json_report(
-        self, tmp_md_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_validate_with_schema_outputs_json_report(self, tmp_md_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_validate with --schema outputs a JSON report with nav table fields."""
         ast_validate(str(tmp_md_file), schema="task")
         captured = capsys.readouterr()
@@ -306,9 +278,7 @@ class TestAstValidate:
         result = ast_validate(str(nonexistent_file))
         assert result == 2
 
-    def test_validate_file_not_found_prints_error(
-        self, nonexistent_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_validate_file_not_found_prints_error(self, nonexistent_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_validate prints an error message to stderr (not stdout) when
         the file does not exist (GH #371)."""
         ast_validate(str(nonexistent_file))
@@ -328,9 +298,7 @@ class TestAstValidate:
         assert captured.out == ""
         assert "error" in captured.err.lower()
 
-    def test_validate_nav_flag_includes_entries(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_validate_nav_flag_includes_entries(self, tmp_path: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_validate --nav includes detailed nav table entries."""
         md = (
             "# Title\n\n"
@@ -353,18 +321,14 @@ class TestAstValidate:
         assert "description" in entry
         assert "line_number" in entry
 
-    def test_validate_no_nav_flag_excludes_entries(
-        self, tmp_md_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_validate_no_nav_flag_excludes_entries(self, tmp_md_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_validate without --nav does not include nav_entries key."""
         ast_validate(str(tmp_md_file))
         captured = capsys.readouterr()
         data = json.loads(captured.out)
         assert "nav_entries" not in data
 
-    def test_validate_with_schema_and_nav_includes_entries(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_validate_with_schema_and_nav_includes_entries(self, tmp_path: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_validate with --schema AND --nav includes nav_entries in output."""
         md = (
             "# TASK-099 Test Task\n\n"
@@ -419,7 +383,6 @@ class TestAstValidate:
         assert data["violations"] == []
 
 
-
 class TestAstFrontmatter:
     """Tests for ast_frontmatter function."""
 
@@ -429,9 +392,7 @@ class TestAstFrontmatter:
             result = ast_frontmatter(str(tmp_md_file))
         assert result == 0
 
-    def test_frontmatter_outputs_json_dict(
-        self, tmp_md_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_frontmatter_outputs_json_dict(self, tmp_md_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_frontmatter outputs a JSON object with frontmatter fields."""
         ast_frontmatter(str(tmp_md_file))
         captured = capsys.readouterr()
@@ -439,9 +400,7 @@ class TestAstFrontmatter:
         assert isinstance(data, dict)
         assert data.get("Key") == "value"
 
-    def test_frontmatter_empty_for_no_frontmatter(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_frontmatter_empty_for_no_frontmatter(self, tmp_path: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_frontmatter returns {} for files without frontmatter."""
         plain_file = tmp_path / "plain.md"
         plain_file.write_text("# Just heading\n\nNo frontmatter.\n", encoding="utf-8")
@@ -450,22 +409,17 @@ class TestAstFrontmatter:
         data = json.loads(captured.out)
         assert data == {}
 
-    def test_frontmatter_file_not_found(
-        self, nonexistent_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_frontmatter_file_not_found(self, nonexistent_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_frontmatter returns exit code 2 for missing file."""
         result = ast_frontmatter(str(nonexistent_file))
         assert result == 2
 
-    def test_frontmatter_output_is_valid_json(
-        self, tmp_md_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_frontmatter_output_is_valid_json(self, tmp_md_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_frontmatter output is parseable as JSON."""
         ast_frontmatter(str(tmp_md_file))
         captured = capsys.readouterr()
         data = json.loads(captured.out)
         assert data is not None
-
 
 
 class TestAstModify:
@@ -492,9 +446,7 @@ class TestAstModify:
         content = tmp_entity_file.read_text(encoding="utf-8")
         assert "done" in content
 
-    def test_modify_outputs_json_status(
-        self, tmp_entity_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_modify_outputs_json_status(self, tmp_entity_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_modify outputs JSON with file, key, value, status fields."""
         ast_modify(str(tmp_entity_file), "Status", "done")
         captured = capsys.readouterr()
@@ -510,9 +462,7 @@ class TestAstModify:
         content = tmp_entity_file.read_text(encoding="utf-8")
         assert "story" in content
 
-    def test_modify_missing_key_returns_exit_code_1(
-        self, tmp_entity_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_modify_missing_key_returns_exit_code_1(self, tmp_entity_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_modify returns 1 when key does not exist in frontmatter."""
         result = ast_modify(str(tmp_entity_file), "NonExistent", "value")
         assert result == 1
@@ -528,11 +478,10 @@ class TestAstModify:
         assert captured.out == ""
         assert "not found" in captured.err.lower()
 
-    def test_modify_file_not_found(
-        self, nonexistent_file: Path, capsys: pytest.CaptureFixture
-    ) -> None:
+    def test_modify_file_not_found(self, nonexistent_file: Path, capsys: pytest.CaptureFixture) -> None:
         """ast_modify returns exit code 2 for missing file."""
         result = ast_modify(str(nonexistent_file), "Status", "done")
         assert result == 2
+
 
 # Modified from geekatron/jerry v0.31.9; see NOTICE.

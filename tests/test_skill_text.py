@@ -31,8 +31,30 @@ UNROOTED_RUN = re.compile(r'\buv run (?!--project "\$\{CLAUDE_PLUGIN_ROOT\}" jer
 FENCE = re.compile(r"^\s*(`{3,}|~{3,})\s*([\w+-]*)")
 SHELL_FENCES = {"bash", "sh", "shell", "console", "zsh"}
 COMMANDS = {
-    "uv", "ls", "cat", "grep", "mkdir", "test", "python", "python3", "jerry", "find", "head",
-    "tail", "wc", "cp", "mv", "rm", "touch", "echo", "cd", "git", "sed", "awk", "diff", "rg",
+    "uv",
+    "ls",
+    "cat",
+    "grep",
+    "mkdir",
+    "test",
+    "python",
+    "python3",
+    "jerry",
+    "find",
+    "head",
+    "tail",
+    "wc",
+    "cp",
+    "mv",
+    "rm",
+    "touch",
+    "echo",
+    "cd",
+    "git",
+    "sed",
+    "awk",
+    "diff",
+    "rg",
 }
 SPAN = re.compile(r"(`+)(.+?)\1")
 QUOTED = re.compile(r"\"(?:[^\"\\]|\\.)*\"|'[^']*'")
@@ -122,7 +144,7 @@ def scan() -> list[Line]:
     for path in shipped():
         rel = path.relative_to(ROOT).as_posix()
         lines = path.read_text(encoding="utf-8").splitlines()
-        rows += [(rel, n, ctx, line) for n, (ctx, line) in enumerate(zip(contexts(rel, lines), lines), 1)]
+        rows += [(rel, n, ctx, line) for n, (ctx, line) in enumerate(zip(contexts(rel, lines), lines, strict=True), 1)]
     return rows
 
 
@@ -354,11 +376,7 @@ def test_should_quote_path_placeholders_in_shell_commands() -> None:
 
 
 def test_should_resolve_every_plugin_root_reference() -> None:
-    refs = [
-        (f"{rel}:{n}", TRAILING.sub("", m.group(1)))
-        for rel, n, _, line in SCAN
-        for m in ROOT_REF.finditer(line)
-    ]
+    refs = [(f"{rel}:{n}", TRAILING.sub("", m.group(1))) for rel, n, _, line in SCAN for m in ROOT_REF.finditer(line)]
 
     assert refs
     assert [f"{where} {path}" for where, path in refs if not (ROOT / literal(path)).exists()] == []
@@ -373,7 +391,7 @@ def test_should_not_route_to_dropped_skills() -> None:
     [
         (uses_directory_flag, "x.md", "prose", "uv run --directory x", 'uv run --project "x"'),
         (names_jerry_project, "x.md", "prose", "export JERRY_PROJECT=PROJ-001", "{project_dir}/a"),
-        (claims_reinjection, "x.md", "prose", '<!-- L2-REINJECT: rank=1 -->', "L2: architect view"),
+        (claims_reinjection, "x.md", "prose", "<!-- L2-REINJECT: rank=1 -->", "L2: architect view"),
         (claims_reinjection, "x.md", "prose", "| L2 | Every prompt | Re-inject rules |", "per prompt engineering"),
         (names_removed_word, "x.md", "prose", "| H-32 | x | project-workflow |", "workflow of the project"),
         (names_removed_word, "x.md", "prose", "`add-entry {PS_ID}` `set-entry-type`", "entry type"),
@@ -409,11 +427,42 @@ def test_should_not_route_to_dropped_skills() -> None:
         (names_dropped_skill, "x.md", "prose", "Use `transcript` or jerry:diataxis.", "Run bootstrap.py first."),
     ],
     ids=[
-        "directory", "jerry-project", "reinject", "reinjection", "rule-file", "ps-cli", "deleted-rule-row",
-        "deleted-rule-name", "pre-tool", "ci-gate", "template", "link",
-        "plugin-root", "link-artifact", "uv-fence", "uv-span", "ast-command", "namespace",
-        "scripts", "docs", "dead-relative", "dead-plugin", "project-id", "docs-output", "deleted", "bare", "relative",
-        "docs-scope", "template-link", "dir-link", "fence", "inline", "plain-fence", "row", "item", "backticked",
+        "directory",
+        "jerry-project",
+        "reinject",
+        "reinjection",
+        "rule-file",
+        "ps-cli",
+        "deleted-rule-row",
+        "deleted-rule-name",
+        "pre-tool",
+        "ci-gate",
+        "template",
+        "link",
+        "plugin-root",
+        "link-artifact",
+        "uv-fence",
+        "uv-span",
+        "ast-command",
+        "namespace",
+        "scripts",
+        "docs",
+        "dead-relative",
+        "dead-plugin",
+        "project-id",
+        "docs-output",
+        "deleted",
+        "bare",
+        "relative",
+        "docs-scope",
+        "template-link",
+        "dir-link",
+        "fence",
+        "inline",
+        "plain-fence",
+        "row",
+        "item",
+        "backticked",
     ],
 )
 def test_should_flag_only_the_banned_form(check: Check, rel: str, ctx: str, bad: str, good: str) -> None:
@@ -435,8 +484,15 @@ def test_should_track_frontmatter_and_fences() -> None:
     lines = ["---", "name: x", "---", "text", "````markdown", "```bash", "```", "````", "after"]
 
     assert contexts("a.md", lines) == [
-        "delimiter", "frontmatter", "delimiter", "prose", "delimiter", "fence:markdown", "fence:markdown",
-        "delimiter", "prose",
+        "delimiter",
+        "frontmatter",
+        "delimiter",
+        "prose",
+        "delimiter",
+        "fence:markdown",
+        "fence:markdown",
+        "delimiter",
+        "prose",
     ]
 
 

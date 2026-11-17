@@ -84,14 +84,10 @@ class SchemaRegistry:
         """
         if self._frozen:
             raise RuntimeError(
-                f"Cannot register schema '{schema.entity_type}': registry is frozen. "
-                f"Call register() before freeze()."
+                f"Cannot register schema '{schema.entity_type}': registry is frozen. Call register() before freeze()."
             )
         if schema.entity_type in self._schemas:
-            raise ValueError(
-                f"Schema '{schema.entity_type}' already registered. "
-                f"Key collision detected (T-SV-04)."
-            )
+            raise ValueError(f"Schema '{schema.entity_type}' already registered. Key collision detected (T-SV-04).")
         self._schemas[schema.entity_type] = schema
 
     def freeze(self) -> None:
@@ -146,5 +142,6 @@ class SchemaRegistry:
             Sorted list of entity type strings.
         """
         return sorted(self._schemas.keys())
+
 
 # Modified from geekatron/jerry v0.31.9; see NOTICE.

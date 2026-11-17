@@ -238,11 +238,7 @@ class JerryDocument:
 
         for line_idx, new_content in new_inline_map.items():
             orig_content = orig_inline_map.get(line_idx)
-            if (
-                orig_content is not None
-                and orig_content != new_content
-                and line_idx < len(result_lines)
-            ):
+            if orig_content is not None and orig_content != new_content and line_idx < len(result_lines):
                 original_line = source_lines[line_idx]
                 if orig_content in original_line:
                     result_lines[line_idx] = original_line.replace(orig_content, new_content, 1)
@@ -285,5 +281,6 @@ class JerryDocument:
             Token.children.
         """
         return list(self._tokens)
+
 
 # Modified from geekatron/jerry v0.31.9; see NOTICE.

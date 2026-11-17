@@ -684,7 +684,7 @@ class TestBlockquoteFrontmatterEdgeCases:
         assert fm.get("Status") == "pending"
         assert fm.get("Priority") == "high"
         # The continuation line is not a valid key-value pair
-        assert "This is a continuation line" not in fm.keys()
+        assert "This is a continuation line" not in fm
 
     def test_case_sensitive_key_lookup(self) -> None:
         """Keys in get() are case-sensitive."""
@@ -776,5 +776,6 @@ class TestFrontmatterAdversarialInputs:
         new_doc = fm.set("Owner", "^start|middle$end")
         new_fm = BlockquoteFrontmatter.extract(new_doc)
         assert new_fm.get("Owner") == "^start|middle$end"
+
 
 # Modified from geekatron/jerry v0.31.9; see NOTICE.

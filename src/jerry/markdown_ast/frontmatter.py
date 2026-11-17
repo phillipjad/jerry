@@ -519,4 +519,5 @@ def _escape_replacement(value: str) -> str:
     """
     return value.replace("\\", "\\\\")
 
+
 # Modified from geekatron/jerry v0.31.9; see NOTICE.

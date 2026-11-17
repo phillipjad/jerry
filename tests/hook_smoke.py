@@ -80,7 +80,16 @@ def smoke(base: Path) -> int:
     assert "Focus: nothing is focused" in context and "PROJ-001" in context, context
 
     focus = [
-        "uv", "run", "--project", plugin.as_posix(), "jerry", "focus", "set", "PROJ-001", "--session", SESSION,
+        "uv",
+        "run",
+        "--project",
+        plugin.as_posix(),
+        "jerry",
+        "focus",
+        "set",
+        "PROJ-001",
+        "--session",
+        SESSION,
     ]
     out, elapsed = run(focus, work, env)
     print(f"jerry focus set: {elapsed:.2f} s")

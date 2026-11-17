@@ -220,8 +220,7 @@ def _scan(root: Path, found: Discovery) -> list[Project]:
                 continue
             if name.id in in_root:
                 found.errors.append(
-                    f"{name.id} is defined twice in {root.as_posix()}: "
-                    f"{in_root[name.id].path.name} and {child.name}"
+                    f"{name.id} is defined twice in {root.as_posix()}: {in_root[name.id].path.name} and {child.name}"
                 )
                 continue
             if parent is not None and name.number[:-1] != parent.number:
