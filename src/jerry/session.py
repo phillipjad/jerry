@@ -4,9 +4,11 @@
 """Per-session state: the roots a session sees and the projects it focuses on.
 
 Each Claude Code session has a file ``~/.jerry/sessions/<session_id>.json``
-holding ``{"cwd", "roots", "none", "focus": [{"id", "path"}]}``. The stored
-roots fix what the session sees, so changing directory mid-session does not
-change discovery. The first focus entry is the primary project. This module
+holding ``{"cwd", "roots", "none", "focus": [{"id", "path"[, "root"]}]}``. The
+stored roots fix what the session sees, so changing directory mid-session does
+not change discovery. The first focus entry is the primary project. An entry
+chosen by folder path also records that folder's ``root``, which keeps a later
+re-resolution by ID inside that root. This module
 uses the standard library only, so hooks can import it without the project
 environment.
 """
@@ -71,7 +73,10 @@ def _valid(data: object) -> bool:
         and strings(data.get("roots"))
         and isinstance(data.get("none"), bool)
         and isinstance(data.get("focus"), list)
-        and all(isinstance(e, dict) and strings([e.get("id"), e.get("path")]) for e in data["focus"])
+        and all(
+            isinstance(e, dict) and strings([e.get("id"), e.get("path"), *([e["root"]] if "root" in e else [])])
+            for e in data["focus"]
+        )
     )
 
 
@@ -86,7 +91,7 @@ def load(sid: str) -> Session | None:
         raise SessionError(f"{path.as_posix()}: cannot read session file: {exc}") from None
     if not _valid(data):
         raise SessionError(f"{path.as_posix()}: not a valid session file")
-    focus = [{"id": e["id"], "path": e["path"]} for e in data["focus"]]
+    focus = [{key: e[key] for key in ("id", "path", "root") if key in e} for e in data["focus"]]
     return Session(cwd=data["cwd"], roots=data["roots"], none=data["none"], focus=focus)
 
 
@@ -141,14 +146,19 @@ def focus_entries(found: projects.Discovery, targets: list[str]) -> list[dict[st
     naming every target that is unknown, a folder that holds no discovered
     project, or an ID found in more than one root, before anything is changed.
     """
-    entries, problems = {}, []
+    entries: dict[str, dict[str, str]] = {}
+    problems = []
     for target in dict.fromkeys(targets):
         if Path(target).is_dir():
             project = projects.project_at(found, target)
             if project is None:
                 problems.append(f"not a project folder under the session roots: {target}")
             else:
-                entries[project.path.as_posix()] = project.id
+                entries[project.path.as_posix()] = {
+                    "id": project.id,
+                    "path": project.path.as_posix(),
+                    "root": project.root.as_posix(),
+                }
             continue
         found_at = _paths(found, target)
         if not found_at:
@@ -160,18 +170,26 @@ def focus_entries(found: projects.Discovery, targets: list[str]) -> list[dict[st
                 + "\nPass one of these paths to focus set to choose."
             )
         else:
-            entries[found_at[0]] = target
+            entries[found_at[0]] = {"id": target, "path": found_at[0]}
     if problems:
         raise SessionError("\n".join(problems))
-    return [{"id": project_id, "path": path} for path, project_id in entries.items()]
+    return list(entries.values())
 
 
 def refresh(session: Session, found: projects.Discovery) -> bool:
-    """Re-resolve by ID each focused project whose folder is gone; return True if any moved."""
+    """Re-resolve by ID each focused project whose folder is gone; return True if any moved.
+
+    An entry chosen by path only re-resolves inside its recorded root, so a vanished
+    folder never falls through to another root's project with the same ID.
+    """
     changed = False
     for entry in session.focus:
         if not Path(entry["path"]).is_dir():
-            found_at = _paths(found, entry["id"])
+            found_at = [
+                p.path.as_posix()
+                for p in found.all_projects
+                if p.id == entry["id"] and p.root.as_posix() == entry.get("root", p.root.as_posix())
+            ]
             if len(found_at) == 1:
                 entry["path"] = found_at[0]
                 changed = True
