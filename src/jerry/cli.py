@@ -62,7 +62,9 @@ def build_parser() -> argparse.ArgumentParser:
     save_parser = project_commands.add_parser(
         "save", help="Commit projects' folders and the registry; with --push, also pull, rebase and push."
     )
-    save_parser.add_argument("project_ids", nargs="*", metavar="id", help="Projects to save (default: the focus).")
+    save_parser.add_argument(
+        "project_ids", nargs="*", metavar="id-or-path", help="Projects to save (default: the focus)."
+    )
     save_parser.add_argument("-m", "--message", required=True, help="Commit message.")
     save_parser.add_argument("--push", action="store_true", help="Pull with rebase, then push the branch.")
     _add_scope(save_parser)
@@ -75,7 +77,7 @@ def build_parser() -> argparse.ArgumentParser:
         ("add", "Add these projects to the focus."),
     ):
         command = focus_commands.add_parser(name, help=help_text)
-        command.add_argument("project_ids", nargs="+", metavar="id")
+        command.add_argument("project_ids", nargs="+", metavar="id-or-path")
         _add_scope(command)
     _add_scope(focus_commands.add_parser("none", help="Work without a project in this session."))
 
@@ -155,7 +157,7 @@ def _projects(args: argparse.Namespace) -> int:
     if args.command == "index":
         return _index(found, args.write)
     if args.command == "save":
-        ids = args.project_ids or ([entry["id"] for entry in state.focus] if state else [])
+        ids = args.project_ids or ([entry["path"] for entry in state.focus] if state else [])
         try:
             print("\n".join(save.save_projects(found, ids, args.message, push=args.push)))
         except save.SaveError as exc:
@@ -185,8 +187,8 @@ def _focus(args: argparse.Namespace) -> int:
         if args.command == "set":
             state.focus = entries
         else:
-            focused = {entry["id"] for entry in state.focus}
-            state.focus += [entry for entry in entries if entry["id"] not in focused]
+            focused = {entry["path"] for entry in state.focus}
+            state.focus += [entry for entry in entries if entry["path"] not in focused]
         state.none = False
     elif args.command == "none":
         state.focus, state.none = [], True

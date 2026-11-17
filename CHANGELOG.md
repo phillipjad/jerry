@@ -5,6 +5,15 @@ All notable changes to this derivative of the Jerry Framework are documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `jerry focus set` and `focus add` accept a project folder path as well as an ID, and
+  `jerry projects save` does too. A path picks that project even when its ID exists in another
+  root; the focus stores the folder, so later commands use it instead of an ID lookup. The
+  ambiguity error now says to pass one of the listed paths.
+
 ## [1.1.0] - 2026-11-09
 
 ### Added

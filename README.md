@@ -199,7 +199,8 @@ one. Quick questions skip the ask. A session that cannot ask works without a pro
 
 Claude runs the `focus` commands when you pick a project or ask for a change. `focus set <id>...`
 replaces the focus (the first ID is primary), `focus add <id>...` adds to it, `focus none` works
-without a project, and `focus show` prints the focus with each Pick up here section.
+without a project, and `focus show` prints the focus with each Pick up here section. Where an
+ID exists in two roots, pass the project's folder path instead of the ID.
 
 Subagents inherit the focus: each one is told `{project_dir}` and the other focused projects,
 and never changes the focus itself. Resuming a session or compacting it keeps the focus. `/clear`

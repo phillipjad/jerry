@@ -179,6 +179,63 @@ def test_should_refuse_an_unknown_id_and_write_nothing(
     assert not session_file(home, "trunks").exists()
 
 
+@pytest.fixture
+def twins(tmp_path: Path, home: Path, monkeypatch: pytest.MonkeyPatch) -> tuple[Path, Path]:
+    near = make_project(tmp_path / "near", "PROJ-007-saiyan")
+    far = make_project(tmp_path / "far", "PROJ-007-namek")
+    monkeypatch.chdir(tmp_path)
+    return near.resolve(), far.resolve()
+
+
+def focus_twins(twins: tuple[Path, Path], *args: str) -> int:
+    near, far = twins
+    return cli.main(["focus", *args, "--root", str(near.parent), "--root", str(far.parent), "--session", SESSION])
+
+
+def test_should_focus_the_project_at_a_path_when_its_id_is_in_two_roots(
+    twins: tuple[Path, Path], home: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    _, far = twins
+
+    code = focus_twins(twins, "set", str(far))
+
+    assert code == 0
+    assert read_session(home)["focus"] == [{"id": "PROJ-007", "path": far.as_posix()}]
+    assert f"{{project_dir}} = {far.as_posix()}" in capsys.readouterr().out.splitlines()
+
+
+def test_should_keep_both_projects_that_share_an_id_when_focused_by_path(twins: tuple[Path, Path], home: Path) -> None:
+    near, far = twins
+
+    assert focus_twins(twins, "set", str(far), str(far), str(near)) == 0
+    assert [entry["path"] for entry in read_session(home)["focus"]] == [far.as_posix(), near.as_posix()]
+    assert focus_twins(twins, "set", str(near)) == 0
+    assert focus_twins(twins, "add", str(far), str(near)) == 0
+    assert [entry["path"] for entry in read_session(home)["focus"]] == [near.as_posix(), far.as_posix()]
+
+
+def test_should_refuse_a_folder_that_is_not_a_discovered_project(
+    twins: tuple[Path, Path], home: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    plain = tmp_path / "plain"
+    plain.mkdir()
+
+    code = focus_twins(twins, "set", str(plain))
+
+    assert code == 1
+    assert f"not a project folder under the session roots: {plain}" in capsys.readouterr().err
+    assert not session_file(home).exists()
+
+
+def test_should_name_the_path_form_in_the_ambiguity_error(
+    twins: tuple[Path, Path], capsys: pytest.CaptureFixture[str]
+) -> None:
+    code = focus_twins(twins, "set", "PROJ-007")
+
+    assert code == 1
+    assert "Pass one of these paths to focus set to choose." in capsys.readouterr().err
+
+
 def test_should_refuse_an_id_found_in_two_roots_and_list_every_path(
     tmp_path: Path, home: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:

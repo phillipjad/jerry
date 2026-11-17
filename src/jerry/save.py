@@ -103,17 +103,16 @@ def _save_root(root: Path, folders: set[Path], message: str, push: bool) -> str:
 
 
 def save_projects(found: projects.Discovery, ids: list[str], message: str, push: bool = False) -> list[str]:
-    """Commit each project's top-level folder and its root's README.md; with ``push``, pull, rebase and push.
+    """Commit each project's top-level folder (``ids`` are project IDs or project folder paths) and its root's README.md; with ``push``, pull, rebase and push.
 
     Refreshes the registries first and refuses on any ``check`` error or scrub hit.
     Returns one report line per root. Raises SaveError; roots saved before the failure stay saved.
     """
     if not ids:
         raise SaveError("no projects to save: pass project IDs or focus a project")
-    unknown = [i for i in ids if i not in found.projects]
-    if unknown:
-        raise SaveError(f"unknown project: {', '.join(unknown)}")
-    chosen = [found.projects[i] for i in ids]
+    chosen = [projects.project_at(found, i) or found.projects.get(i) for i in ids]
+    if None in chosen:
+        raise SaveError(f"unknown project: {', '.join(i for i, p in zip(ids, chosen) if p is None)}")
     folders: dict[Path, set[Path]] = {}
     for p in chosen:
         folders.setdefault(p.root, set()).add(p.root / p.path.relative_to(p.root).parts[0])
