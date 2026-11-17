@@ -3,6 +3,7 @@
 
 import json
 import os
+import shutil
 import time
 from pathlib import Path
 
@@ -200,7 +201,7 @@ def test_should_focus_the_project_at_a_path_when_its_id_is_in_two_roots(
     code = focus_twins(twins, "set", str(far))
 
     assert code == 0
-    assert read_session(home)["focus"] == [{"id": "PROJ-007", "path": far.as_posix()}]
+    assert read_session(home)["focus"] == [{"id": "PROJ-007", "path": far.as_posix(), "root": far.parent.as_posix()}]
     assert f"{{project_dir}} = {far.as_posix()}" in capsys.readouterr().out.splitlines()
 
 
@@ -314,6 +315,51 @@ def test_should_re_resolve_a_focused_project_after_its_folder_moves(
     assert f"{{project_dir}} = {moved}" in capsys.readouterr().out.splitlines()
 
 
+def test_should_keep_a_path_focused_project_in_its_root_when_its_folder_vanishes(
+    twins: tuple[Path, Path], home: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    near, _ = twins
+    focus_twins(twins, "set", str(near))
+    shutil.rmtree(near)
+    capsys.readouterr()
+
+    code = focus_twins(twins, "show")
+
+    assert code == 0
+    assert read_session(home)["focus"] == [{"id": "PROJ-007", "path": near.as_posix(), "root": near.parent.as_posix()}]
+    assert "(not found under the session roots)" in capsys.readouterr().out
+
+
+def test_should_follow_a_path_focused_project_renamed_inside_its_root(twins: tuple[Path, Path], home: Path) -> None:
+    _, far = twins
+    focus_twins(twins, "set", str(far))
+    renamed = far.with_name("PROJ-007-renamed")
+    far.rename(renamed)
+
+    assert focus_twins(twins, "show") == 0
+
+    assert read_session(home)["focus"] == [
+        {"id": "PROJ-007", "path": renamed.as_posix(), "root": far.parent.as_posix()}
+    ]
+
+
+def test_should_follow_an_id_focused_project_moved_to_another_root(
+    tmp_path: Path, home: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    old = make_project(tmp_path / "old", "PROJ-007-saiyan")
+    (tmp_path / "new").mkdir()
+    monkeypatch.chdir(tmp_path)
+    roots = ["--root", str(tmp_path / "old"), "--root", str(tmp_path / "new")]
+    assert cli.main(["focus", "set", "PROJ-007", *roots, "--session", SESSION]) == 0
+    assert "root" not in read_session(home)["focus"][0]
+    moved = (tmp_path / "new" / old.name).resolve()
+    old.rename(moved)
+
+    assert cli.main(["focus", "show", *roots, "--session", SESSION]) == 0
+
+    assert read_session(home)["focus"] == [{"id": "PROJ-007", "path": moved.as_posix()}]
+
+
 def test_should_retry_the_replace_when_the_session_file_is_briefly_locked(
     home: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -358,6 +404,7 @@ def test_should_report_a_session_file_that_stays_locked_and_leave_no_temp_file(
         b"[]",
         b'{"cwd": "/x", "roots": "/x", "none": false, "focus": []}',
         b'{"cwd": "/x", "roots": [], "none": false, "focus": [{"id": "PROJ-001"}]}',
+        b'{"cwd": "/x", "roots": [], "none": false, "focus": [{"id": "PROJ-001", "path": "/x", "root": 7}]}',
     ],
 )
 def test_should_report_a_corrupt_session_file_without_changing_it(
