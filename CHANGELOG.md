@@ -5,6 +5,16 @@ All notable changes to this derivative of the Jerry Framework are documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2] - 2026-11-17
+
+### Fixed
+
+- `jerry projects save` with no IDs refreshes the focus first, so a focused project whose folder
+  was renamed is saved at its new folder instead of failing as an unknown project. 1.2.0 broke
+  this; earlier releases saved by ID.
+- `jerry focus add <path>` for a project already focused by ID now records its root on that
+  entry, so the 1.2.1 root-scoped re-resolution covers it too.
+
 ## [1.2.1] - 2026-11-17
 
 ### Fixed

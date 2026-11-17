@@ -108,6 +108,18 @@ def test_should_save_a_project_named_by_path_when_its_id_is_in_two_roots(
     assert git(root, "status", "--porcelain") == " M PROJ-001-goku/RESUME.md\n"
 
 
+def test_should_save_the_focus_after_its_folder_was_renamed(root: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    assert cli.main(["focus", "set", "PROJ-002", "--session", "s1", "--root", str(root)]) == 0
+    (root / "PROJ-002-vegeta").rename(root / "PROJ-002-renamed")
+    (root / "PROJ-002-renamed" / "RESUME.md").write_text(PICK_UP + "- Final Flash.\n", encoding="utf-8")
+    capsys.readouterr()
+
+    code, _, err = run_save(capsys, root, "-m", "Rename PROJ-002", "--session", "s1")
+
+    assert (code, err) == (0, "")
+    assert "PROJ-002-renamed/RESUME.md" in committed(root)
+
+
 def test_should_commit_only_the_named_projects_folder_and_the_refreshed_registry(
     root: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
