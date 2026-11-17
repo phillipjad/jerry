@@ -133,24 +133,37 @@ def _paths(found: projects.Discovery, project_id: str) -> list[str]:
     return [p.path.as_posix() for p in found.all_projects if p.id == project_id]
 
 
-def focus_entries(found: projects.Discovery, ids: list[str]) -> list[dict[str, str]]:
-    """Return focus entries for ``ids`` in order, without duplicates.
+def focus_entries(found: projects.Discovery, targets: list[str]) -> list[dict[str, str]]:
+    """Return focus entries for ``targets`` in order, without duplicate folders.
 
-    Raises SessionError naming every ID that is unknown, or found in more than
-    one root, before anything is changed.
+    A target is a project ID, or the path of an existing folder, which picks
+    that project even when its ID is also in another root. Raises SessionError
+    naming every target that is unknown, a folder that holds no discovered
+    project, or an ID found in more than one root, before anything is changed.
     """
-    entries, problems = [], []
-    for project_id in dict.fromkeys(ids):
-        found_at = _paths(found, project_id)
+    entries, problems = {}, []
+    for target in dict.fromkeys(targets):
+        if Path(target).is_dir():
+            project = projects.project_at(found, target)
+            if project is None:
+                problems.append(f"not a project folder under the session roots: {target}")
+            else:
+                entries[project.path.as_posix()] = project.id
+            continue
+        found_at = _paths(found, target)
         if not found_at:
-            problems.append(f"unknown project: {project_id}")
+            problems.append(f"unknown project: {target}")
         elif len(found_at) > 1:
-            problems.append(f"{project_id} is ambiguous; found at:\n  " + "\n  ".join(found_at))
+            problems.append(
+                f"{target} is ambiguous; found at:\n  "
+                + "\n  ".join(found_at)
+                + "\nPass one of these paths to focus set to choose."
+            )
         else:
-            entries.append({"id": project_id, "path": found_at[0]})
+            entries[found_at[0]] = target
     if problems:
         raise SessionError("\n".join(problems))
-    return entries
+    return [{"id": project_id, "path": path} for path, project_id in entries.items()]
 
 
 def refresh(session: Session, found: projects.Discovery) -> bool:

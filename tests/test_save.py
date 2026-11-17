@@ -68,6 +68,46 @@ def root(remote: Path, tmp_path: Path) -> Path:
     return clone(remote, tmp_path / "projects")
 
 
+@pytest.fixture
+def twin_roots(root: Path, tmp_path: Path) -> tuple[Path, list[str]]:
+    other = tmp_path / "other"
+    tracked(other, "PROJ-001-gohan", title="Gohan", summary="")
+    (other / "README.md").write_text(f"# Registry\n\n{START}\n{END}\n", encoding="utf-8")
+    assert cli.main(["projects", "index", "--write", "--root", str(other)]) == 0
+    git(tmp_path, "init", "-q", "-b", "main", str(other))
+    configure(other)
+    git(other, "add", "-A")
+    git(other, "commit", "-q", "-m", "Seed")
+    (other / "PROJ-001-gohan" / "RESUME.md").write_text(PICK_UP + "- Masenko.\n", encoding="utf-8")
+    (root / "PROJ-001-goku" / "RESUME.md").write_text(PICK_UP + "- Not this one.\n", encoding="utf-8")
+    return other, ["--root", str(root), "--root", str(other)]
+
+
+def test_should_save_the_path_focused_project_when_its_id_is_in_two_roots(
+    twin_roots: tuple[Path, list[str]],
+) -> None:
+    other, roots = twin_roots
+    assert cli.main(["focus", "set", str(other / "PROJ-001-gohan"), "--session", "s1", *roots]) == 0
+
+    code = cli.main(["projects", "save", "-m", "Update PROJ-001", "--session", "s1", *roots])
+
+    assert code == 0
+    assert committed(other) == ["PROJ-001-gohan/RESUME.md"]
+    assert git(other, "status", "--porcelain") == ""
+
+
+def test_should_save_a_project_named_by_path_when_its_id_is_in_two_roots(
+    twin_roots: tuple[Path, list[str]], root: Path
+) -> None:
+    other, roots = twin_roots
+
+    code = cli.main(["projects", "save", str(other / "PROJ-001-gohan"), "-m", "Update PROJ-001", *roots])
+
+    assert code == 0
+    assert committed(other) == ["PROJ-001-gohan/RESUME.md"]
+    assert git(root, "status", "--porcelain") == " M PROJ-001-goku/RESUME.md\n"
+
+
 def test_should_commit_only_the_named_projects_folder_and_the_refreshed_registry(
     root: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:

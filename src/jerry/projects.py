@@ -285,6 +285,12 @@ def discover(start: Path, roots: list[Path] | None = None) -> Discovery:
     return found
 
 
+def project_at(found: Discovery, folder: str) -> Project | None:
+    """Return the discovered project, shadowed or not, whose folder is ``folder``; None if there is none."""
+    path = Path(folder)
+    return next((p for p in found.all_projects if p.path == path.resolve()), None) if path.is_dir() else None
+
+
 def render_list(found: Discovery) -> str:
     """Render the discovered projects grouped by root, indented by depth."""
     if not found.projects:
