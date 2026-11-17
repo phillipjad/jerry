@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (c) 2026 Phillip Miavelstuck
 
+import json
 import subprocess
 from pathlib import Path
 
@@ -108,7 +109,9 @@ def test_should_save_a_project_named_by_path_when_its_id_is_in_two_roots(
     assert git(root, "status", "--porcelain") == " M PROJ-001-goku/RESUME.md\n"
 
 
-def test_should_save_the_focus_after_its_folder_was_renamed(root: Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_should_save_the_focus_after_its_folder_was_renamed(
+    root: Path, home: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
     assert cli.main(["focus", "set", "PROJ-002", "--session", "s1", "--root", str(root)]) == 0
     (root / "PROJ-002-vegeta").rename(root / "PROJ-002-renamed")
     (root / "PROJ-002-renamed" / "RESUME.md").write_text(PICK_UP + "- Final Flash.\n", encoding="utf-8")
@@ -118,6 +121,8 @@ def test_should_save_the_focus_after_its_folder_was_renamed(root: Path, capsys: 
 
     assert (code, err) == (0, "")
     assert "PROJ-002-renamed/RESUME.md" in committed(root)
+    stored = json.loads((home / ".jerry" / "sessions" / "s1.json").read_text(encoding="utf-8"))
+    assert stored["focus"][0]["path"] == (root / "PROJ-002-renamed").resolve().as_posix()
 
 
 def test_should_commit_only_the_named_projects_folder_and_the_refreshed_registry(
