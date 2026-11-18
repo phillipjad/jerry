@@ -200,19 +200,19 @@ def test_should_stage_old_files_whose_names_hold_glob_characters(
     root: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     vegeta = root / "PROJ-002-vegeta"
-    (vegeta / "notes [v2]*.md").write_text("Galick Gun.\n", encoding="utf-8")
-    (vegeta / "notes v1.md").write_text("Scouter.\n", encoding="utf-8")
+    (vegeta / "notes [v2].md").write_text("Galick Gun.\n", encoding="utf-8")
+    (vegeta / "notes v.md").write_text("Scouter.\n", encoding="utf-8")
     commit_all(root, "Add notes")
     vegeta.rename(root / "PROJ-002-renamed")
     vegeta.mkdir()
-    shutil.copy(root / "PROJ-002-renamed" / "notes v1.md", vegeta / "notes v1.md")
+    shutil.copy(root / "PROJ-002-renamed" / "notes v.md", vegeta / "notes v.md")
 
     code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Rename PROJ-002")
 
     assert (code, err) == (0, "")
-    assert "PROJ-002-renamed/notes [v2]*.md" in head_files(root)
-    assert "PROJ-002-vegeta/notes [v2]*.md" not in head_files(root)
-    assert "PROJ-002-vegeta/notes v1.md" in head_files(root)
+    assert "PROJ-002-renamed/notes [v2].md" in head_files(root)
+    assert "PROJ-002-vegeta/notes [v2].md" not in head_files(root)
+    assert "PROJ-002-vegeta/notes v.md" in head_files(root)
     assert git(root, "status", "--porcelain") == ""
 
 
@@ -220,17 +220,17 @@ def test_should_keep_a_staged_survivor_whose_name_a_glob_would_also_match(
     root: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     gohan = tracked(root, "PROJ-003-gohan", title="Gohan", summary="")
-    (gohan / "a [x]*.md").write_text("Masenko.\n", encoding="utf-8")
-    (gohan / "a x1.md").write_text("Kamehameha.\n", encoding="utf-8")
+    (gohan / "a [x].md").write_text("Masenko.\n", encoding="utf-8")
+    (gohan / "a x.md").write_text("Kamehameha.\n", encoding="utf-8")
     git(root, "add", "PROJ-003-gohan")
     gohan.rename(root / "PROJ-003-renamed")
     gohan.mkdir()
-    shutil.copy(root / "PROJ-003-renamed" / "a x1.md", gohan / "a x1.md")
+    shutil.copy(root / "PROJ-003-renamed" / "a x.md", gohan / "a x.md")
 
     code, _, err = run_save(capsys, root, "PROJ-003", "-m", "Add PROJ-003")
 
     assert (code, err) == (0, "")
-    assert git(root, "diff", "--cached", "--name-only").split("\n")[:-1] == ["PROJ-003-gohan/a x1.md"]
+    assert git(root, "diff", "--cached", "--name-only").split("\n")[:-1] == ["PROJ-003-gohan/a x.md"]
     assert not [name for name in head_files(root) if name.startswith("PROJ-003-gohan/")]
 
 
