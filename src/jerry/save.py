@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import contextlib
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -31,9 +32,14 @@ def _plural(count: int, noun: str) -> str:
     return f"{count} {noun}{'' if count == 1 else 's'}"
 
 
-def _git(top: Path, *args: str) -> str:
+def _git(top: Path, *args: str, stdin: str | None = None) -> str:
     result = subprocess.run(
-        ["git", "-C", str(top), *args], capture_output=True, text=True, encoding="utf-8", errors="replace"
+        ["git", "-C", str(top), *args],
+        input=stdin,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
     )
     if result.returncode:
         raise SaveError(f"git {args[0]}: {(result.stderr or result.stdout).strip()}")
@@ -77,22 +83,58 @@ def _push(top: Path) -> None:
     _git(top, "push", "-q")
 
 
-def _top_folder_id(name: str) -> str | None:
-    parsed = projects.parse_folder(name)
-    return parsed.id if parsed else None
+_FROM_STDIN = ("--pathspec-from-file=-", "--pathspec-file-nul")
+FOLDER_ID = re.compile(r"PROJ-\d{3}(?:\.\d+)*(?!\d|\.\d)")
 
 
-def _renamed_away(top: Path, root: Path, folders: set[Path]) -> set[str]:
-    """Return the tracked folders under ``root`` that are gone from disk and carry a saved folder's project ID."""
-    wanted = {_top_folder_id(f.name) for f in folders} - {None}
-    root_depth = len(root.relative_to(top).parts)
-    deleted = _git(top, "ls-files", "-z", "--deleted", "--", root.relative_to(top).as_posix()).split("\0")
-    gone = {
-        "/".join(parts[: root_depth + 1])
-        for parts in (name.split("/") for name in deleted if name)
-        if len(parts) > root_depth and _top_folder_id(parts[root_depth]) in wanted
-    }
-    return {rel for rel in gone if not (top / rel).exists()}
+def _nul_joined(paths: list[str], literal: list[str]) -> str:
+    """Join pathspecs for ``--pathspec-file-nul``; each of ``literal`` is matched as exactly that file name.
+
+    ``:(literal)`` magic is refused when the caller's environment already sets ``GIT_LITERAL_PATHSPECS``,
+    and that mode makes the plain name literal anyway.
+    """
+    caller_is_literal = os.environ.get("GIT_LITERAL_PATHSPECS", "").lower() in {"1", "true", "yes", "on"}
+    magic = "" if caller_is_literal else ":(literal)"
+    return "\0".join([*paths, *(f"{magic}{name}" for name in literal)])
+
+
+def _folder_id(name: str) -> str | None:
+    match = FOLDER_ID.match(name)
+    return match.group(0) if match else None
+
+
+def _abandoned_files(top: Path, root: Path, folders: set[Path]) -> tuple[list[str], list[str]]:
+    """Return the files of renamed-away folders as ``(in HEAD, only in the index)``.
+
+    A file belongs to a renamed-away folder when it is gone from the working tree and sits in a top-level
+    folder under ``root`` that is not saved but starts with the project ID of one that is. Comparing with
+    HEAD and with the index together catches every way to rename: ``mv``, ``git mv``, ``git rm``, and files
+    that were staged but never committed.
+    """
+    wanted = {_folder_id(folder.name) for folder in folders} - {None}
+    saved = {folder.name for folder in folders}
+    depth = len(root.relative_to(top).parts)
+    scope = root.relative_to(top).as_posix()
+
+    def belonging(listing: str) -> list[str]:
+        return [
+            name
+            for name in listing.split("\0")
+            if name
+            and len(parts := name.split("/")) > depth + 1
+            and parts[depth] not in saved
+            and _folder_id(parts[depth]) in wanted
+        ]
+
+    try:
+        _git(top, "rev-parse", "--verify", "--quiet", "HEAD")
+        in_head = belonging(
+            _git(top, "diff", "--name-only", "--no-renames", "--diff-filter=D", "-z", "HEAD", "--", scope)
+        )
+    except SaveError:
+        in_head = []
+    in_index = belonging(_git(top, "ls-files", "-z", "--deleted", "--", scope))
+    return in_head, [name for name in in_index if name not in in_head]
 
 
 def _save_root(root: Path, folders: set[Path], message: str, push: bool) -> str:
@@ -101,15 +143,26 @@ def _save_root(root: Path, folders: set[Path], message: str, push: bool) -> str:
     except SaveError:
         raise SaveError(f"{root.as_posix()}: not in a git repository; nothing to save") from None
     targets = [*folders, root / projects.REGISTRY]
-    paths = sorted({p.relative_to(top).as_posix() for p in targets if p.exists()} | _renamed_away(top, root, folders))
+    paths = sorted(p.relative_to(top).as_posix() for p in targets if p.exists())
     hits = _scrub_files(top, paths)
     if hits:
         raise SaveError(f"{root.as_posix()}: not saved; remove or redact these first:\n  " + "\n  ".join(hits))
+    abandoned, staged_only = _abandoned_files(top, root, folders)
     _git(top, "add", "-A", "--", *paths)
+    if abandoned or staged_only:
+        _git(
+            top,
+            "rm",
+            "--cached",
+            "-q",
+            "--ignore-unmatch",
+            *_FROM_STDIN,
+            stdin=_nul_joined([], abandoned + staged_only),
+        )
     staged = _git(top, "diff", "--cached", "--name-only", "--", *paths).split("\n")
-    count = len(list(filter(None, staged)))
+    count = len(list(filter(None, staged))) + len(abandoned)
     if count:
-        _git(top, "commit", "-q", "--only", "-m", message, "--", *paths)
+        _git(top, "commit", "-q", "--only", "-m", message, *_FROM_STDIN, stdin=_nul_joined(paths, abandoned))
         sha = _git(top, "rev-parse", "--short", "HEAD").strip()
         report = f"committed {sha} ({_plural(count, 'file')})"
     else:
