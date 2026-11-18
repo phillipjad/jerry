@@ -2,6 +2,7 @@
 # Copyright (c) 2026 Phillip Miavelstuck
 
 import json
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -123,6 +124,49 @@ def test_should_save_the_focus_after_its_folder_was_renamed(
     assert "PROJ-002-renamed/RESUME.md" in committed(root)
     stored = json.loads((home / ".jerry" / "sessions" / "s1.json").read_text(encoding="utf-8"))
     assert stored["focus"][0]["path"] == (root / "PROJ-002-renamed").resolve().as_posix()
+
+
+def test_should_stage_the_old_folder_deletion_when_a_project_was_renamed(
+    root: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    (root / "PROJ-002-vegeta").rename(root / "PROJ-002-renamed")
+
+    code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Rename PROJ-002")
+
+    assert (code, err) == (0, "")
+    assert git(root, "status", "--porcelain") == ""
+    tree = git(root, "ls-tree", "-r", "--name-only", "HEAD").split()
+    assert "PROJ-002-renamed/project.toml" in tree
+    assert not [name for name in tree if name.startswith("PROJ-002-vegeta/")]
+
+
+def test_should_leave_other_deleted_folders_unstaged_when_saving_a_rename(
+    root: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    shutil.rmtree(root / "PROJ-001-goku")
+    (root / "PROJ-002-vegeta").rename(root / "PROJ-002-renamed")
+
+    code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Rename PROJ-002")
+
+    assert (code, err) == (0, "")
+    status = git(root, "status", "--porcelain").splitlines()
+    assert status and all(line.startswith(" D PROJ-001-goku/") for line in status)
+
+
+def test_should_refuse_to_save_a_path_named_project_whose_links_are_broken_when_its_id_is_shadowed(
+    twin_roots: tuple[Path, list[str]], capsys: pytest.CaptureFixture[str]
+) -> None:
+    other, roots = twin_roots
+    (other / "PROJ-001-gohan" / "project.toml").write_text(
+        'title = "Gohan"\nstatus = "active"\nsummary = ""\nrelated = ["PROJ-099"]\n', encoding="utf-8"
+    )
+    head = git(other, "rev-parse", "HEAD")
+
+    code = cli.main(["projects", "save", str(other / "PROJ-001-gohan"), "-m", "Update PROJ-001", *roots])
+
+    assert code == 1
+    assert "PROJ-099" in capsys.readouterr().err
+    assert git(other, "rev-parse", "HEAD") == head
 
 
 def test_should_commit_only_the_named_projects_folder_and_the_refreshed_registry(

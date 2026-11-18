@@ -5,6 +5,15 @@ All notable changes to this derivative of the Jerry Framework are documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.4] - 2026-11-18
+
+### Fixed
+
+- `jerry projects save` stages the deletion of a renamed project's old folder with the new one, so
+  a push no longer publishes both copies. Other deleted folders stay untouched.
+- `jerry projects check` and `projects save` validate the links of every discovered project,
+  including one whose ID is shadowed by a nearer root and that is saved by its folder path.
+
 ## [1.2.3] - 2026-11-17
 
 ### Fixed

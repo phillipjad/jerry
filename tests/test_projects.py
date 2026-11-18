@@ -325,6 +325,15 @@ def test_should_compute_inverse_links(tmp_path: Path, home: Path) -> None:
     assert found.inverse_links("PROJ-003") == {"related": ["PROJ-002"]}
 
 
+def test_should_report_unknown_links_of_a_shadowed_project(tmp_path: Path, home: Path) -> None:
+    make_project(tmp_path / "near", "PROJ-001-near")
+    make_project(tmp_path / "far", "PROJ-001-far", related=["PROJ-099"])
+
+    found = projects.discover(tmp_path, roots=[tmp_path / "near", tmp_path / "far"])
+
+    assert any("PROJ-099" in e and "not a known project" in e for e in found.errors)
+
+
 def test_should_report_unknown_and_self_links_as_errors(tmp_path: Path, home: Path) -> None:
     make_project(tmp_path / "projects", "PROJ-001-sample", related=["PROJ-001", "PROJ-099"])
 
