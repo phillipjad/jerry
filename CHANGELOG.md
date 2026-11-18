@@ -5,6 +5,19 @@ All notable changes to this derivative of the Jerry Framework are documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.6] - 2026-11-18
+
+### Fixed
+
+- `jerry projects save` no longer commits a deleted file from a folder that merely shares the saved
+  project's `PROJ-NNN` prefix, such as `PROJ-002-notes/`, while that folder still holds other tracked
+  files. A folder counts as renamed away only when it lost its `project.toml` or lost every tracked file.
+
+### Known limits
+
+- A same-prefix folder that vanished completely is committed as deleted with the save, because it looks
+  the same as a rename.
+
 ## [1.2.5] - 2026-11-18
 
 ### Fixed

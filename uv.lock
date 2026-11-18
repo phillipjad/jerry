@@ -118,7 +118,7 @@ wheels = [
 
 [[package]]
 name = "jerry"
-version = "1.2.5"
+version = "1.2.6"
 source = { editable = "." }
 default-groups = []
 dependencies = [

@@ -104,37 +104,51 @@ def _folder_id(name: str) -> str | None:
 
 
 def _abandoned_files(top: Path, root: Path, folders: set[Path]) -> tuple[list[str], list[str]]:
-    """Return the files of renamed-away folders as ``(in HEAD, only in the index)``.
+    """Return the files of renamed-away project folders as ``(in HEAD, only in the index)``.
 
-    A file belongs to a renamed-away folder when it is gone from the working tree and sits in a top-level
-    folder under ``root`` that is not saved but starts with the project ID of one that is. Comparing with
-    HEAD and with the index together catches every way to rename: ``mv``, ``git mv``, ``git rm``, and files
-    that were staged but never committed.
+    A folder is renamed away when it is a top-level folder under ``root`` that is not saved, starts with the
+    project ID of one that is, and has either lost its ``project.toml`` or lost every tracked file. A
+    same-prefix folder that still holds tracked files is a different folder and is left alone. The abandoned
+    files are those missing from the working tree. Comparing with HEAD and with the index together catches
+    every way to rename: ``mv``, ``git mv``, ``git rm``, and files that were staged but never committed.
     """
     wanted = {_folder_id(folder.name) for folder in folders} - {None}
     saved = {folder.name for folder in folders}
     depth = len(root.relative_to(top).parts)
     scope = root.relative_to(top).as_posix()
 
-    def belonging(listing: str) -> list[str]:
-        return [
-            name
-            for name in listing.split("\0")
-            if name
-            and len(parts := name.split("/")) > depth + 1
-            and parts[depth] not in saved
-            and _folder_id(parts[depth]) in wanted
-        ]
+    def listed(listing: str) -> list[str]:
+        return [name for name in listing.split("\0") if name and len(name.split("/")) > depth + 1]
 
+    tracked = listed(_git(top, "ls-files", "-z", "--", scope))
     try:
         _git(top, "rev-parse", "--verify", "--quiet", "HEAD")
-        in_head = belonging(
-            _git(top, "diff", "--name-only", "--no-renames", "--diff-filter=D", "-z", "HEAD", "--", scope)
-        )
     except SaveError:
         in_head = []
-    in_index = belonging(_git(top, "ls-files", "-z", "--deleted", "--", scope))
-    return in_head, [name for name in in_index if name not in in_head]
+    else:
+        in_head = listed(_git(top, "diff", "--name-only", "--no-renames", "--diff-filter=D", "-z", "HEAD", "--", scope))
+        prefix = "" if scope == "." else f"{scope}/"
+        try:
+            names = _git(top, "ls-tree", "-r", "-z", "--name-only", "HEAD" if scope == "." else f"HEAD:{scope}")
+        except SaveError:
+            names = ""
+        tracked += listed("\0".join(prefix + name for name in names.split("\0") if name))
+    in_index = listed(_git(top, "ls-files", "-z", "--deleted", "--", scope))
+    missing = set(in_head) | set(in_index)
+    surviving = {name.split("/")[depth] for name in set(tracked) - missing}
+    renamed_away = {
+        parts[depth]
+        for parts in (name.split("/") for name in tracked)
+        if parts[depth] not in saved
+        and _folder_id(parts[depth]) in wanted
+        and "/".join(parts) in missing
+        and (parts[depth] not in surviving or parts[depth + 1 :] == ["project.toml"])
+    }
+
+    def belonging(names: list[str]) -> list[str]:
+        return [name for name in names if name.split("/")[depth] in renamed_away]
+
+    return belonging(in_head), belonging([name for name in in_index if name not in in_head])
 
 
 def _save_root(root: Path, folders: set[Path], message: str, push: bool) -> str:

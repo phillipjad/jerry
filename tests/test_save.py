@@ -307,6 +307,75 @@ def test_should_not_take_a_longer_numbered_folder_for_the_same_project(
     assert "PROJ-0020-trunks/project.toml" in head_files(root)
 
 
+def test_should_leave_a_deleted_file_of_a_same_prefix_folder_that_still_has_files(
+    root: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    notes = root / "PROJ-002-notes"
+    notes.mkdir()
+    (notes / "scratch.md").write_text("Scratch.\n", encoding="utf-8")
+    (notes / "keep.md").write_text("Keep.\n", encoding="utf-8")
+    commit_all(root, "Add notes")
+    (notes / "scratch.md").unlink()
+    (root / "PROJ-002-vegeta").rename(root / "PROJ-002-renamed")
+
+    code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Rename PROJ-002")
+
+    assert (code, err) == (0, "")
+    assert "PROJ-002-notes/scratch.md" in head_files(root)
+    assert git(root, "status", "--porcelain") == " D PROJ-002-notes/scratch.md\n"
+
+
+def test_should_clean_the_old_folder_when_its_project_file_was_removed_earlier(
+    root: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    vegeta = root / "PROJ-002-vegeta"
+    (vegeta / "project.toml").unlink()
+    commit_all(root, "Drop the project file")
+    vegeta.rename(root / "PROJ-002-renamed")
+    (root / "PROJ-002-renamed" / "project.toml").write_text(
+        'title = "Vegeta"\nstatus = "active"\nsummary = ""\n', encoding="utf-8"
+    )
+
+    code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Rename PROJ-002")
+
+    assert err == "", err
+    assert code == 0
+    assert not [name for name in head_files(root) if name.startswith("PROJ-002-vegeta/")]
+
+
+def test_should_clean_a_legacy_folder_that_never_had_a_project_file(
+    root: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    legacy = root / "PROJ-004-legacy"
+    legacy.mkdir()
+    (legacy / "RESUME.md").write_text(PICK_UP, encoding="utf-8")
+    commit_all(root, "Add legacy folder")
+    legacy.rename(root / "PROJ-004-modern")
+    (root / "PROJ-004-modern" / "project.toml").write_text(
+        'title = "Modern"\nstatus = "active"\nsummary = ""\n', encoding="utf-8"
+    )
+
+    code, _, err = run_save(capsys, root, "PROJ-004", "-m", "Modernise PROJ-004")
+
+    assert err == "", err
+    assert code == 0
+    assert not [name for name in head_files(root) if name.startswith("PROJ-004-legacy/")]
+
+
+def test_should_not_publish_a_recreated_old_file_with_a_secret(
+    root: Path, home: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    secret = "gh" + "p_" + "A1" * 18
+    (root / "PROJ-002-vegeta").rename(root / "PROJ-002-renamed")
+    (root / "PROJ-002-vegeta").mkdir()
+    (root / "PROJ-002-vegeta" / "RESUME.md").write_text(f"token {secret}\n", encoding="utf-8")
+
+    code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Rename PROJ-002")
+
+    assert (code, err) == (0, "")
+    assert subprocess.run(["git", "-C", str(root), "grep", "-q", secret, "HEAD"]).returncode == 1
+
+
 def test_should_save_a_rename_when_the_root_is_below_the_repository_top(
     tmp_path: Path, home: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
@@ -326,6 +395,25 @@ def test_should_save_a_rename_when_the_root_is_below_the_repository_top(
     assert (code, err) == (0, "")
     assert git(top, "status", "--porcelain") == "?? other.md\n"
     assert not [name for name in head_files(top) if "PROJ-001-goku" in name]
+
+
+def test_should_save_a_projects_folder_that_is_new_to_a_repository_with_history(
+    tmp_path: Path, home: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    top = tmp_path / "repo"
+    top.mkdir()
+    (top / "notes.md").write_text("Existing.\n", encoding="utf-8")
+    git(tmp_path, "init", "-q", "-b", "main", str(top))
+    configure(top)
+    commit_all(top, "Seed")
+    base = top / "work" / "projects"
+    tracked(base, "PROJ-001-goku", title="Goku", summary="")
+    (base / "README.md").write_text(f"# Registry\n\n{START}\n{END}\n", encoding="utf-8")
+
+    code, _, err = run_save(capsys, base, "PROJ-001", "-m", "First projects")
+
+    assert (code, err) == (0, "")
+    assert "work/projects/PROJ-001-goku/project.toml" in head_files(top)
 
 
 def test_should_make_the_first_commit_of_a_repository_without_history(
