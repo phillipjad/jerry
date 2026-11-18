@@ -5,6 +5,26 @@ All notable changes to this derivative of the Jerry Framework are documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.5] - 2026-11-18
+
+### Fixed
+
+- `jerry projects save` commits the deletion of a renamed project's old folder however the rename was
+  done: `mv`, `git mv`, `git rm`, or with files that were staged but never committed. It compares the
+  working tree with HEAD and with the index, commits only the files that are missing, and never anything
+  left behind in the old folder or any file that still exists.
+- A rename that only fixes a folder name that was not valid, such as `PROJ-002_vegeta`, is cleaned up
+  too. The old folder is recognised by its `PROJ-NNN` prefix.
+- File names with glob characters, and a `GIT_LITERAL_PATHSPECS` environment variable, no longer
+  confuse the rename handling.
+- Saving no longer builds long command lines: the paths go to git on standard input, so a project
+  folder with thousands of files saves on Windows too. This needs git 2.25 or later.
+
+### Known limits
+
+- A rename that changes the project number is a new project ID, so `projects save` does not treat the
+  old folder as renamed; commit its deletion with git.
+
 ## [1.2.4] - 2026-11-18
 
 ### Fixed

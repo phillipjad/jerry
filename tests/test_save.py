@@ -153,6 +153,196 @@ def test_should_leave_other_deleted_folders_unstaged_when_saving_a_rename(
     assert status and all(line.startswith(" D PROJ-001-goku/") for line in status)
 
 
+def head_files(repo: Path) -> list[str]:
+    return git(repo, "ls-tree", "-r", "--name-only", "HEAD").split("\n")
+
+
+def commit_all(repo: Path, message: str) -> None:
+    git(repo, "add", "-A")
+    git(repo, "commit", "-q", "-m", message)
+
+
+def test_should_save_a_rename_done_with_git_mv(root: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    git(root, "mv", "PROJ-002-vegeta", "PROJ-002-renamed")
+
+    code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Rename PROJ-002")
+
+    assert (code, err) == (0, "")
+    assert git(root, "status", "--porcelain") == ""
+    assert "PROJ-002-renamed/project.toml" in head_files(root)
+    assert not [name for name in head_files(root) if name.startswith("PROJ-002-vegeta/")]
+
+
+def test_should_save_a_rename_done_with_git_rm_and_a_fresh_copy(root: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    shutil.copytree(root / "PROJ-002-vegeta", root / "PROJ-002-renamed")
+    git(root, "rm", "-r", "-q", "PROJ-002-vegeta")
+
+    code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Rename PROJ-002")
+
+    assert (code, err) == (0, "")
+    assert git(root, "status", "--porcelain") == ""
+    assert not [name for name in head_files(root) if name.startswith("PROJ-002-vegeta/")]
+
+
+def test_should_not_commit_files_left_behind_in_the_old_folder(root: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    (root / "PROJ-002-vegeta").rename(root / "PROJ-002-renamed")
+    (root / "PROJ-002-vegeta").mkdir()
+    (root / "PROJ-002-vegeta" / "stray.tmp").write_text("Left behind.\n", encoding="utf-8")
+
+    code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Rename PROJ-002")
+
+    assert (code, err) == (0, "")
+    assert git(root, "status", "--porcelain") == "?? PROJ-002-vegeta/\n"
+    assert not [name for name in head_files(root) if name.startswith("PROJ-002-vegeta/")]
+
+
+def test_should_stage_old_files_whose_names_hold_glob_characters(
+    root: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    vegeta = root / "PROJ-002-vegeta"
+    (vegeta / "notes [v2]*.md").write_text("Galick Gun.\n", encoding="utf-8")
+    (vegeta / "notes v1.md").write_text("Scouter.\n", encoding="utf-8")
+    commit_all(root, "Add notes")
+    vegeta.rename(root / "PROJ-002-renamed")
+    vegeta.mkdir()
+    shutil.copy(root / "PROJ-002-renamed" / "notes v1.md", vegeta / "notes v1.md")
+
+    code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Rename PROJ-002")
+
+    assert (code, err) == (0, "")
+    assert "PROJ-002-renamed/notes [v2]*.md" in head_files(root)
+    assert "PROJ-002-vegeta/notes [v2]*.md" not in head_files(root)
+    assert "PROJ-002-vegeta/notes v1.md" in head_files(root)
+    assert git(root, "status", "--porcelain") == ""
+
+
+def test_should_keep_a_staged_survivor_whose_name_a_glob_would_also_match(
+    root: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    gohan = tracked(root, "PROJ-003-gohan", title="Gohan", summary="")
+    (gohan / "a [x]*.md").write_text("Masenko.\n", encoding="utf-8")
+    (gohan / "a x1.md").write_text("Kamehameha.\n", encoding="utf-8")
+    git(root, "add", "PROJ-003-gohan")
+    gohan.rename(root / "PROJ-003-renamed")
+    gohan.mkdir()
+    shutil.copy(root / "PROJ-003-renamed" / "a x1.md", gohan / "a x1.md")
+
+    code, _, err = run_save(capsys, root, "PROJ-003", "-m", "Add PROJ-003")
+
+    assert (code, err) == (0, "")
+    assert git(root, "diff", "--cached", "--name-only").split("\n")[:-1] == ["PROJ-003-gohan/a x1.md"]
+    assert not [name for name in head_files(root) if name.startswith("PROJ-003-gohan/")]
+
+
+def test_should_save_the_rename_of_a_folder_holding_hundreds_of_files(
+    root: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    evidence = root / "PROJ-002-vegeta" / "evidence"
+    evidence.mkdir()
+    for number in range(400):
+        (evidence / f"{number:03d}-{'x' * 85}.md").write_text("Over 9000.\n", encoding="utf-8")
+    commit_all(root, "Add evidence")
+    (root / "PROJ-002-vegeta").rename(root / "PROJ-002-renamed")
+
+    code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Rename PROJ-002")
+
+    assert (code, err) == (0, "")
+    assert git(root, "status", "--porcelain") == ""
+    assert not [name for name in head_files(root) if name.startswith("PROJ-002-vegeta/")]
+
+
+def test_should_clear_a_staged_new_file_of_the_old_folder(root: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    vegeta = root / "PROJ-002-vegeta"
+    (vegeta / "notes.md").write_text("Scouter.\n", encoding="utf-8")
+    git(root, "add", "PROJ-002-vegeta/notes.md")
+    vegeta.rename(root / "PROJ-002-renamed")
+
+    code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Rename PROJ-002")
+
+    assert (code, err) == (0, "")
+    assert git(root, "status", "--porcelain") == ""
+    assert not [name for name in head_files(root) if name.startswith("PROJ-002-vegeta/")]
+
+
+@pytest.mark.parametrize(
+    "variable", ["GIT_LITERAL_PATHSPECS", "GIT_GLOB_PATHSPECS", "GIT_NOGLOB_PATHSPECS", "GIT_ICASE_PATHSPECS"]
+)
+def test_should_save_a_rename_whatever_pathspec_mode_the_environment_sets(
+    root: Path, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch, variable: str
+) -> None:
+    (root / "PROJ-002-vegeta").rename(root / "PROJ-002-renamed")
+    monkeypatch.setenv(variable, "1")
+
+    code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Rename PROJ-002")
+
+    assert (code, err) == (0, "")
+    assert not [name for name in head_files(root) if name.startswith("PROJ-002-vegeta/")]
+
+
+def test_should_save_the_rename_that_fixes_a_bad_folder_name(root: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    (root / "PROJ-002-vegeta").rename(root / "PROJ-002_vegeta")
+    commit_all(root, "Misname the folder")
+    (root / "PROJ-002_vegeta").rename(root / "PROJ-002-vegeta")
+
+    code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Fix the name")
+
+    assert (code, err) == (0, "")
+    assert git(root, "status", "--porcelain") == ""
+    assert not [name for name in head_files(root) if name.startswith("PROJ-002_vegeta/")]
+
+
+def test_should_not_take_a_longer_numbered_folder_for_the_same_project(
+    root: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    shutil.rmtree(root / "PROJ-001-goku")
+    (root / "PROJ-002-vegeta").rename(root / "PROJ-002-renamed")
+    tracked(root, "PROJ-0020-trunks", title="Trunks", summary="")
+    git(root, "add", "PROJ-0020-trunks")
+    git(root, "commit", "-q", "-m", "Add trunks", "--", "PROJ-0020-trunks")
+    shutil.rmtree(root / "PROJ-0020-trunks")
+
+    code, _, err = run_save(capsys, root, "PROJ-002", "-m", "Rename PROJ-002")
+
+    assert (code, err) == (0, "")
+    assert "PROJ-0020-trunks/project.toml" in head_files(root)
+
+
+def test_should_save_a_rename_when_the_root_is_below_the_repository_top(
+    tmp_path: Path, home: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    top = tmp_path / "repo"
+    base = top / "work" / "projects"
+    tracked(base, "PROJ-001-goku", title="Goku", summary="")
+    (base / "README.md").write_text(f"# Registry\n\n{START}\n{END}\n", encoding="utf-8")
+    assert cli.main(["projects", "index", "--write", "--root", str(base)]) == 0
+    git(tmp_path, "init", "-q", "-b", "main", str(top))
+    configure(top)
+    commit_all(top, "Seed")
+    (base / "PROJ-001-goku").rename(base / "PROJ-001-renamed")
+    (top / "other.md").write_text("Not a project.\n", encoding="utf-8")
+
+    code, _, err = run_save(capsys, base, "PROJ-001", "-m", "Rename PROJ-001")
+
+    assert (code, err) == (0, "")
+    assert git(top, "status", "--porcelain") == "?? other.md\n"
+    assert not [name for name in head_files(top) if "PROJ-001-goku" in name]
+
+
+def test_should_make_the_first_commit_of_a_repository_without_history(
+    tmp_path: Path, home: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    fresh = tmp_path / "fresh"
+    tracked(fresh, "PROJ-001-goku", title="Goku", summary="")
+    (fresh / "README.md").write_text(f"# Registry\n\n{START}\n{END}\n", encoding="utf-8")
+    git(tmp_path, "init", "-q", "-b", "main", str(fresh))
+    configure(fresh)
+
+    code, _, err = run_save(capsys, fresh, "PROJ-001", "-m", "First save")
+
+    assert (code, err) == (0, "")
+    assert "PROJ-001-goku/project.toml" in head_files(fresh)
+
+
 def test_should_refuse_to_save_a_path_named_project_whose_links_are_broken_when_its_id_is_shadowed(
     twin_roots: tuple[Path, list[str]], capsys: pytest.CaptureFixture[str]
 ) -> None:
