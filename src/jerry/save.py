@@ -77,13 +77,31 @@ def _push(top: Path) -> None:
     _git(top, "push", "-q")
 
 
+def _top_folder_id(name: str) -> str | None:
+    parsed = projects.parse_folder(name)
+    return parsed.id if parsed else None
+
+
+def _renamed_away(top: Path, root: Path, folders: set[Path]) -> set[str]:
+    """Return the tracked folders under ``root`` that are gone from disk and carry a saved folder's project ID."""
+    wanted = {_top_folder_id(f.name) for f in folders} - {None}
+    root_depth = len(root.relative_to(top).parts)
+    deleted = _git(top, "ls-files", "-z", "--deleted", "--", root.relative_to(top).as_posix()).split("\0")
+    gone = {
+        "/".join(parts[: root_depth + 1])
+        for parts in (name.split("/") for name in deleted if name)
+        if len(parts) > root_depth and _top_folder_id(parts[root_depth]) in wanted
+    }
+    return {rel for rel in gone if not (top / rel).exists()}
+
+
 def _save_root(root: Path, folders: set[Path], message: str, push: bool) -> str:
     try:
         top = Path(_git(root, "rev-parse", "--show-toplevel").strip()).resolve()
     except SaveError:
         raise SaveError(f"{root.as_posix()}: not in a git repository; nothing to save") from None
     targets = [*folders, root / projects.REGISTRY]
-    paths = sorted(p.relative_to(top).as_posix() for p in targets if p.exists())
+    paths = sorted({p.relative_to(top).as_posix() for p in targets if p.exists()} | _renamed_away(top, root, folders))
     hits = _scrub_files(top, paths)
     if hits:
         raise SaveError(f"{root.as_posix()}: not saved; remove or redact these first:\n  " + "\n  ".join(hits))

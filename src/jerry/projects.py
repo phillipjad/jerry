@@ -274,7 +274,7 @@ def discover(start: Path, roots: list[Path] | None = None) -> Discovery:
                 f"{root.as_posix()}: {', '.join(shadowed)} shadowed by the same ID in a nearer root; ignored"
             )
 
-    for project in found.projects.values():
+    for project in found.all_projects:
         for link_type, ids in project.links.items():
             for target in ids:
                 if target == project.id:
